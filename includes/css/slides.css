@@ -1,3 +1,5 @@
+/* Reset */
+
 * {
 	margin: 0;
 	padding: 0;
@@ -5,13 +7,9 @@
 
 /* Slide View */
 
-body[data-view=slides] {
-	background-color: rgba(0,0,0,1);
-}
+body[data-view=slides] { background-color: rgba(0,0,0,1); }
 
-	body[data-view=slides] * {
-		font: normal 24px/100% 'lucida grande', arial;
-	}
+	body[data-view=slides] * { font: normal 24px/100% 'lucida grande', arial; }
 
 	body[data-view=slides] > .wrapper {
 		position: absolute;
@@ -36,47 +34,22 @@ body[data-view=slides] {
 			width: 100%;
 			height: 100%;
 		}
-		
+
 			body[data-view=slides] > .wrapper > #slides > div {
 				display: none;
 				width: 100%;
 				height: 100%;
 				overflow: hidden;
 			}
-			
-				body[data-view=slides] > .wrapper > #slides > div.current {
-					display: block;
-					z-index: 1;
-				}
-				
-				body[data-view=slides] > .wrapper > #slides > div.next,
-				body[data-view=slides] > .wrapper > #slides > div.prev {
-					z-index: 2;
-				}
-				
-			body[data-view=slides] > .wrapper > #slides .increment {
-				display: none;
-			}
-			
+
+				body[data-view=slides] > .wrapper > #slides > div.current { display: block; }
+
+			body[data-view=slides] > .wrapper > #slides .increment { display: none; }
+
 /* Outline View */
 
-body[data-view=outline] * {
-	font: normal 12pt/150% 'lucida grande', arial;
-}
+body[data-view=outline] * { font: normal 12pt/150% 'lucida grande', arial; }
 
-body[data-view=outline] > .wrapper > footer {
-	display: none;
-}
+body[data-view=outline] > .wrapper > footer { display: none; }
 
-body[data-view=outline] > .wrapper > #slides > div {
-	
-}
-
-	body[data-view=outline] > .wrapper > #slides > div > header {
-		font-weight: bold;
-		font-size: 150%;
-	}
-
-body[data-view=outline] > .wrapper > #slides .increment {
-	display: inherit !important;
-}
+body[data-view=outline] > .wrapper > #slides .increment { display: inherit !important; }

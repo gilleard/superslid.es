@@ -172,13 +172,6 @@ $(document).ready(function() {
 	// Set inital view to slide
 	$g_body.attr('data-view', g_currentView == e_view.slides ? 'slides' : 'outline');
 	
-	/*
-	var filepath = document.location.href; // Get the current file
-	filepath = $.twFile.convertUriToLocalPath(filepath); // Convert the path to a readable format
-	var text = $.twFile.load(filepath); // Load the file
-	alert(text);
-	*/
-	
 	// **************************************************
 	//
 	// Events
