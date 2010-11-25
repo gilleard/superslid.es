@@ -9,7 +9,9 @@
 
 body[data-view=slides] { background-color: rgba(0,0,0,1); }
 
-	body[data-view=slides] * { font: normal 24px/100% 'lucida grande', arial; }
+	body[data-view=slides] * { font: normal 24px/100% Arial; }
+
+	body[data-view=slides] .MathJax * { font-size: inherit; }
 
 	body[data-view=slides] > .wrapper {
 		position: absolute;
@@ -46,6 +48,8 @@ body[data-view=slides] { background-color: rgba(0,0,0,1); }
 
 			body[data-view=slides] > .wrapper > #slides .increment { display: none; }
 
+			body[data-view=slides] > .wrapper > #slides > div sup { font-size: 75%; vertical-align: super; }
+
 /* Outline View */
 
 body[data-view=outline] * { font: normal 12pt/150% 'lucida grande', arial; }
@@ -53,3 +57,9 @@ body[data-view=outline] * { font: normal 12pt/150% 'lucida grande', arial; }
 body[data-view=outline] > .wrapper > footer { display: none; }
 
 body[data-view=outline] > .wrapper > #slides .increment { display: inherit !important; }
+
+body[data-view=outline] > .wrapper > #slides > div sup { vertical-align: baseline; }
+
+/* General */
+
+body > .wrapper > #slides > .references ol  { list-style: decimal inside; }

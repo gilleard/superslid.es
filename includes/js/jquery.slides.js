@@ -29,7 +29,7 @@ $(document).ready(function() {
 		$g_footer = $('body > .wrapper > footer'),
 		$g_pagingCurrent = $g_footer.find('.current'),
 		$g_pagingTotal = $g_footer.find('.total'),
-		$g_currentSlide;
+		$g_currentSlide = null;
 	
 	// General variables
 	var
@@ -152,6 +152,47 @@ $(document).ready(function() {
 		
 	}
 	
+	function generateReferences() {
+		
+		// Get all links
+		var $l_links = $('a[href!=""]').filter(':not(.ignore)');
+		
+		// If there are any
+		if ($l_links.size() > 0) {
+		
+			// Create reference slide
+			$('#slides').append('<div class="references"><header>References</header><section><ol></ol></section></div>');
+			var l_referencesHtml = '';
+			
+			// For each
+			$l_links.each(function() {
+			
+				// Add number to original link
+				$(this).after('<sup>[' + parseInt($l_links.index($(this)) + 1, 10) + ']</sup>');
+				
+				// Start reference list item
+				l_referencesHtml += '<li>' + $(this).text();
+				
+				// Check for a description
+				if ($(this).attr('title') != '') {
+					l_referencesHtml += ' (' + $(this).attr('title') + ')'; }
+				
+				// Add link and end reference list item
+				l_referencesHtml += ' &#8211; <a href="' + $(this).attr('href') + '">' + $(this).attr('href') + '</a></li>';
+			
+			});
+			
+			// Add list to reference slide
+			$('#slides > .references ol').append(l_referencesHtml);
+		
+		}
+		
+		// Update paging variables
+		$g_slides = $('#slides > div');
+		g_totalSlides = $g_slides.size();
+		
+	}
+	
 	// **************************************************
 	//
 	// Initialisation
@@ -161,6 +202,9 @@ $(document).ready(function() {
 	log('Number of slides: ' + g_totalSlides);
 	log('Current slides: ' + g_currentSlideNumber);
 	log('Current view: ' + getCurrentView(g_currentView));
+	
+	// Init references
+	generateReferences();
 	
 	// Show initial slide
 	goToSlide(g_currentSlideNumber, e_direction.forward);
@@ -255,14 +299,6 @@ $(document).ready(function() {
 			}
 			
 			event.preventDefault();
-			
-		})
-		// Click
-		.click(function() {
-		
-			if(g_currentView == e_view.slides) {
-				advance();
-			}
 			
 		});
 
