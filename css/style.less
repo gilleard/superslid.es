@@ -1,0 +1,63 @@
+/* Slide View */
+@slide-width: 980px;
+@slide-height: 740px;
+
+body[data-view=slides] {
+	background-color:rgba(0,0,0,1);
+	
+  > .wrapper {
+  	position:absolute;
+  	left:50%;
+  	top:50%;
+  	width:@slide-width;
+  	height:@slide-height;
+  	margin:@slide-height*-1/2 0 0 @slide-width*-1/2;
+  	overflow:hidden;
+  	background-color:rgba(255,255,255,1);
+
+    > footer {
+    	position:absolute;
+    	left:0;
+    	bottom:0;
+    	width:100%;
+    	z-index:3;
+    	font-size: 150%;
+    }
+
+    > #slides {
+    	width:100%;
+    	height:100%;
+
+      > div {
+      	display:none;
+      	width:100%;
+      	height:100%;
+      	overflow:hidden;
+      	font-size: 150%;
+      }
+
+      > div.current {
+      	display:block;
+      }
+
+      .increment {
+      	display:none;
+      }
+    }
+  }
+}
+
+/* Outline View */
+body[data-view=outline] > .wrapper {
+   > footer {
+    	display:none;
+  }
+
+  > #slides > div {
+  	font-size: 12pt;
+  }
+  
+  > #slides .increment {
+  	display:inherit!important;
+  }
+}

@@ -1,7 +1,8 @@
-See http://meyerweb.com/eric/tools/s5/features.html for controls.
+Notes:
+- Basic controls replicate S5: http://meyerweb.com/eric/tools/s5/features.html for controls
 
 Issues:
-- Initial goToSlide call adds hash to url when looking at outline view
+- Keyboard controls override too much (text editing etc...) 
 
 Ideas:
 - Back button support
