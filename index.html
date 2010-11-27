@@ -1,94 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html>
-
-	<head>
-
-		<meta charset="utf-8" />
-	
-		<title>simpleslid.es</title>
-	
-		<link href="includes/css/slides.css" rel="stylesheet" type="text/css" />
-		
-		<script type="text/javascript" src="includes/js/mathjax/MathJax.js"></script>
-
-	</head>
-	
-	<body>
-	
-		<div class="wrapper">
-	
-			<div id="slides">
-		
-				<div>
-		
-					<header>Slide 1</header>
-					
-					<section>
-					
-						<p contenteditable="true">Lorem <a href="http://bla.com">ipsum dolor</a> sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut <a href="http://bla.com" title="A description of this link">labore et dolore</a> magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					
-						<p contenteditable="true">\[ \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) \]</p>
-					
-					</section>
-		
-				</div>
-		
-				<div>
-		
-					<header>Slide 2</header>
-					
-					<section>
-					
-						<p contenteditable="true">Duis aute irure \(\sqrt{3x-1}+(1+x)^2\) dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla <a class="ignore" href="http://bla.com">ipsum dolor</a> pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui \(\sqrt{3x-1}+(1+x)^2\) officia deserunt mollit anim id est laborum.</p>
-					
-					</section>
-		
-				</div>
-		
-				<div>
-		
-					<header>Slide 3</header>
-					
-					<section>
-					
-						<p contenteditable="true">Lorem ipsum dolor sit amet, <a href="http://bla.com">consectetur adipisicing</a> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut ipsum dolor enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-						
-						<ul contenteditable="true">
-							<li class="increment">An item</li>
-							<li class="increment"><a href="http://bla.com">Another item</a></li>
-							<li class="increment">\(\sqrt{3x-1}+(1+x)^2\)</li>
-						</ul>
-					
-					</section>
-		
-				</div>
-		
-				<div>
-		
-					<header>Slide 4</header>
-					
-					<section>
-					
-						<p contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					
-					</section>
-		
-				</div>
-			
-			</div>
-			
-			<footer>
-			
-				<p><span class="current">X</span> of <span class="total">Y</span></p>
-			
-			</footer>
-			
-		</div>
-
-		<script type="text/javascript" src="includes/js/jquery.js"></script>
-		<script type="text/javascript" src="includes/js/jquery.slides.js"></script>
-
-	</body>
-
+<html lang="en-GB">
+  <head>
+  
+    <!-- meta -->
+    <meta charset="utf-8">
+    <title>superslid.es</title>
+    
+    <!-- css -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- math -->
+    <script src="MathJax/MathJax.js"></script>
+    
+  </head>
+  <body>
+  
+    <div class="wrapper">
+    
+      <div id="slides">
+        
+        <div>
+          <header>Slide 1</header>
+          <section>
+            <p>Lorem <a href="http://bla.com">ipsum dolor</a> sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut <a href="http://bla.com" title="A description of this link">labore et dolore</a> magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>\[ \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) \]</p>
+          </section>
+        </div>
+        
+        <div>
+          <header>Slide 2</header>
+          <section>
+        <p>Duis aute irure \(\sqrt{3x-1}+(1+x)^2\) dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla <a class="ignore" href="http://bla.com">ipsum dolor</a> pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui \(\sqrt{3x-1}+(1+x)^2\) officia deserunt mollit anim id est laborum.</p>
+          </section>
+        </div>
+        
+        <div>
+          <header>Slide 3</header>
+          <section>
+            <p>Lorem ipsum dolor sit amet, <a href="http://bla.com">consectetur adipisicing</a> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut ipsum dolor enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <ul>
+              <li class="increment">An item</li>
+              <li class="increment"><a href="http://bla.com">Another item</a></li>
+              <li class="increment">\(\sqrt{3x-1}+(1+x)^2\)</li>
+            </ul>
+          </section>
+        </div>
+        
+        <div>
+          <header>Slide 4</header>
+          <section>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </section>
+        </div>
+      
+      </div>
+      
+      <footer>
+        <p><span class="current">X</span> of <span class="total">Y</span></p>
+      </footer>
+      
+    </div>
+  
+    <!-- js -->
+    <script src="js/jquery.js"></script>
+    <script src="js/script.js"></script>
+    
+  </body>
 </html>

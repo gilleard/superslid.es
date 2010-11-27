@@ -1,1 +1,9 @@
 See http://meyerweb.com/eric/tools/s5/features.html for controls.
+
+Issues:
+- Initial goToSlide call adds hash to url when looking at outline view
+
+Ideas:
+- Back button support
+- Class to hide text in slide view, shown in outline
+- Slide themes
