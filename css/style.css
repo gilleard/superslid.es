@@ -1,8 +1,8 @@
 /* Slide View */
-body[data-view=slides] {
+body.slides {
   background-color: #000000;
 }
-body[data-view=slides] > .wrapper {
+body.slides > .wrapper {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -12,38 +12,88 @@ body[data-view=slides] > .wrapper {
   overflow: hidden;
   background-color: #ffffff;
 }
-body[data-view=slides] > .wrapper > footer {
+body.slides > .wrapper > footer {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  z-index: 3;
   font-size: 150%;
 }
-body[data-view=slides] > .wrapper > #slides {
+body.slides > .wrapper > #slides {
   width: 100%;
   height: 100%;
 }
-body[data-view=slides] > .wrapper > #slides > div {
+body.slides > .wrapper > #slides > div {
   display: none;
   width: 100%;
   height: 100%;
   overflow: hidden;
   font-size: 150%;
 }
-body[data-view=slides] > .wrapper > #slides > div.current {
+body.slides > .wrapper > #slides > div.current {
   display: block;
 }
-body[data-view=slides] > .wrapper > #slides .increment {
+body.slides > .wrapper > #slides .increment {
   display: none;
 }
 /* Outline View */
-body[data-view=outline] > .wrapper > footer {
+body.outline > .wrapper > footer {
   display: none;
 }
-body[data-view=outline] > .wrapper > #slides > div {
+body.outline > .wrapper > #slides > div {
   font-size: 12pt;
 }
-body[data-view=outline] > .wrapper > #slides .increment {
+body.outline > .wrapper > #slides .increment {
   display: inherit!important;
+}
+/* Overview */
+#overview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+#overview > div {
+  position: relative;
+  width: 490px;
+  height: 100%;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+#overview > div > ol {
+  height: 370px;
+  overflow: auto;
+}
+#overview > div > ol > li {
+  list-style-position: outside;
+  background-color: #f5f5f5;
+}
+#overview > div > ol > li > a {
+  display: block;
+  padding: 5px;
+  text-align: center;
+}
+#overview > div > ol > li > .preview {
+  background-color: #ffffff;
+  z-index: 1;
+}
+#overview > div > ol > li:nth-child(even) {
+  background-color: transparent;
+}
+#overview > div > .preview {
+  display: block !important;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  z-index: 0;
+}
+#overview > div > ol > li .preview, #overview > div > .preview {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 490px;
+  height: 370px;
+  font-size: 75%;
 }
