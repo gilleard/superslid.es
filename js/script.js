@@ -11,6 +11,10 @@ $(document).ready(function() {
       'forward': 0,
       'back': 1
     },
+    e_dimension = {
+      'title': 0,
+      'sub': 1
+    },
     e_view = {
       'slides': 0,
       'outline': 1
@@ -50,41 +54,89 @@ $(document).ready(function() {
       console.log(message);
     }
     
-  }
+  } // log(message)
   
-  function advance() {
+  function advance(l_dimension) {
   
+    // Get elements to be incremented
     var $l_elementsToIncrement = $g_currentSlide.find('.increment[data-visibility=hidden]');
-  
+    
+    // If there are some
     if($l_elementsToIncrement.size() > 0) {
+    
+      // Show the next one
       log('Showing next element');
       $l_elementsToIncrement.first().show().attr('data-visibility', 'visible');
+      
     }
+    
+    // If we're not at the end of the slides
     else if(g_currentSlideNumber < g_totalSlides) {
-      goToSlide(parseInt(g_currentSlideNumber, 10) + 1, e_direction.forward);
-    }
+    
+      // If trying to view the next sub slide and the next slide is not a title slide
+      if((l_dimension == e_dimension.sub) && (!$g_currentSlide.next().hasClass('title'))) {
+          goToSlide(parseInt(g_currentSlideNumber, 10) + 1, e_direction.forward);
+          return;
+      }
+      
+      // We're looking for the next title slide (after possibly not finding a sub slide)
+      var $l_nextTitleSlide = $g_currentSlide.nextAll('.title');
+      if($l_nextTitleSlide.size() > 0) {
+      
+        // Skip to the next title slide
+        goToSlide(parseInt($g_slides.index($l_nextTitleSlide.first()), 10) + 1, e_direction.forward);
+        
+      }
+      
+    } // g_currentSlideNumber < g_totalSlides
+    
+    // No elements to show, no slide to move forward to
     else {
       log('At end of slides');
     }
   
-  }
+  } // advance(l_dimension)
   
-  function previous() {
+  function previous(l_dimension) {
   
+    // Get elements already incremented
     var $l_elementsIncremented = $g_currentSlide.find('.increment[data-visibility=visible]');
-  
+    
+    // If there are some
     if($l_elementsIncremented.size() > 0) {
+    
+      // Hide the last one
       log('Hiding next element');
       $l_elementsIncremented.last().hide().attr('data-visibility', 'hidden');
+      
     }
+    
+    // If we're not at the start of the slides
     else if(g_currentSlideNumber > 1) {
-      goToSlide(parseInt(g_currentSlideNumber, 10) - 1, e_direction.back);
-    }
+      
+      // If trying to view the prev sub slide and the prev slide is not a title slide
+      if((l_dimension == e_dimension.sub) && (!$g_currentSlide.prev().hasClass('title'))) {
+          goToSlide(parseInt(g_currentSlideNumber, 10) - 1, e_direction.back);
+          return;
+      }
+      
+      // We're looking for the prev title slide (after possibly not finding a sub slide)
+      var $l_prevTitleSlide = $g_currentSlide.prevAll('.title');
+      if($l_prevTitleSlide.size() > 0) {
+      
+        // Skip to the prev title slide
+        goToSlide(parseInt($g_slides.index($l_prevTitleSlide.first()), 10) + 1, e_direction.back);
+        
+      }
+      
+    } // g_currentSlideNumber > 1
+    
+    // No elements to hide, no slide to move back to
     else {
       log('At start of slides');
     }
 
-  }
+  } // previous(l_dimension)
   
   function goToSlide(l_slideNumber, l_direction) {
   
@@ -163,7 +215,7 @@ $(document).ready(function() {
     if ($l_links.size() > 0) {
     
       // Create reference slide
-      $('#slides').append('<div class="references"><h2>References</h2><section><ol></ol></section></div>');
+      $('#slides').append('<div class="title references"><h2>References</h2><section><ol></ol></section></div>');
       var l_referencesHtml = '';
       
       // For each
@@ -250,16 +302,23 @@ $(document).ready(function() {
           if(g_currentView == e_view.slides) {
             if(g_skipSlides !== '') {
               if((event.keyCode == 10) || (event.keyCode == 13)) {
+                // Skip to slide
                 log('Skip to slide ' + g_skipSlides);
                 goToSlide(g_skipSlides, e_direction.forward);
               }
               else {
+                // Skip forward slides
                 log('Skip forward ' + parseInt(g_skipSlides, 10) + ' slides');
                 goToSlide(parseInt(g_currentSlideNumber, 10) + parseInt(g_skipSlides, 10), e_direction.forward);
               }
             }
             else {
-              advance();
+              if(event.keyCode == 39) {
+                advance(e_dimension.sub);
+              }
+              else if(event.keyCode == 40) {
+                advance(e_dimension.title);
+              }
             }
             g_skipSlides = '';
           }
@@ -269,11 +328,17 @@ $(document).ready(function() {
         case 38: // up          
           if(g_currentView == e_view.slides) {
             if(g_skipSlides !== '') {
+              // Skip back slides
               log('Skip back ' + g_skipSlides + ' slides');
               goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
             }
             else {
-              previous();
+              if(event.keyCode == 37) {
+                previous(e_dimension.sub);
+              }
+              else if(event.keyCode == 38) {
+                previous(e_dimension.title);
+              }
             }
             g_skipSlides = '';
           }
