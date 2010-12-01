@@ -62,33 +62,40 @@ body.outline > .wrapper > #slides .increment {
   margin: 0 auto;
   background-color: #ffffff;
 }
-#overview > div > ol {
+#overview > div > ol, #overview > div > ol > li > ol {
   height: 370px;
   overflow: auto;
 }
-#overview > div > ol > li {
-  list-style-position: outside;
-  background-color: #f5f5f5;
+#overview > div > ol > li, #overview > div > ol > li > ol > li {
+  list-style: none;
 }
-#overview > div > ol > li > a {
+#overview > div > ol > li > a, #overview > div > ol > li > ol > li > a {
   display: block;
   padding: 5px;
   text-align: center;
+  background-color: #f5f5f5;
 }
-#overview > div > ol > li > .preview {
-  background-color: #ffffff;
+#overview > div > ol > li > .preview, #overview > div > ol > li > ol > li > .preview {
   z-index: 1;
 }
-#overview > div > ol > li:nth-child(even) {
+#overview > div > ol > li > ol, #overview > div > ol > li > ol > li > ol {
+  display: none;
+}
+#overview > div > ol > li > ol > li > a, #overview > div > ol > li > ol > li > ol > li > a {
+  background-color: #eee;
+}
+#overview > div > ol > li a:hover, #overview > div > ol > li > ol > li a:hover {
   background-color: transparent;
+}
+#overview > div > ol > li > ol {
+  height: auto;
 }
 #overview > div > .preview {
   display: block !important;
   overflow: hidden;
-  background-color: #f5f5f5;
   z-index: 0;
 }
-#overview > div > ol > li .preview, #overview > div > .preview {
+#overview > div ol > li .preview, #overview > div > .preview {
   display: none;
   position: absolute;
   left: 0;

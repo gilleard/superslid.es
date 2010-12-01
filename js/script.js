@@ -266,15 +266,29 @@ $(document).ready(function() {
       // Generate new slide list
       var slideListHtml = '';
       $g_slides.filter('.title').each(function() {
-        slideListHtml += '<li><a href="#' + parseInt($g_slides.index($(this)) + 1, 10) + '">' + $(this).find('h1, h2, header').first().text() + '</a><div class="preview">' + $(this).html() + '</div></li>';
+        slideListHtml += '<li><a href="#' + parseInt($g_slides.index($(this)) + 1, 10) + '">' + $(this).find('h1, h2, header').first().text() + '</a><div class="preview">' + $(this).html() + '</div>';
+        
+          var $l_subSlides = $(this).nextUntil('.title');
+          if ($l_subSlides.size() > 0) {
+            slideListHtml += '<ol>';
+            $l_subSlides.each(function() {
+              slideListHtml += '<li><a href="#' + parseInt($g_slides.index($(this)) + 1, 10) + '">' + $(this).find('h1, h2, header').first().text() + '</a><div class="preview">' + $(this).html() + '</div></li>';
+            });
+            slideListHtml += '</ol>';
+          }        
+        slideListHtml += '</li>';
       });
       $('<ol />').append(slideListHtml).prependTo($g_overview.find('> div'));
       
       // Show preview on hover
-      $g_overview.find('> div > ol > li > a').hover(
-        function() { $(this).next().show(); },
-        function() { $(this).next().hide(); }
-      );
+      $g_overview
+        .find('> div ol > li > a').hover(
+          function() { $(this).next().show(); },
+          function() { $(this).next().hide(); }
+        ).end()
+        .find('> div > ol > li > a').click(function() {
+          $(this).parent().find('> ol').stop(false, true).slideToggle(250);
+        });
       
       // Show the overview
       $g_overview.show();

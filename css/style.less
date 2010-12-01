@@ -83,37 +83,49 @@ body.outline > .wrapper {
     margin: 0 auto;
     background-color: #ffffff;
 
-    > ol {
+    > ol,
+    > ol > li > ol {
       height: @slide-height/2;
       overflow: auto;
     
       > li {
-        list-style-position: outside;
-        background-color: #f5f5f5;
+        list-style: none;
         
         > a {
           display: block;
           padding: 5px;
           text-align: center;
+          background-color: #f5f5f5;
         }
         
         > .preview {
-          background-color: #ffffff;
           z-index: 1;
         }
         
-      }
+        > ol {
+          display: none;
+          
+          > li > a {
+            background-color: #eee;
+          }
+          
+        }
         
-      > li:nth-child(even) {
+      }
+      
+      > li a:hover {
         background-color: transparent;
       }
       
     }
     
+    > ol > li > ol {
+      height: auto;
+    }
+    
     > .preview {
       display: block !important;
       overflow: hidden;
-      background-color: #f5f5f5;
       z-index: 0;
     }
 
@@ -121,7 +133,7 @@ body.outline > .wrapper {
   
 }
 
-#overview > div > ol > li .preview,
+#overview > div ol > li .preview,
 #overview > div > .preview {
   display: none;
   position: absolute;
