@@ -2,8 +2,6 @@ function superSlides(options) {
 
   // Defaults
   var settings = {
-     'location'         : 'top',
-     'background-color' : 'blue'
   };
 
   // Update settings with user's values
@@ -283,21 +281,37 @@ function superSlides(options) {
     // If overview is hidden
     else {
 
-      // Generate new slide list
+      // For each non sub slide
       var slideListHtml = '';
       $g_slides.filter(':not(.sub)').each(function() {
+      
+        // Add title and preview
         slideListHtml += '<li><a href="#' + parseInt($g_slides.index($(this)) + 1, 10) + '">' + $(this).find('h1, h2, header').first().text() + '</a><div class="preview">' + $(this).html() + '</div>';
-
+        
+          // Check for sub slides
           var $l_subSlides = $(this).nextUntil(':not(.sub)');
           if ($l_subSlides.size() > 0) {
-            slideListHtml += '<ol>';
+          
+            // Add arrow
+            slideListHtml += '<span>&darr;</span><ol>';
             $l_subSlides.each(function() {
+            
+              // Add title and preview
               slideListHtml += '<li><a href="#' + parseInt($g_slides.index($(this)) + 1, 10) + '">' + $(this).find('h1, h2, header').first().text() + '</a><div class="preview">' + $(this).html() + '</div></li>';
+            
             });
+            
+            // Close sub slide list
             slideListHtml += '</ol>';
-          }
+            
+          } // $l_subSlides.size() > 0
+          
+        // Close non sub slide list-item
         slideListHtml += '</li>';
+        
       });
+      
+      // Add list to reference slide
       $('<ol />').append(slideListHtml).prependTo($g_overview.find('> div'));
 
       // Show preview on hover
@@ -305,8 +319,16 @@ function superSlides(options) {
         .find('> div ol > li > a').hover(
           function() { $(this).next().show(); },
           function() { $(this).next().hide(); }
-        ).end()
-        .find('> div > ol > li > a').click(function() {
+        )
+        
+        // Go to slide on click
+        .click(function() {
+          toggleOverview();
+          goToSlide(parseInt($(this).attr('href').substring(1), 10));
+        }).end()
+        
+        // Toggle sub slides on span click
+        .find('> div > ol > li > span').click(function() {
           $(this).parent().find('> ol').stop(false, true).slideToggle(250);
         });
 
