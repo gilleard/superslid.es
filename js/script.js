@@ -2,6 +2,9 @@ function superSlides(options) {
 
   // Defaults
   var settings = {
+    width: 980,
+    height: 735,
+    fontSize: 150
   };
 
   // Update settings with user's values
@@ -38,10 +41,8 @@ function superSlides(options) {
   // Pointers
   var
     $g_body = $('body'),
-    $g_slides = $('#slides > div'),
-    $g_footer = $('body > .wrapper > footer'),
-    $g_pagingCurrent = $g_footer.find('.current'),
-    $g_pagingTotal = $g_footer.find('.total'),
+    $g_wrapper = $g_body.find('> .wrapper'),
+    $g_slides = $g_wrapper.find('> #slides > div'),
     $g_currentSlide = null,
     $g_overview = null;
 
@@ -66,6 +67,44 @@ function superSlides(options) {
     }
 
   } // log(message)
+  
+  function scaleSlides() {
+  
+    var
+      l_windowWidth = $(window).width(),
+      l_windowHeight = $(window).height();
+    
+    // Wider than slide ratio
+    if((l_windowWidth/l_windowHeight) > (settings.width/settings.height)) {
+      
+      // Limit width, auto centered
+      var l_wrapperWidth = parseInt(l_windowHeight * (settings.width/settings.height), 10);
+      
+      $g_wrapper.css({
+        'width': l_wrapperWidth + 'px',
+        'height': l_windowHeight + 'px',
+        'margin-top': '0px',
+        'font-size': (l_wrapperWidth / settings.width) * settings.fontSize + '%'
+      });
+      
+    }
+    
+    // Taller than slide ratio
+    else {
+    
+      // Limit height, calculate margin to centre
+      var l_wrapperHeight = parseInt(l_windowWidth * (settings.height/settings.width), 10);
+    
+      $g_wrapper.css({
+        'width': l_windowWidth + 'px',
+        'height': l_wrapperHeight + 'px',
+        'margin-top': parseInt((l_windowHeight - l_wrapperHeight) / 2, 10) + 'px',
+        'font-size': (l_wrapperHeight / settings.height) * settings.fontSize + '%'
+      });
+      
+    }
+  
+  } // scaleSlides()
 
   function goToSlide(l_slideNumber, l_direction) {
 
@@ -105,9 +144,6 @@ function superSlides(options) {
 
     // Show new slide
     $g_currentSlide.addClass('current');
-
-    // Update paging variables
-    $g_pagingCurrent.text(g_currentSlideNumber);
 
     // Update url
     if(g_currentView == e_view.slides) {
@@ -199,7 +235,9 @@ function superSlides(options) {
   } // previous(l_dimension)
 
   function getCurrentView() {
+  
     return g_currentView == e_view.slides ? 'slides' : 'outline';
+    
   } // getCurrentView()
 
   function switchView(l_view) {
@@ -208,12 +246,30 @@ function superSlides(options) {
     g_currentView = l_view;
 
     log('New view: ' + getCurrentView());
-
-    // Update url
-    location.hash = g_currentView == e_view.slides ? '#' + g_currentSlideNumber : '';
-
+    
     // Switch to new view
     $g_body.removeClass('slides outline').addClass(getCurrentView());
+    
+    if(g_currentView == e_view.slides) {
+    
+      // Check for resize
+      scaleSlides();
+    
+    }
+    else {
+    
+      // Remove any scaling
+      $g_wrapper.css({
+        'width': 'auto',
+        'height': 'auto',
+        'margin-top': '0px',
+        'font-size': 'inherit'
+      });
+    
+    }
+    
+    // Update url
+    location.hash = g_currentView == e_view.slides ? '#' + g_currentSlideNumber : '';
 
   } // switchView(l_view)
 
@@ -266,6 +322,24 @@ function superSlides(options) {
     g_totalSlides = $g_slides.size();
 
   } // generateReferences()
+  
+  function generateFooters() {
+  
+    // Copy footer into each slide
+    $g_slides.append($('body > .wrapper > footer'));
+    
+    // For each slide
+    $g_slides.each(function() {
+    
+      // Replace current slide numbers
+      $(this).find('.current').text(parseInt($g_slides.index($(this)) + 1, 10));
+      
+    });
+    
+    // Replace total slide numbers
+    $g_slides.find('.total').text(g_totalSlides);
+  
+  } // generateFooters()
 
   function toggleOverview() {
 
@@ -280,7 +354,7 @@ function superSlides(options) {
 
     // If overview is hidden
     else {
-
+    
       // For each non sub slide
       var slideListHtml = '';
       $g_slides.filter(':not(.sub)').each(function() {
@@ -350,15 +424,19 @@ function superSlides(options) {
   log('Current slides: ' + g_currentSlideNumber);
   log('Current view: ' + getCurrentView(g_currentView));
 
+  // Scale slides
+  if(g_currentView == e_view.slides) {
+    scaleSlides();
+  }
+
   // Init references
   generateReferences();
 
   // Show initial slide
   goToSlide(g_currentSlideNumber, e_direction.forward);
 
-  // Replace paging variables
-  $g_pagingCurrent.text(g_currentSlideNumber);
-  $g_pagingTotal.text(g_totalSlides);
+  // Init footer
+  generateFooters();
 
   // Init overview
   $g_overview = $('<div />').attr('id', 'overview').css('display', 'none').append($('<div />').append($('<div />').addClass('preview'))).appendTo('body > .wrapper');
@@ -372,102 +450,111 @@ function superSlides(options) {
   //
   // **************************************************
 
-  // Keyboard
-  $(window).keyup(function(event) {
-
-    switch(event.keyCode) {
-
-      case 35: // end
-        if(g_currentView == e_view.slides) {
-          goToSlide(g_totalSlides, e_direction.forward);
-        }
-        break;
-
-      case 36: // home
-        if(g_currentView == e_view.slides) {
-          goToSlide(1, e_direction.forward);
-        }
-        break;
-
-      case 10: // return
-      case 13: // enter
-      case 32: // space
-      case 39: // right
-      case 40: // down
-        if(g_currentView == e_view.slides && !g_overviewActive) {
-          if(g_skipSlides !== '') {
-            if((event.keyCode == 10) || (event.keyCode == 13)) {
-              // Skip to slide
-              log('Skip to slide ' + g_skipSlides);
-              goToSlide(g_skipSlides, e_direction.forward);
+  $(window)
+  
+    // Keyboard
+    .keyup(function(event) {
+  
+      switch(event.keyCode) {
+  
+        case 35: // end
+          if(g_currentView == e_view.slides) {
+            goToSlide(g_totalSlides, e_direction.forward);
+          }
+          break;
+  
+        case 36: // home
+          if(g_currentView == e_view.slides) {
+            goToSlide(1, e_direction.forward);
+          }
+          break;
+  
+        case 10: // return
+        case 13: // enter
+        case 32: // space
+        case 39: // right
+        case 40: // down
+          if(g_currentView == e_view.slides && !g_overviewActive) {
+            if(g_skipSlides !== '') {
+              if((event.keyCode == 10) || (event.keyCode == 13)) {
+                // Skip to slide
+                log('Skip to slide ' + g_skipSlides);
+                goToSlide(g_skipSlides, e_direction.forward);
+              }
+              else {
+                // Skip forward slides
+                log('Skip forward ' + parseInt(g_skipSlides, 10) + ' slides');
+                goToSlide(parseInt(g_currentSlideNumber, 10) + parseInt(g_skipSlides, 10), e_direction.forward);
+              }
             }
             else {
-              // Skip forward slides
-              log('Skip forward ' + parseInt(g_skipSlides, 10) + ' slides');
-              goToSlide(parseInt(g_currentSlideNumber, 10) + parseInt(g_skipSlides, 10), e_direction.forward);
+              if(event.keyCode == 32 || event.keyCode == 39) {
+                advance(e_dimension.sub);
+              }
+              else if(event.keyCode == 40) {
+                advance(e_dimension.title);
+              }
             }
+            g_skipSlides = '';
           }
-          else {
-            if(event.keyCode == 32 || event.keyCode == 39) {
-              advance(e_dimension.sub);
+          break;
+  
+        case 37: // left
+        case 38: // up
+          if(g_currentView == e_view.slides && !g_overviewActive) {
+            if(g_skipSlides !== '') {
+              // Skip back slides
+              log('Skip back ' + g_skipSlides + ' slides');
+              goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
             }
-            else if(event.keyCode == 40) {
-              advance(e_dimension.title);
+            else {
+              if(event.keyCode == 37) {
+                previous(e_dimension.sub);
+              }
+              else if(event.keyCode == 38) {
+                previous(e_dimension.title);
+              }
             }
+            g_skipSlides = '';
           }
-          g_skipSlides = '';
-        }
-        break;
-
-      case 37: // left
-      case 38: // up
-        if(g_currentView == e_view.slides && !g_overviewActive) {
-          if(g_skipSlides !== '') {
-            // Skip back slides
-            log('Skip back ' + g_skipSlides + ' slides');
-            goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
+          break;
+  
+        case 48: // 0
+        case 49: // 1
+        case 50: // 2
+        case 51: // 3
+        case 52: // 4
+        case 53: // 5
+        case 54: // 6
+        case 55: // 7
+        case 56: // 8
+        case 57: // 9
+          g_skipSlides += parseInt(event.keyCode, 10) - 48;
+          break;
+  
+        case 79: // o
+          if(g_currentView == e_view.slides) {
+            toggleOverview();
           }
-          else {
-            if(event.keyCode == 37) {
-              previous(e_dimension.sub);
-            }
-            else if(event.keyCode == 38) {
-              previous(e_dimension.title);
-            }
+          break;
+  
+        case 84: // t
+          if(!g_overviewActive) {
+            switchView(g_currentView == e_view.slides ? e_view.outline : e_view.slides);
           }
-          g_skipSlides = '';
-        }
-        break;
-
-      case 48: // 0
-      case 49: // 1
-      case 50: // 2
-      case 51: // 3
-      case 52: // 4
-      case 53: // 5
-      case 54: // 6
-      case 55: // 7
-      case 56: // 8
-      case 57: // 9
-        g_skipSlides += parseInt(event.keyCode, 10) - 48;
-        break;
-
-      case 79: // o
-        if(g_currentView == e_view.slides) {
-          toggleOverview();
-        }
-        break;
-
-      case 84: // t
-        if(!g_overviewActive) {
-          switchView(g_currentView == e_view.slides ? e_view.outline : e_view.slides);
-        }
-        break;
-
-    }
-
-    event.preventDefault();
-
-  });
+          break;
+  
+      }
+  
+      event.preventDefault();
+  
+    })
+  
+    // Resize browser
+    .resize(function() {
+      if(g_currentView == e_view.slides) {
+        scaleSlides();
+      }
+    });
 
 }
