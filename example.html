@@ -1,0 +1,1371 @@
+<!doctype html>
+
+<html lang="en-GB">
+  <head>
+  
+    <!-- meta -->
+    <meta charset="utf-8">
+    <title>SUPERslid.es</title>
+    
+    <!-- css -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- math -->
+    <script src="math/MathJax.js"></script>
+    
+  </head>
+  <body>
+  
+    <div class="wrapper">
+    
+      <div id="slides">
+        
+<div>
+
+<h1>COMP60370<br>
+
+A Tale of Two Formats<br>
+
+</h1>
+
+<h2>Bijan Parsia</h2>
+
+<h2>{bparsia@cs.man.ac.uk}
+
+</h2>
+
+</div>
+
+<div>
+
+<h1>Things "on the Web"</h1>
+
+<ul>
+
+<li>Documents</li>
+
+<ul>
+
+<li>Home pages, documentation, papers, magazines, manuals,
+
+novels....</li>
+
+</ul>
+
+<li>Data</li>
+
+<ul>
+
+<li>Addresses, bank records, appointments</li>
+
+</ul>
+
+<li>Applications</li>
+
+<ul>
+
+<li>"User agents"</li>
+
+<li>Non-user agents</li>
+
+<li>Web hosted/native applications</li>
+
+<ul>
+
+<li>For end users</li>
+
+<li>For other programs</li>
+
+</ul>
+
+</ul>
+
+<li>There are at lease <a href="http://www.worldwidewebsize.com/">45.4 billion web
+
+pages</a> <i>indexed</i> in search engines!</li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Making such things</h1>
+
+<ul>
+
+<li>Who creates documents?</li>
+
+<ul>
+
+<li>Authors</li>
+
+<li>Programs</li>
+
+</ul>
+
+<li>Who creates data?</li>
+
+<ul>
+
+<li>Authors</li>
+
+<li>Programs</li>
+
+</ul>
+
+<li>Who creates applications?</li>
+
+<li>How do we make such things for (more or less) <i>arbitrary</i>
+
+(re)use?</li>
+
+<ul>
+
+<li>Web applicaitons <b>are</b>, <b>create</b>,
+
+and <b>consume</b> Web documents and data!</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>The most basic picture</h1>
+
+<p align="center"><img alt="For example, a web browser might interact with two web servers (one for the HTML page and one for an embedded PNG image)." src="http://www.cs.man.ac.uk/%7Ebparsia/2007/comp60370/arch1.png" height="321" width="455"></p>
+
+</div>
+
+<div>
+
+<h1>A less basic picture<br>
+
+</h1>
+
+<p align="center"><img alt="The browser has to use DNS servers in order to find the Web host serving the HTML and PNGs." src="http://www.cs.man.ac.uk/%7Ebparsia/2007/comp60370/arch2.png" height="321" width="455"></p>
+
+</div>
+
+<div>
+
+<h1>The data<br>
+
+</h1>
+
+<ul>
+
+<li>Initial URI, say
+
+&lt;<font color="#3333ff">http://ex.org/test/example.html</font>&gt;</li>
+
+<li>The HTML:</li>
+
+<ul>
+
+<li><code></code>
+
+<pre>&lt;html&gt;<br> &lt;head&gt;&lt;title&gt;Test!&lt;/title&gt;&lt;/head&gt;<br> &lt;body&gt;&lt;img src="http://www.cs.man.ac.uk/%7Ebparsia/2007/comp60370/<font color="#3333ff">http://ex2.org/myhead.png</font>"&gt;&lt;/body&gt;<br>&lt;/html&gt;</pre>
+
+</li>
+
+</ul>
+
+<li>Consider how complex this is!</li>
+
+<ul>
+
+<li>And this is durn simple.</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Today: Authoring&nbsp;Web Stuff<br>
+
+</h1>
+
+<ul>
+
+<li>Validation &amp; error handling</li>
+
+<li>Semantic Markup &amp; Styling</li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Case to Study<br>
+
+</h1>
+
+<ul>
+
+<li>Consider <a href="http://www.intertwingly.net/blog/1472.html">weblogs</a></li>
+
+<ul>
+
+<li>Chronologically reversed series of "items"</li>
+
+<li>Each item has an author and a timestamp</li>
+
+<li>Items are generally short, but can contain all sorts of
+
+hypermedia</li>
+
+<li>Generally intended to be read by people</li>
+
+<ul>
+
+<li>Closer to a magazine than to a stock ticker</li>
+
+</ul>
+
+</ul>
+
+<li>Different aspects</li>
+
+<ul>
+
+<li>Writing</li>
+
+<li>Reading</li>
+
+<li>Publishing</li>
+
+<ul>
+
+<li>As a web site</li>
+
+<li>As a "feed" for syndication</li>
+
+</ul>
+
+<li>Aggregating</li>
+
+</ul>
+
+<ul>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>A Weblog Workflow</h1>
+
+<p align="center"><img alt="Weblog entries get pushed to a server (with a CMS or just to the file system) which then gets published as an HTML page or an XML feed which is then aggregated." src="http://www.cs.man.ac.uk/%7Ebparsia/2007/comp60370/weblogwf.png" height="333" width="286"></p>
+
+<ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Weblog Data Formats</h1>
+
+<ul>
+
+<li>For writing</li>
+
+<ul>
+
+<li>HTML (directly or by a Web App)</li>
+
+<li>"Markdown" languages</li>
+
+</ul>
+
+<li>Reading</li>
+
+<ul>
+
+<li>HTML</li>
+
+</ul>
+
+<li>Publishing</li>
+
+<ul>
+
+<li>HTML for web sites</li>
+
+<li>RSSx or Atom for syndication</li>
+
+</ul>
+
+<li>Aggregation</li>
+
+<ul>
+
+<li>RSSx or Atom</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>A Brief History of (X)HTML</h1>
+
+<ul>
+
+<li>Original HTML "inspired by" some SGML formats</li>
+
+<ul>
+
+<li>But no DTD; first browser didn't use SGML parser</li>
+
+<li>At least somewhat LaTeXish</li>
+
+</ul>
+
+<li>HTML 2.0-3.2 had DTDs</li>
+
+<ul>
+
+<li>But widely ignored (except by validators)</li>
+
+<li><a href="http://www.ology.org/tilt/cgh/">Big</a>
+
+<a href="http://www.xml.com/pub/a/w3j/s1.people.html">bad</a>
+
+<a href="http://people.hbs.edu/pyin/papers/ETB0605.pdf">browser</a>/<a href="http://www.innervisions.com.au/webhistory/index.html">designer</a>
+
+<a href="http://www.quirksmode.org/browsers/history.html">wars</a></li>
+
+</ul>
+
+<li>HTML 4.0x</li>
+
+<ul>
+
+<li>DTD (again, not used by browsers)</li>
+
+</ul>
+
+<ul>
+
+<li>Deprecation of presentational features</li>
+
+</ul>
+
+<li>XHTML</li>
+
+<ul>
+
+<li>XMLized version of HTML 4.0x (with DTD)</li>
+
+</ul>
+
+<li>(X)HTML5</li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>HTML as SSD</h1>
+
+<ul>
+
+<li>HTML files tend to correspond to documents</li>
+
+<ul>
+
+<li>Text/narrative heavy</li>
+
+<li>Complex, irregular (treelike) structure</li>
+
+<li>Lots of features (doc structure, formatting, tables,
+
+forms, etc.)</li>
+
+</ul>
+
+<li>HTML is Not XML</li>
+
+<ul>
+
+<li>No need for well formedness</li>
+
+<li>Tags don't need to be closed</li>
+
+<li>Attributes don't need to be quoted (etc. etc.)</li>
+
+<li><a href="http://hixie.ch/advocacy/xhtml">Many
+
+others</a></li>
+
+</ul>
+
+<li>HTML is Not SGML</li>
+
+<ul>
+
+<li>See, for example, the <a href="http://ln.hixie.ch/?start=1137799947&amp;count=1">case</a>
+
+of <a href="http://www.howtocreate.co.uk/SGMLComments.html">comments</a></li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>HTML as SSD</h1>
+
+<ul>
+
+<li>HTML files tend to correspond to documents</li>
+
+<ul>
+
+<li>Text/narrative heavy</li>
+
+<li>Complex, irregular (treelike) structure</li>
+
+<li>Lots of features (doc structure, formatting, tables,
+
+forms, etc.)</li>
+
+</ul>
+
+<li>HTML is Not XML</li>
+
+<ul>
+
+<li>No need for well formedness</li>
+
+<li>Tags don't need to be closed</li>
+
+<li>Attributes don't need to be quoted (etc. etc.)</li>
+
+<li><a href="http://hixie.ch/advocacy/xhtml">Many
+
+others</a></li>
+
+</ul>
+
+<li>HTML is Not SGML</li>
+
+<ul>
+
+<li>See, for example, the <a href="http://ln.hixie.ch/?start=1137799947&amp;count=1">case</a>
+
+of <a href="http://www.howtocreate.co.uk/SGMLComments.html">comments</a></li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>A simple HTML weblog (1)</h1>
+
+<blockquote>
+
+<p>Authentic Voice of a Person.&nbsp; Reverse Chronological
+
+Order.&nbsp; On the web.&nbsp; These are essential
+
+characteristics of a online Journal or weblog.</p>
+
+<p>Given the statements above, a well formed log entry would
+
+contain at a minimum an author, a creationDate, and a
+
+permaLink.&nbsp; And, of course, content. -- <a href="http://www.intertwingly.net/blog/1472.html">Sam Ruby</a></p>
+
+</blockquote>
+
+<pre><code>&lt;h1&gt;My Weblog&lt;/h1&gt;<br>&lt;h2&gt;What I Did Today&lt;/h2&gt;<br>&lt;h3&gt;Feb. 11, 2008; Bijan Parsia&lt;/h3&gt;<br>&lt;p&gt;Taught a class and it went &lt;i&gt;very&lt;/i&gt; well.&lt;/p&gt;</code></pre>
+
+</div>
+
+<div>
+
+<h1>A simple HTML weblog (2)</h1>
+
+<p>We can radically change the markup.</p>
+
+<pre><code>&lt;h1&gt;My Weblog&lt;/h1&gt;<br>&lt;ul&gt;<br> &lt;li&gt;<br> &lt;b&gt;What I Did Today&lt;/b&gt;&lt;br/&gt;<br> &lt;i&gt;Feb. 11, 2008; Bijan Parsia&lt;/i&gt;&lt;/br&gt;<br> &lt;p&gt;Taught a class and it went &lt;em&gt;very&lt;/em&gt; well.<br> &lt;/li&gt;<br>&lt;/ul&gt;</code></pre>
+
+</div>
+
+<div>
+
+<h1>A simple Atom entry</h1>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>&lt;feed xmlns="http://www.w3.org/2005/Atom"&gt;<br> &lt;title&gt;<font color="#3333ff">My Weblog</font>&lt;/title&gt;<br> &lt;updated&gt;2008-02-13T18:30:02Z&lt;/updated&gt; <br> &lt;id&gt;urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6&lt;/id&gt;<br> &lt;entry&gt;<br> &lt;author&gt; <br> &lt;name&gt;<font color="#3333ff">Bijan Parisa</font>&lt;/name&gt;<br> &lt;/author&gt; <br> &lt;title&gt;<font color="#3333ff">What I Did Today</font>&lt;/title&gt;<br> &lt;id&gt;urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id&gt;<br> &lt;updated&gt;<font color="#3333ff">2008-02-13T18:30:02Z</font>&lt;/updated&gt;<br> &lt;content type="xhtml" xml:lang="en"<br> xmlns="http://www.w3.org/1999/xhtml"&gt;<br> &lt;p&gt;<font color="#3333ff">Taught a class and it went &lt;em&gt;very&lt;/em&gt; well.</font>&lt;/p&gt;<br> &lt;/content&gt;<br> &lt;/entry&gt; <br>&lt;/feed&gt;</code></pre>
+
+</div>
+
+<div>
+
+<h1>Validation in the Wild</h1>
+
+<ul>
+
+<li>HTML</li>
+
+<ul>
+
+<li><a href="http://www.wrox.com/WileyCDA/Section/id-302834.html">1%</a>-<a href="http://www.cs.ust.hk/%7Eshen/100.pdf">5%</a> of
+
+web pages are valid</li>
+
+</ul>
+
+<ul>
+
+<ul>
+
+<li><a href="http://www.cs.tut.fi/%7Ejkorpela/html/validation.html">Validation</a>
+
+<a href="http://ln.hixie.ch/?start=1029713028&amp;count=1">is</a>
+
+very weak!</li>
+
+</ul>
+
+<li>All sorts of breakage</li>
+
+<ul>
+
+<li>E.g., overlapping tags</li>
+
+<ul>
+
+<li><code>&lt;b&gt;hi
+
+&lt;i&gt;there&lt;/b&gt;, my good
+
+friend&lt;/i&gt;</code></li>
+
+</ul>
+
+</ul>
+
+</ul>
+
+<li>Syndication Formats</li>
+
+<ul>
+
+<li><a href="http://www.xml.com/pub/a/2003/01/22/dive-into-xml.html?page=last&amp;x-showcontent=off">10%</a>
+
+&nbsp;feeds <i>not well-formed</i></li>
+
+</ul>
+
+<li>Where do the problems come from?</li>
+
+<ul>
+
+<li>Hand authoring</li>
+
+<li>Generation bugs</li>
+
+<ul>
+
+<li>String concat based generation</li>
+
+</ul>
+
+<li>Composition from random sources</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Seeking Validation</h1>
+
+<ul>
+
+<li>Validation and conformance criteria</li>
+
+<ul>
+
+<li>Schema language expressible</li>
+
+<ul>
+
+<li>Expressible <i>at all</i></li>
+
+<li>Painfully expressible</li>
+
+<li>Not usefully expressible</li>
+
+</ul>
+
+<li>Machine checkable</li>
+
+<ul>
+
+<li>But might require arbitrary programming</li>
+
+</ul>
+
+<li>Requires human judgment</li>
+
+<ul>
+
+<li>E.g, for <a href="http://www.w3.org/TR/html401/struct/objects.html#h-13.8">alt
+
+text:</a> "Do not specify meaningless alternate text (e.g.,
+
+"dummy text")."</li>
+
+</ul>
+
+</ul>
+
+<li>Reporting and repairing</li>
+
+<ul>
+
+<li>Hard failure (alone) not helpful</li>
+
+<li>Forbidding harmless stuff pointless</li>
+
+<li>Requiring the impossible pointless</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Lesson #1</h1>
+
+<ul>
+
+<li>We are dealing with socio-political (and economic) phenomena<br>
+
+</li>
+
+<ul>
+
+<li>Complex ones!</li>
+
+<li>Many players; many <i>sorts</i> of player</li>
+
+<li>Lots of historical specifics</li>
+
+</ul>
+
+<ul>
+
+<li>Lots of interaction effects</li>
+
+</ul>
+
+<li>Human factors critical</li>
+
+<ul>
+
+<li>What do people <i>do</i> (and why?)</li>
+
+<ul>
+
+<li>How to influence them?</li>
+
+</ul>
+
+<ul>
+
+<li>Affordances and incentives</li>
+
+</ul>
+
+<li>Dealing with "bozos"</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Error</h1>
+
+<ul>
+
+<li><a href="http://www.postel.org/postel.html">Be
+
+liberal in what you accept, and conservative in what
+
+you send.</a></li>
+
+<ul>
+
+<li>Validation should help, not punish</li>
+
+</ul>
+
+<li>De facto XML motto</li>
+
+<ul>
+
+<li>Be strict about the well formedness of what you accept,
+
+and strict in what you send</li>
+
+<li>Draconian error handling</li>
+
+<ul>
+
+<li>Fail early and fail hard</li>
+
+</ul>
+
+</ul>
+
+<ul>
+
+<li>What about higher levels?</li>
+
+<ul>
+
+<li>Validity and other analysis?</li>
+
+<li>Most schema languages poor at error reporting</li>
+
+</ul>
+
+</ul>
+
+<li>&nbsp;Current thinking (some of the time)</li>
+
+<ul>
+
+<li>Deterministic error handling, i.e., speced error recovery</li>
+
+</ul>
+
+<li><a href="http://software.hixie.ch/utilities/js/live-dom-viewer/">Live
+
+DOM viewer</a></li>
+
+<ul>
+
+<li>Look at <a href="htmllog1.html">htmllog1.html</a>,
+
+<a href="htmllog2.html">htmllog2.html</a>, and
+
+<a href="atomlog.atom">atomlog.atom</a></li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Schematron</h1>
+
+<ul>
+
+<li>A <a href="http://www.schematron.com/">different
+
+sort</a> of schema language</li>
+
+<ul>
+
+<li>Not grammar or object based</li>
+
+<li>Rule based</li>
+
+<li>Test oriented</li>
+
+<li>Complimentary</li>
+
+</ul>
+
+<li>Conceptual simple</li>
+
+<ul>
+
+<li>Patterns contain rules</li>
+
+<li>Rules set a <i>context</i> and contain
+
+asserts and reports</li>
+
+<li>A&amp;Rs contain tests and assertions</li>
+
+<ul>
+
+<li>Tests are XPath querys with the context as the current
+
+node</li>
+
+<li>Assertions are natural language text describing the
+
+condition</li>
+
+</ul>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>From HTML5: Exclusions</h1>
+
+<ul>
+
+<li>HTML5 <a href="http://hsivonen.iki.fi/thesis/">validator</a></li>
+
+<ul>
+
+<li>Relax NG schema</li>
+
+<li>Schemetron assertions</li>
+
+<li>Custom code</li>
+
+</ul>
+
+<li>Often want <i>contextual</i> <a href="http://www.xml.com/pub/a/2004/11/10/xslt.html">exclusions</a></li>
+
+<ul>
+
+<li>To break circles:</li>
+
+<ul>
+
+<li>Paragraphs contain footnotes</li>
+
+<li>Footnotes contain paragraphs</li>
+
+<li>Footnotes may not contain paragraphs</li>
+
+</ul>
+
+<li>Without exclusions, would need many paragraph productions</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Exclusions Examples</h1>
+
+<pre><code>&lt;schema xmlns="http://purl.oclc.org/dsdl/schematron"&gt;<br>&nbsp; &lt;ns prefix="h" uri="http://www.w3.org/1999/xhtml"/&gt;<br> &lt;pattern name='dfn cannot nest'&gt;<br> &lt;rule context="h:dfn"&gt;<br> &lt;report test="ancester::h:dfn"&gt;<br> The "dfn" element cannot contain any nested<br> "dfn" elements.&lt;/report&gt;<br> &lt;/rule&gt;<br> &lt;/pattern&gt;<br></code><code> &lt;pattern name='noscript cannot nest'&gt;<br> &lt;rule context="h:noscript"&gt;<br> &lt;report test="ancester::h:&gt;noscript"&gt;<br> The "noscript element cannot contain any nested<br> "noscript" elements.&lt;/report&gt;<br> &lt;/rule&gt;<br> &lt;/pattern&gt;<br>&lt;/schema&gt;</code></pre>
+
+</div>
+
+<div>
+
+<h1>Dfn Defined</h1>
+
+<p>From <a href="http://syntax.whattf.org/relaxng/common.rnc">common.rnc</a>:</p>
+
+<pre><code>common.elem.embedded = ( notAllowed )<br>common.elem.phrase = ( common.elem.embedded )<br>common.inner.phrase =( text &amp; common.elem.phrase* )</code></pre>
+
+<p>From <a href="http://syntax.whattf.org/relaxng/phrase.rnc">phrase.rnc</a>:</p>
+
+<pre><code>dfn.elem = element dfn { dfn.inner &amp; dfn.attrs }<br>dfn.attrs =<br>	( common.attrs )<br>dfn.inner =<br>	( common.inner.phrase )<br><br>common.elem.phrase |= dfn.elem</code><code></code></pre>
+
+</div>
+
+<div>
+
+<h1>An Atom Example&nbsp;</h1>
+
+<pre><code>&lt;ns uri="http://www.w3.org/2005/Atom" prefix="atom"/&gt; <br>&lt;rule context="atom:feed"&gt;<br> &lt;assert test="atom:author or not(atom:entry[not(atom:author)])"&gt;<br> An atom:feed must have an atom:author unless all<br> of its atom:entry children have an atom:author.<br> &lt;/assert&gt;<br>&lt;/rule&gt;</code></pre>
+
+</div>
+
+<div>
+
+<h1>Schematron Presumes...&nbsp;</h1>
+
+<ul>
+
+<li>...Well formed XML</li>
+
+<ul>
+
+<li>As do all XML schema languages</li>
+
+</ul>
+
+<ul>
+
+<li>So can't help with e.g., overlapping tags</li>
+
+<ul>
+
+<li>Or tag soup in general</li>
+
+</ul>
+
+</ul>
+
+<li>...Authorial repair</li>
+
+<ul>
+
+<li>At least in the default case</li>
+
+<li>Thus, not the basis of a browser!</li>
+
+</ul>
+
+<li><a href="http://www.whatwg.org/specs/web-apps/current-work/#parsing">Parse
+
+phase</a> can handle both</li>
+
+<ul>
+
+<li>Parser generates (the moral equiv of) a DOM</li>
+
+<li>Parser can repair some problems</li>
+
+<ul>
+
+<li>E.g., elements in the wrong place</li>
+
+</ul>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Structure and Style&nbsp;</h1>
+
+<ul>
+
+<li>Both HTML and&nbsp;Atom have specific vocabularies</li>
+
+<ul>
+
+<li>Both have <i>structural</i> terms</li>
+
+<ul>
+
+<li>Indeed, except in content, Atom has nothing else</li>
+
+</ul>
+
+</ul>
+
+<ul>
+
+<li>HTML terms have specific default renderings</li>
+
+<ul>
+
+<li>And some (e.g., <code>&lt;font&gt;</code>)
+
+are purely presentational</li>
+
+<ul>
+
+<li>Or arguably presentational</li>
+
+</ul>
+
+</ul>
+
+<li>Atom terms have no default renderings</li>
+
+<ul>
+
+<li>Often rendered to/scraped from HTML</li>
+
+</ul>
+
+</ul>
+
+<li>HTML has two "purely structural" elements: <code>&lt;div&gt;</code>
+
+and <code>&lt;span&gt;</code></li>
+
+<ul>
+
+<li>Instances distinguished by the <code>class</code>
+
+and <code>id </code>attributes</li>
+
+<li>Styled by CSS style rules or the&nbsp;<code>style</code>
+
+attribute</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Why separate them?&nbsp;</h1>
+
+<ul>
+
+<li>Presentation is more fluid than structure</li>
+
+<ul>
+
+<li>The "look" may need updating<br>
+
+</li>
+
+</ul>
+
+<li>Presentation needs may vary</li>
+
+<ul>
+
+<li>What works for 21" screens doesn't for mobile phones</li>
+
+<ul>
+
+<li>(Or maybe not!)</li>
+
+</ul>
+
+<li>Accessibility (content should be perceivable by people
+
+with disabilities)</li>
+
+</ul>
+
+<li>Programmatic processing needs</li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>CSS vs. XSL</h1>
+
+<ul>
+
+<li>CSS is</li>
+
+<ul>
+
+<li>not an XML/angle brackets format</li>
+
+<li>annotative, not transformative</li>
+
+<li>mostly "formats" nodes</li>
+
+<li>ubiquitous on the Web, esp. client side</li>
+
+</ul>
+
+<li>XSL</li>
+
+<ul>
+
+<li>has two parts: XSLT and XSL-FO</li>
+
+<ul>
+
+<li>or really, any target language such as HTML</li>
+
+</ul>
+
+<li>generates a new tree</li>
+
+<ul>
+
+<li>so is free to rearrange things</li>
+
+</ul>
+
+<li>mostly server side</li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>CSS Basics</h1>
+
+<ul>
+
+<li>Rules</li>
+
+<ul>
+
+<li><a href="http://www.w3.org/TR/CSS21/selector.html">Selectors</a></li>
+
+<ul>
+
+<li>Similar to XPath expressions</li>
+
+<ul>
+
+<li>But "forward" directed</li>
+
+<li>Special syntax for <code>class</code>
+
+attributes</li>
+
+<li>"Pseudo" classes and elements</li>
+
+</ul>
+
+</ul>
+
+<li>Declaration blocks</li>
+
+<ul>
+
+<li>Sets of declarations</li>
+
+<ul>
+
+<li>i.e., <a href="http://www.w3.org/TR/CSS21/propidx.html">property</a>/value
+
+pairs</li>
+
+</ul>
+
+</ul>
+
+</ul>
+
+<li>@-Rules (esp.:)</li>
+
+<ul>
+
+<li><a href="http://www.w3.org/TR/CSS21/cascade.html#at-import">@import</a></li>
+
+<li><a href="http://www.w3.org/TR/CSS21/media.html">@media</a></li>
+
+</ul>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>CSS with &lt;div&gt;, &lt;span&gt;</h1>
+
+<pre><code>&lt;style type="text/css"&gt;<br>.title {font-weight: bold}<br>div.title {text-align:center; font-size: 24; }<br>div.entry div.title {text-align: left; font-variant: normal}<br>span.date {font-style: italic}<br>span.date:after{content:" by"}<br>div.content {font-style: italic}<br>div.content i {font-style: normal; font-weight: bold}<br>#one {color: red}&lt;/style&gt;<br>&lt;div class=title&gt;My Weblog&lt;/div&gt;<br>&lt;div class="entry"&gt;<br> &lt;div class=title&gt;What I Did Today&lt;/div&gt;<br> &lt;div class=byline&gt;<br> &lt;span class=date&gt;Feb. 11, 2008&lt;/span&gt; &lt;span class=author&gt;Bijan Parsia&lt;/span&gt;<br> &lt;/div&gt;<br> &lt;div class="content" id="one"&gt;<br> &lt;p&gt;Taught a class and it went &lt;i&gt;very&lt;/i&gt; well.&lt;/p&gt;<br> &lt;/div&gt;<br>&lt;/div&gt;</code></pre>
+
+</div>
+
+<div>
+
+<h1>Reading &amp; References (1)</h1>
+
+<ul>
+
+<li><a href="http://hsivonen.iki.fi/thesis/">An
+
+HTML5 Conformance Checker</a></li>
+
+<ul>
+
+<li>Nice summary history of HTML and discussion of schema
+
+languages</li>
+
+</ul>
+
+<li><a href="http://www.mnot.net/rss/tutorial/">RSS
+
+Tutorial</a></li>
+
+<li>Draconian error handling (pro and con)</li>
+
+<ul>
+
+<li><a href="http://www.xml.com/pub/a/2003/01/22/dive-into-xml.html">Parsing
+
+RSS at all Costs</a></li>
+
+</ul>
+
+<ul>
+
+<li><a href="http://diveintomark.org/archives/2004/01/14/thought_experiment">Thought
+
+Experiment</a>,<a href="http://diveintomark.org/archives/2004/01/08/postels-law">
+
+There
+
+are no exceptions to Postel's law</a></li>
+
+<li><a href="http://www.tbray.org/ongoing/When/200x/2004/01/11/PostelPilgrim">On
+
+Postel, Again</a>,&nbsp;<a href="http://www.tbray.org/ongoing/When/200x/2007/01/30/XML-2">XML
+
+2.0?</a></li>
+
+<li><a href="http://annevankesteren.nl/2004/06/well-formed">Well
+
+formed</a></li>
+
+<li><a href="http://diveintomark.org/archives/2004/02/04/incompatible-rss">The
+
+myth of RSS compatibility</a></li>
+
+<li><a href="http://nick.typepad.com/blog/2004/01/feeddemon_and_w.html">FeedDemon
+
+and well-formed Atom feeds</a>, <a href="http://nick.typepad.com/blog/2004/01/feeddemon_and_w_1.html">part
+
+ii</a></li>
+
+</ul>
+
+<li><a href="http://www.cs.ust.hk/%7Eshen/100.pdf">An
+
+Experimental Study on Validation Problems with Existing HTML Webpages</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h1>Reading &amp; References (2)</h1>
+
+<ul>
+
+<li>Specs</li>
+
+<ul>
+
+<li><a href="http://www.w3.org/TR/html5/">HTML5,</a>
+
+<a href="http://www.w3.org/TR/html401/">HTML 4.01</a>,
+
+<a href="http://www.w3.org/TR/xhtml1/">XHTML 1.0</a></li>
+
+<ul>
+
+<li><a href="http://www.alistapart.com/articles/previewofhtml5">A
+
+Preview of HTML5</a></li>
+
+</ul>
+
+<li><a href="http://www.rssboard.org/rss-specification">RSS
+
+2.0</a>, <a href="http://atompub.org/rfc4287.html">Atom
+
+1.0</a>, <a href="http://microformats.org/wiki/hatom#Draft_Specification">hAtom</a></li>
+
+<ul>
+
+<li><a href="http://www.intertwingly.net/blog/1472.html">Anatomy
+
+of a Well Formed Log Entry</a></li>
+
+</ul>
+
+<li><a href="http://www.w3.org/TR/CSS21/">CSS 2.1</a></li>
+
+<li><a href="http://www.schematron.com/">Schematron</a></li>
+
+<ul>
+
+<li><a href="http://www.ldodds.com/papers/schematron_xsltuk.html">Schematron:
+
+validating XML using XSLT</a></li>
+
+</ul>
+
+</ul>
+
+<li>For next week</li>
+
+<ul>
+
+<li><a href="http://www.w3.org/TR/webarch/">Architecture
+
+of the World Wide Web, Volume One</a></li>
+
+<li><a href="http://www.ics.uci.edu/%7Efielding/pubs/dissertation/top.htm">REST
+
+thesis</a></li>
+
+<li><a href="http://www.ics.uci.edu/%7Efielding/pubs/webarch_icse2000.pdf">Principled
+
+Design of the Modern Web Architecture</a>&nbsp;</li>
+
+</ul>
+
+</ul>
+
+</div>
+      
+      </div>
+      
+      <footer>
+        <p><span class="current">X</span> of <span class="total">Y</span></p>
+      </footer>
+      
+    </div>
+  
+    <!-- js -->
+    <script src="js/jquery.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/jquery.twfile.js"></script>
+    <script>
+
+      $(function (){
+        superSlides({
+          // Config options
+        });
+      });
+
+    </script>
+    
+  </body>
+</html>

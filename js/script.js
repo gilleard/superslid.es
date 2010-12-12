@@ -133,11 +133,11 @@ function superSlides(options) {
     switch(l_direction) {
 
       case e_direction.forward:
-        $g_currentSlide.find('.increment').hide().attr('data-visibility', 'hidden');
+        $g_currentSlide.find('.incremental').hide().attr('data-visibility', 'hidden');
         break;
 
       case e_direction.back:
-        $g_currentSlide.find('.increment').show().attr('data-visibility', 'visible');
+        $g_currentSlide.find('.incremental').show().attr('data-visibility', 'visible');
         break;
 
     } // goToSlide(l_slideNumber, l_direction)
@@ -155,7 +155,7 @@ function superSlides(options) {
   function advance(l_dimension) {
 
     // Get elements to be incremented
-    var $l_elementsToIncrement = $g_currentSlide.find('.increment[data-visibility=hidden]');
+    var $l_elementsToIncrement = $g_currentSlide.find('.incremental[data-visibility=hidden]');
 
     // If there are some
     if($l_elementsToIncrement.size() > 0) {
@@ -196,7 +196,7 @@ function superSlides(options) {
   function previous(l_dimension) {
 
     // Get elements already incremented
-    var $l_elementsIncremented = $g_currentSlide.find('.increment[data-visibility=visible]');
+    var $l_elementsIncremented = $g_currentSlide.find('.incremental[data-visibility=visible]');
 
     // If there are some
     if($l_elementsIncremented.size() > 0) {
@@ -414,6 +414,29 @@ function superSlides(options) {
 
   } // toggleOverview()
 
+  function generatePrintHtml() {
+    
+    // Fetch current html
+    var $l_printHtml = $('html').clone();
+    
+    // Switch to print state
+    $l_printHtml.find('body').removeClass('slides outline').addClass('print');
+    
+    // Remove any scaling
+    $l_printHtml.find('body > .wrapper').attr('style' , '').css({'font-size': settings.fontSize + '%'});
+    
+    // Remove any unnecessary html
+    $l_printHtml.find('#MathJax_Hidden, #MathJax_Message, #overview, script, applet').remove();
+    $l_printHtml.find('#slides > div').removeClass('current');
+    
+    // Put the doctype + html tag back
+    var l_printHtml = '<!doctype html><html lang="en-GB">' + $l_printHtml.html() + '</html>';
+    
+    // Save the file
+  	$.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
+  	
+	} // generatePrintHtml()
+
   // **************************************************
   //
   // Initialisation
@@ -535,6 +558,12 @@ function superSlides(options) {
         case 79: // o
           if(g_currentView == e_view.slides) {
             toggleOverview();
+          }
+          break;
+  
+        case 80: // p
+          if(confirm('Are you sure?')) {
+            generatePrintHtml();
           }
           break;
   

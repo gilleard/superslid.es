@@ -42,22 +42,6 @@ body.slides {
   
 }
 
-body.outline > .wrapper {
-
-  > #slides > div {
-  	font-size: 12pt;
-  	
-     > footer {
-    	display: none;
-    }
-  }
-  
-  > #slides .increment {
-  	display: inherit!important;
-  }
-  
-}
-
 #overview {
   position: absolute;
   top: 0;
@@ -148,4 +132,50 @@ body.outline > .wrapper {
   width: 100%;
   height: 50%;
   background-color: rgb(255,255,255);
+}
+
+body.outline > .wrapper {
+
+  > #slides > div {
+  	
+     > footer {
+    	display: none;
+    }
+  }
+  
+  > #slides .increment {
+  	display: inherit!important;
+  }
+  
+}
+/*
+@page {
+  size: 980px 735px;
+  margin: 0;
+  padding: 0;
+}
+*/
+body.print {
+
+  > .wrapper {
+
+    > #slides > div {
+      position: relative;
+      width: 980px;
+      height: 780px;
+      
+      > footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+      }
+    }
+    
+    > #slides .increment {
+    	display: inherit!important;
+    }
+
+  }
+  
 }

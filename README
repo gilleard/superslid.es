@@ -1,11 +1,18 @@
-Notes:
-- Basic controls replicate S5: http://meyerweb.com/eric/tools/s5/features.html
+Features:
+- Auto-scaling Text
+- Incremental Display: use .incremental to reveal items one at a time
+- Progress Indicator: keep track of where you are using .current and .total in your footer
+- Slide Bookmarks: point at a specific slide using /slides.html#3
+- Keyboard Controls: see http://is.gd/iDr3d
+- Outline View: toggle between outline and slide view using 't' key
+- Link References: lists all link, if any title attributes are provided those without are excluded, implicitly specify with .exclude and .include
+- Overview: navigate and preview slides using the 'o' key
+- Print: save generated source code using 'p' key (webkit browsers require TiddlySaver), print using PrinceXML
 
 Issues:
-- Keyboard controls override too much (text editing etc...) 
+- Keyboard controls override too much
 - Overview titles need a length limit
 
 Ideas:
 - Back button support
-- Class to hide text in slide view, shown in outline
-- Slide themes
+- Allow for hidden text in slide view, shown in outline
