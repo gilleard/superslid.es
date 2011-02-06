@@ -1,0 +1,76 @@
+.slides{
+	background-image: url('fullbg.jpg');
+	background-color: #99cc66 !important;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.slides #slides > div > .tracker {
+	opacity: 0.5;
+	border: 1px solid #000000;
+}
+
+.slides #slides > div > section {
+	font-family: Arial, sans-serif;
+	font-size: 1em;
+	color: #FFFFFF;
+	font-weight: normal;
+}
+
+.slides #slides > div {
+	opacity: 0.3;
+    border: 0.2em solid #000000;
+	-moz-box-shadow: 10px 10px 5px #336600;
+	-webkit-box-shadow: 10px 10px 5px #336600;
+	box-shadow: 10px 10px 5px #336600;
+	background: url('gbg.jpg');
+}
+
+.slides #slides > div.current {
+  opacity: 1;
+}
+
+
+.slides #slides > div > h2 {
+	font-family: Arial, sans-serif;
+	font-size: 2.5em;
+	color: #FFFFFF;
+	font-weight: bold;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.slides #slides > div > footer {
+	color: #FFFFFF;
+}
+
+a:link {color:#3333CC}      /* unvisited link */
+a:visited {color:#3333FF}  /* visited link */
+a:hover {color:#000000; background:#ffffff; padding:6px; border: 1px solid #000000;}  /* mouse over link */
+a:active {color:#0000FF}  /* selected link */
+
+.slides #slides > div > section {
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.slides #slides > div > section > p {
+	font-size: 1.5em;
+}
+.slides #slides > div > section > ul { 
+}
+
+.slides #slides > div > section > ul > ul { 
+	margin-left: 0.5em;
+	margin-bottom: 1.2em;
+}
+
+.slides #slides > div > section > ul > li {
+	font-size: 1.5em;
+}
+
+.slides #slides > div > section > ol > li {
+	font-size: 1.5em;
+}
+

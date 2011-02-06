@@ -10,7 +10,6 @@ Features:
 - Print: save generated source code using 'p' key (webkit browsers require TiddlySaver), print using PrinceXML
 
 Issues:
-- Keyboard controls override too much
 - Overview titles need a length limit
 
 Ideas:

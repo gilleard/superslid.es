@@ -1,0 +1,108 @@
+.slides #slides > div > section {
+	font-family: Comic Sans, Comic Sans MS, cursive;
+	font-size: 1em;
+	color: #000000;
+	font-weight: normal;
+}
+
+.slides #slides > div > .tracker > .litTab{
+	background-color: #6A268D;
+}
+.slides #slides > div > .tracker > .offTab{
+	background-color: #E0D2E6;
+}
+
+
+.slides #slides > div {
+  background: #FFF url('bg.png') top left no-repeat;
+  border: 0.15em solid #6A268D;
+}
+
+.slides #slides > div > .topStyle{
+	height:10px;
+	display: block;
+	margin-bottom: -10px;
+	width: 90%;
+	position: absolute;
+	left: 5%;
+	top: 5%;
+	margin-top: 60px;
+	background: #999; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#6A268D', endColorstr='#E0D2E6'); /* for IE */
+	background: -webkit-gradient(linear, left bottom, right bottom, from(#6A268D), to(#E0D2E6)); /* for webkit browsers */
+	background: -moz-linear-gradient(left center,  #6A268D,  #E0D2E6); /* for firefox 3.6+ */
+}
+
+.slides #slides > div > .logoTop{
+	display: block;
+	background: url('logomanchester.gif') top left no-repeat;
+	height:44px;
+	width: 129px;
+	margin-bottom: -44px;
+	margin-right: -129px;
+	position: absolute;
+	top: 0px;
+	left: 32px;
+}
+
+.slides #slides > div > .logoLeft{
+	display: block;
+	background: url('logoleft.gif') top left no-repeat;
+	height:117px;
+	width: 32px;
+	margin-bottom: -117px;
+	margin-right: -32px;
+	position: absolute;
+	top: 44px;
+	left: 0px;
+}
+
+.slides #slides > div > h2 {
+	font-family: Comic Sans, Comic Sans MS, cursive;
+	font-size: 2em;
+	color: #000000;
+	font-weight: normal;
+	margin-top: 40px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.slides #slides > div > section {
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.slides #slides > div > section > p {
+	font-size: 1.5em;
+}
+.slides #slides > div > section > ul { 
+	list-style: inside url('circlePurple.gif');
+}
+
+.slides #slides > div > section > ul > ul { 
+	list-style: url('smallCircle.png');
+	margin-left: 2em;
+	margin-bottom: 1.2em;
+}
+
+.slides #slides > div > section > ul > li {
+	font-size: 1.5em;
+}
+
+.slides #slides > div > section > ol > li {
+	font-size: 1.5em;
+}
+
+.slides #slides > .title > section {
+  margin-top: 20%;
+  font-size: 150%;
+	text-align: center;
+}
+
+.slides #slides > .title > section h1 {
+  font-size: 250%;
+}
+.slides #slides > div > footer {
+  padding-bottom: .5em;
+  text-align: center;
+}

@@ -1,0 +1,41 @@
+@page {
+	size: 985px 740px;
+	padding: 0;
+	margin: 0;
+}
+
+
+#slides > div > .tracker {
+	display: hidden !important;
+}
+
+#slides > div > .tracker > .litTab{
+	display: hidden !important;
+}
+#slides > div > .tracker > .offTab{
+	display: hidden !important;
+}
+
+.slides #slides {
+}
+
+#slides > div {
+  opacity: 1 !important;
+  display: block;  
+  position: relative;
+  width: 980px;
+  height: 735px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+#slides > div > footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+#slides > div.current {
+  display: block;
+}
+#slides .incremental {
+}

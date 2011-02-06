@@ -5,16 +5,24 @@
   
     <!-- meta -->
     <meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>SUPERslid.es</title>
     
     <!-- css -->
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
     
   </head>
   <body>
     
     <div id="slides">
+      
+      <div class="title">
+        <section>
+          <h1>Title</h1>
+          <h2>Subtitle</h2>
+        </section>
+      </div>
       
       <div>
         <h2>Slide 1</h2>
@@ -28,6 +36,14 @@
         <h2>Slide 2</h2>
         <section>
           <p>Duis aute irure \(\sqrt{3x-1}+(1+x)^2\) dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla <a class="exclude" href="http://bla.com" title="excluded with title attribute">another excluded link</a> pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui \(\sqrt{3x-1}+(1+x)^2\) officia deserunt mollit anim id est laborum.</p>
+      		<pre class="brush: xml;">
+            <div>
+              <h2>Title</h2>
+              <section>
+            		<p>Text</p>
+              </section>
+            </div>
+      		</pre>
         </section>
       </div>
       
@@ -61,6 +77,7 @@
             <li class="incremental"><a href="http://bla.com">Another item</a></li>
             <li class="incremental">\(\sqrt{3x-1}+(1+x)^2\)</li>
           </ul>
+          <p>Lorem ipsum dolor sit amet, <a href="http://bla.com">consectetur adipisicing</a> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut ipsum dolor enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </section>
       </div>
       
@@ -71,7 +88,7 @@
         </section>
       </div>
       
-      <div class="up">
+      <div class="up" data-content="example">
         <h2>Slide 4</h2>
         <section>
           <p>Duis aute irure \(\sqrt{3x-1}+(1+x)^2\) dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla <a class="exclude" href="http://bla.com">an excluded link</a> pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui \(\sqrt{3x-1}+(1+x)^2\) officia deserunt mollit anim id est laborum.</p>
@@ -89,7 +106,7 @@
         </section>
       </div>
       
-      <div class="sub">
+      <div class="sub" data-content="test">
         <h2>Slide 4 B</h2>
         <section>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -103,7 +120,7 @@
         </section>
       </div>
       
-      <div class="sub">
+      <div class="sub" data-content="test">
         <h2>Slide 5 A</h2>
         <section>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -120,12 +137,27 @@
     <script src="js/jquery.js"></script>
     <script src="js/script.js"></script>
     <script src="js/jquery.twfile.js"></script>
+
     <script>
 
       $(function (){
         superSlides({
-          // Config options
-          enableMath: true
+          
+          'width': 980,
+          'height': 735,
+          'scale': 0.9,
+          'fontSize': 150,
+          'enableMath': false,
+          'enableToc': false,
+          'strictNav': false,
+          'incrementOnce': false,
+          'customJs': 'theme/manc/theme.js',
+          'customCss': 'theme/manc/theme.css',
+          'incrementOnce': true,
+          'syntax': {
+            'xml': 'tools/syntax/scripts/shBrushXml.js'
+          }
+          
         });
       });
 

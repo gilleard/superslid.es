@@ -7,7 +7,12 @@ function superSlides(options) {
     scale: 0.9,
     fontSize: 150,
     enableMath: false,
-    strictNav: false
+    enableToc: false,
+    strictNav: false,
+    incrementOnce: false,
+    customJs: null,
+    customCss: null,
+    syntax: null
   };
 
   // Update settings with user's values
@@ -80,61 +85,43 @@ function superSlides(options) {
 
   } // log(message)
   
-  function scaleSlides() {
-
-    g_windowWidth = $(window).width();
-    g_windowHeight = $(window).height();
-    
-    // Wider than slide ratio
-    if((g_windowWidth/g_windowHeight) > (settings.width/settings.height)) {
-      
-      // Width set to settings.scale% of windows height
-      g_wrapperHeight = settings.scale * g_windowHeight;
-      
-      // Height based on width to preserve aspect ratio
-      g_wrapperWidth = g_wrapperHeight * (settings.width/settings.height);
-      
-    }
-    
-    // Taller than slide ratio
-    else {
-      
-      // Height set to settings.scale% of windows width
-      g_wrapperWidth = settings.scale * g_windowWidth;
-      
-      // Width based on height to preserve aspect ratio
-      g_wrapperHeight = g_wrapperWidth * (settings.height/settings.width);
-      
-    }
-      
-    // Centre slide
-    g_wrapperHorizontalMargin = (g_windowWidth - g_wrapperWidth) / 2;
-    g_wrapperVerticalMargin = (g_windowHeight - g_wrapperHeight) / 2;
-    
-    // Scale slides wrapper
-    $g_wrapper.css({
-      'width': parseInt(g_wrapperWidth, 10) + 'px',
-      'height': parseInt(g_wrapperHeight, 10) + 'px',
-      'margin': parseInt(g_wrapperVerticalMargin, 10) + 'px ' + parseInt(g_wrapperHorizontalMargin, 10) + 'px',
-      'font-size': (settings.fontSize * (g_wrapperWidth / settings.width)) + '%'
-    });
-    
-    if($g_overview.size() > 0) {
-    
-      // Scale overview
-      $g_overview.find('> div').css({
-        'width': parseInt(g_wrapperWidth / 2, 10) + 'px',
-        'height': parseInt(g_wrapperHeight, 10) + 'px',
-        'margin': parseInt(g_wrapperVerticalMargin, 10) + 'px auto',
-        'font-size': (settings.fontSize * (g_wrapperWidth / settings.width)) + '%'
-      });
-    
-    }
+  function includeJs(l_jsFile) {
   
-    // Position slides
-    positionSlides();
+    var l_req = new XMLHttpRequest();
+    l_req.open("GET", l_jsFile, false);
+    l_req.onreadystatechange = function() {
+      if(l_req.readyState === 4) {
+        window.eval(l_req.responseText);
+        log(l_jsFile + ' loaded.');
+      }
+    };
+    l_req.send(null);
   
-  } // scaleSlides()
+  } // include(l_jsFile)
+  
+  function includeCss(l_cssFile) {
+  
+    $('head').append(
+      $('<link />').attr({
+        'rel': 'stylesheet',
+        'href': l_cssFile
+      })
+    );
+    log(l_cssFile + ' included.');
+  
+  } // includeCss(l_cssFile)
+  
+  function loadTheme() {
+  
+    if(settings.customJs) {
+      includeJs(settings.customJs);
+    }
+    
+    if(settings.customCss) {
+      includeCss(settings.customCss);
+    }
+      
+  } // loadTheme()
   
   function positionSlides() {
   
@@ -190,6 +177,62 @@ function superSlides(options) {
     }
   
   } // positionSlides()
+  
+  function scaleSlides() {
+
+    g_windowWidth = $(window).width();
+    g_windowHeight = $(window).height();
+    
+    // Wider than slide ratio
+    if((g_windowWidth/g_windowHeight) > (settings.width/settings.height)) {
+      
+      // Width set to settings.scale% of windows height
+      g_wrapperHeight = settings.scale * g_windowHeight;
+      
+      // Height based on width to preserve aspect ratio
+      g_wrapperWidth = g_wrapperHeight * (settings.width/settings.height);
+      
+    }
+    
+    // Taller than slide ratio
+    else {
+      
+      // Height set to settings.scale% of windows width
+      g_wrapperWidth = settings.scale * g_windowWidth;
+      
+      // Width based on height to preserve aspect ratio
+      g_wrapperHeight = g_wrapperWidth * (settings.height/settings.width);
+      
+    }
+      
+    // Centre slide
+    g_wrapperHorizontalMargin = (g_windowWidth - g_wrapperWidth) / 2;
+    g_wrapperVerticalMargin = (g_windowHeight - g_wrapperHeight) / 2;
+    
+    // Scale slides wrapper
+    $g_wrapper.css({
+      'width': parseInt(g_wrapperWidth, 10) + 'px',
+      'height': parseInt(g_wrapperHeight, 10) + 'px',
+      'margin': parseInt(g_wrapperVerticalMargin, 10) + 'px ' + parseInt(g_wrapperHorizontalMargin, 10) + 'px',
+      'font-size': (settings.fontSize * (g_wrapperWidth / settings.width)) + '%'
+    });
+    
+    if($g_overview.size() > 0) {
+    
+      // Scale overview
+      $g_overview.find('> div').css({
+        'width': parseInt(g_wrapperWidth / 2, 10) + 'px',
+        'height': parseInt(g_wrapperHeight, 10) + 'px',
+        'margin': parseInt(g_wrapperVerticalMargin, 10) + 'px auto',
+        'font-size': (settings.fontSize * (g_wrapperWidth / settings.width)) + '%'
+      });
+    
+    }
+  
+    // Position slides
+    positionSlides();
+  
+  } // scaleSlides()
 
   function goToSlide(l_slideNumber, l_direction) {
 
@@ -224,7 +267,7 @@ function superSlides(options) {
     $g_currentSlide.addClass('current');
 
     // Update url
-    if(g_currentView == e_view.slides) {
+    if(g_currentView === e_view.slides) {
       location.hash = '#' + g_currentSlideNumber;
     }
 
@@ -233,14 +276,21 @@ function superSlides(options) {
   function advance(l_dimension) {
 
     // Get elements to be incremented
-    var $l_elementsToIncrement = $g_currentSlide.find('.incremental:not(:visible)');
+    var $l_elementsToIncrement = $g_currentSlide.find('.incremental').filter(function(index) {
+      return $(this).css('visibility') === 'hidden';
+    });
 
     // If there are some
     if($l_elementsToIncrement.size() > 0) {
 
       // Show the next one
       log('Showing next element');
-      $l_elementsToIncrement.first().show();
+      $l_elementsToIncrement.first().css({'visibility':'visible'});
+      
+      // Check for increment preference
+      if(settings.incrementOnce) {
+        $l_elementsToIncrement.first().removeClass('incremental');
+      }
 
     }
 
@@ -248,7 +298,7 @@ function superSlides(options) {
     else if(g_currentSlideNumber < g_totalSlides) {
 
       // Trying to view next sub slide
-      if(l_dimension == e_dimension.sub) {
+      if(l_dimension === e_dimension.sub) {
       
         // Next slide is a sub slide
         if($g_currentSlide.next().hasClass('sub')) {
@@ -258,7 +308,7 @@ function superSlides(options) {
           
         }
         
-      } // l_dimension == e_dimension.sub
+      } // l_dimension === e_dimension.sub
       
       // Trying to view next non-sub slide
       else {
@@ -274,7 +324,7 @@ function superSlides(options) {
   
         }
       
-      } // l_dimension == e_dimension.title
+      } // l_dimension === e_dimension.title
 
     } // g_currentSlideNumber < g_totalSlides
 
@@ -288,14 +338,16 @@ function superSlides(options) {
   function previous(l_dimension) {
 
     // Get elements already incremented
-    var $l_elementsIncremented = $g_currentSlide.find('.incremental:visible');
+    var $l_elementsIncremented = $g_currentSlide.find('.incremental').filter(function(index) {
+      return $(this).css('visibility') === 'visible';
+    });
 
     // If there are some
     if($l_elementsIncremented.size() > 0) {
 
       // Hide the last one
       log('Hiding next element');
-      $l_elementsIncremented.last().hide();
+      $l_elementsIncremented.last().css({'visibility':'hidden'});
 
     } // $l_elementsIncremented.size() > 0
 
@@ -303,7 +355,7 @@ function superSlides(options) {
     else if(g_currentSlideNumber > 1) {
 
       // Trying to view the prev sub slide
-      if(l_dimension == e_dimension.sub) {
+      if(l_dimension === e_dimension.sub) {
       
         // This is a sub slide
         if($g_currentSlide.hasClass('sub')) {
@@ -313,7 +365,7 @@ function superSlides(options) {
         
         }
         
-      } // l_dimension == e_dimension.sub
+      } // l_dimension === e_dimension.sub
       
       // Trying to view prev non-sub slide
       else {
@@ -329,7 +381,7 @@ function superSlides(options) {
   
         }
       
-      } // l_dimension == e_dimension.title
+      } // l_dimension === e_dimension.title
 
     } // g_currentSlideNumber > 1
 
@@ -342,7 +394,7 @@ function superSlides(options) {
 
   function getCurrentView() {
   
-    return g_currentView == e_view.slides ? 'slides' : 'outline';
+    return g_currentView === e_view.slides ? 'slides' : 'outline';
     
   } // getCurrentView()
 
@@ -356,7 +408,7 @@ function superSlides(options) {
     // Switch to new view
     $g_body.removeClass('slides outline').addClass(getCurrentView());
     
-    if(g_currentView == e_view.slides) {
+    if(g_currentView === e_view.slides) {
     
       // Check for resize
       scaleSlides();
@@ -364,14 +416,14 @@ function superSlides(options) {
     }
     
     // Update url
-    location.hash = g_currentView == e_view.slides ? '#' + g_currentSlideNumber : '';
+    location.hash = g_currentView === e_view.slides ? '#' + g_currentSlideNumber : '';
 
   } // switchView(l_view)
 
   function generateReferences() {
 
     // Get all links and remove specific excluded links
-    var $l_links = $g_slides.find('a[href]:not(.exclude)');
+    var $l_links = $g_slides.filter(':not(#toc)').find('a[href]:not(.exclude)');
 
     // Check for use of title attribute
     var $l_filteredLinks = $l_links.filter('[title]');
@@ -440,7 +492,7 @@ function superSlides(options) {
   
     var l_scriptTag = document.createElement("script");
     l_scriptTag.type = "text/javascript";
-    l_scriptTag.src = "math/MathJax.js";
+    l_scriptTag.src = "tools/math/MathJax.js";
   
     var l_config = 'MathJax.Hub.Config({ config: "MathJax.js" }); ' + 'MathJax.Hub.Startup.onload();';
   
@@ -451,7 +503,7 @@ function superSlides(options) {
       l_scriptTag.text = l_config;
     }
   
-    document.getElementsByTagName("head")[0].appendChild(l_scriptTag);
+    $('head').get(0).appendChild(l_scriptTag);
   
   } // initMathJax()
 
@@ -549,7 +601,224 @@ function superSlides(options) {
     // Save the file
     $.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
 
-	} // generatePrintHtml()
+  } // generatePrintHtml()
+  
+  function generateToc() {
+    
+    // Remove slides without a data-content attribute
+    var $l_labeledSlides = $g_slides.filter('[data-content]');
+    
+    // If there are any left
+    if($l_labeledSlides.size() > 0) {
+    
+      // Add toc slide
+      var $l_toc = $('<div />').attr({'id':'toc'}).append('<h2>Topic Oriented Contents</h2>').append('<section />').appendTo($g_wrapper).find('> section');
+      
+      var
+       l_contents,
+       l_slideNumber,
+       $l_contentsList;
+      
+      // For each
+      $l_labeledSlides.each(function() {
+        
+        // Store attribute
+        l_contents = $(this).attr('data-content');
+        
+        // Look for existing list
+        $l_contentsList = $l_toc.find('ul[data-content="' + l_contents + '"]');
+        
+        // If there isn't one
+        if($l_contentsList.size() === 0) {
+        
+          // Create it
+          $l_toc.append('<h3>' + l_contents + '</h3>');
+          $l_contentsList = $('<ul />').attr({'data-content':l_contents}).appendTo($l_toc);
+          
+        }
+        
+        // Add this slide
+        l_slideNumber = parseInt($g_slides.index($(this)) + 1, 10);
+        $l_contentsList.append('<li><a href="#' + l_slideNumber + '" data-source="' + l_slideNumber + '">' + $(this).find('h2').first().text() + '</a></li>');
+        
+      });
+      
+      // Allow for clicks
+      $l_toc.find('ul[data-content] a').click(function() {
+        goToSlide($(this).attr('data-source'), e_direction.forward);
+        return false;
+      });
+      
+    }
+
+    // Update paging variables
+    $g_slides = $('#slides > div');
+    g_totalSlides = $g_slides.size();
+  
+  } // generateToc()
+  
+  function loadSyntaxHighlighting() {
+  
+    // syntax css
+    includeCss('tools/syntax/styles/shCore.css');
+    includeCss('tools/syntax/styles/shThemeDefault.css');
+      
+    // syntax core js
+    includeJs('tools/syntax/scripts/shCore.js');
+    
+    // syntax brushes
+    $.each(settings.syntax, function(index, value) { 
+      includeJs(value);
+    });
+    
+    // call syntax highlighter
+    SyntaxHighlighter.all();
+
+  } // loadSyntaxHighlighting()
+
+  
+  
+  
+  
+  
+  // *** UNDER DEVELOPMENT - TO REVIEW ***
+  
+  function initGraphics() {
+  
+    $g_slides.not('.references').each(function() {
+    
+      if($(this).find('> .graphics').size() < 1) {
+        $(this).append($('<div />').addClass('graphics'));
+      }
+      
+    });
+  
+  }
+  
+  function addTextBox(event) {
+    
+    var $l_newTextBox = 
+      $('<p />')
+        .text('Insert Text')
+        .attr('contenteditable', 'true')
+        .append($('<span />').attr('contenteditable', 'false').addClass('ui drag'))
+        .append($('<span />').attr('contenteditable', 'false').addClass('ui resize'))
+        .css({'top':'0', 'left':'0'});
+    
+    $l_newTextBox.appendTo($g_currentSlide.find('> .graphics'));
+    
+  } // addTextBox()
+  
+  function drawArrow($l_canvasWrapper) {
+   
+    // Resize/reset canvas
+    var l_canvas = $l_canvasWrapper.find('canvas').get(0);
+    l_canvas.width = $l_canvasWrapper.width();
+    l_canvas.height = $l_canvasWrapper.height();
+    
+    var l_canvasContext = l_canvas.getContext('2d');
+    
+    l_canvasContext.beginPath();
+    l_canvasContext.lineWidth = 3;
+    l_canvasContext.strokeStyle = "#444";
+    
+    l_canvasContext.moveTo(0, 0);
+    l_canvasContext.lineTo(l_canvas.width, l_canvas.height);
+    l_canvasContext.stroke();
+  
+  }
+  
+  function addArrow(event) {
+    
+    var $l_newArrow = 
+      $('<div />')
+        .addClass('arrow')
+        .append('<canvas />')
+        .append($('<span />').addClass('ui drag'))
+        .append($('<span />').addClass('ui resize'))
+        .css({'top':'0', 'left':'0'});
+    
+    $l_newArrow.appendTo($g_currentSlide.find('> .graphics'));
+    
+    drawArrow($l_newArrow);
+    
+  } // addArrow()
+  
+  $('.drag').live('mousedown', function(event){
+  
+    var
+      $l_activeGraphic = $(this).parent(),
+      l_offsetY = event.pageY - $l_activeGraphic.offset().top + g_wrapperVerticalMargin,
+      l_offsetX = event.pageX - $l_activeGraphic.offset().left + g_wrapperHorizontalMargin;
+  
+    $('body')
+      .mousemove(function(event) {
+      
+        $(this).addClass('drag');
+      
+        $l_activeGraphic
+          .addClass('active')
+          .css({
+            'top': (((event.pageY - l_offsetY) / g_wrapperHeight) * 100) + '%',
+            'left': (((event.pageX - l_offsetX) / g_wrapperWidth) * 100) + '%'
+          });
+      
+        return false;
+      
+      })
+      .mouseup(function() {
+  
+        $l_activeGraphic.removeClass('active');
+        $(this).unbind('mousemove').removeClass('drag');
+      
+      });
+      
+    return false;
+  
+  });
+  
+  $('.resize').live('mousedown', function(event){
+  
+    var
+      $l_activeGraphic = $(this).parent(),
+      l_offsetY = $l_activeGraphic.height() - event.pageY,
+      l_offsetX = $l_activeGraphic.width() - event.pageX;
+  
+    $('body')
+      .mousemove(function(event) {
+      
+        $(this).addClass('resize');
+      
+        $l_activeGraphic
+          .addClass('active')
+          .css({
+            'height': (((event.pageY + l_offsetY) / g_wrapperHeight) * 100) + '%',
+            'width': (((event.pageX + l_offsetX) / g_wrapperWidth) * 100) + '%'
+          });
+          
+        if($l_activeGraphic.hasClass('arrow')) {
+          drawArrow($l_activeGraphic);
+        }
+      
+        return false;
+      
+      })
+      .mouseup(function() {
+  
+        $l_activeGraphic.removeClass('active');
+        $(this).unbind('mousemove').removeClass('resize');
+      
+      });
+      
+    return false;
+  
+  });
+  
+  // *** UNDER DEVELOPMENT - TO REVIEW ***
+  
+  
+  
+
 
   // **************************************************
   //
@@ -560,15 +829,23 @@ function superSlides(options) {
   log('Number of slides: ' + g_totalSlides);
   log('Current slides: ' + g_currentSlideNumber);
   log('Current view: ' + getCurrentView(g_currentView));
-
+  
+  // Load theme
+  loadTheme();
+  
   // Add view class
-  $g_body.addClass(g_currentView == e_view.slides ? 'slides' : 'outline');
+  $g_body.addClass(g_currentView === e_view.slides ? 'slides' : 'outline');
+  
+  // Generate ToC
+  if(settings.enableToc) {
+    generateToc();
+  }
 
   // Generate initial references
   generateReferences();
   
   // Init overview
-  $g_overview = $('<div />').attr('id', 'overview').css('display', 'none').append($('<div />').append($('<div />').addClass('preview'))).appendTo($g_body);
+  $g_overview = $('<div />').attr('id', 'overview').append($('<div />').append($('<div />').addClass('preview'))).appendTo($g_body);
 
   // Calculate initial scale
   scaleSlides();
@@ -579,9 +856,17 @@ function superSlides(options) {
   // Generate footer
   generateFooters();
   
+  // Init graphics
+  initGraphics();
+  
   // MathJax
   if(settings.enableMath) {
     initMathJax();
+  }
+  
+  // Syntax Highlighting
+  if(settings.syntax) {
+    loadSyntaxHighlighting();
   }
 
   // **************************************************
@@ -590,21 +875,21 @@ function superSlides(options) {
   //
   // **************************************************
 
-  $(window)
+  // Keyboard
+  $(document).keydown(function(event) {
   
-    // Keyboard
-    .keyup(function(event) {
-  
-      switch(event.keyCode) {
+    if(!$(event.target).is('[contenteditable=true]')) {
+
+      switch(event.which) {
   
         case 35: // end
-          if(g_currentView == e_view.slides) {
+          if(g_currentView === e_view.slides) {
             goToSlide(g_totalSlides, e_direction.forward);
           }
           break;
   
         case 36: // home
-          if(g_currentView == e_view.slides) {
+          if(g_currentView === e_view.slides) {
             goToSlide(1, e_direction.forward);
           }
           break;
@@ -614,9 +899,9 @@ function superSlides(options) {
         case 32: // space
         case 39: // right
         case 40: // down
-          if(g_currentView == e_view.slides && !g_overviewActive) {
+          if(g_currentView === e_view.slides && !g_overviewActive) {
             if(g_skipSlides !== '') {
-              if((event.keyCode == 10) || (event.keyCode == 13)) {
+              if((event.which === 10) || (event.which === 13)) {
                 // Skip to slide
                 log('Skip to slide ' + g_skipSlides);
                 goToSlide(g_skipSlides, e_direction.forward);
@@ -628,10 +913,10 @@ function superSlides(options) {
               }
             }
             else {
-              if(event.keyCode == 32 || event.keyCode == 39) {
+              if(event.which === 32 || event.which === 39) {
                 advance(e_dimension.title);
               }
-              else if(event.keyCode == 40) {
+              else if(event.which === 40) {
                 // If reversed sub slides
                 if($g_currentSlide.hasClass('up') ||
                     ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
@@ -648,17 +933,17 @@ function superSlides(options) {
   
         case 37: // left
         case 38: // up
-          if(g_currentView == e_view.slides && !g_overviewActive) {
+          if(g_currentView === e_view.slides && !g_overviewActive) {
             if(g_skipSlides !== '') {
               // Skip back slides
               log('Skip back ' + g_skipSlides + ' slides');
               goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
             }
             else {
-              if(event.keyCode == 37) {
+              if(event.which === 37) {
                 previous(e_dimension.title);
               }
-              else if(event.keyCode == 38) {
+              else if(event.which === 38) {
                 // If reversed sub slides
                 if($g_currentSlide.hasClass('up') ||
                     ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
@@ -683,11 +968,11 @@ function superSlides(options) {
         case 55: // 7
         case 56: // 8
         case 57: // 9
-          g_skipSlides += parseInt(event.keyCode, 10) - 48;
+          g_skipSlides += parseInt(event.which, 10) - 48;
           break;
   
         case 79: // o
-          if(g_currentView == e_view.slides) {
+          if(g_currentView === e_view.slides) {
             toggleOverview();
           }
           break;
@@ -700,21 +985,38 @@ function superSlides(options) {
   
         case 84: // t
           if(!g_overviewActive) {
-            switchView(g_currentView == e_view.slides ? e_view.outline : e_view.slides);
+            switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides);
           }
           break;
   
+        case 88: // x
+          if(g_currentView === e_view.slides) {
+            addArrow(event);
+          }
+          break;
+  
+        case 90: // z
+          if(g_currentView === e_view.slides) {
+            addTextBox(event);
+          }
+          break;
+          
       }
-  
-      event.preventDefault();
-  
-    })
-  
-    // Resize browser
-    .resize(function() {
-      if(g_currentView == e_view.slides) {
-        scaleSlides();
+      
+      if($.inArray(event.which, [37, 38, 39, 40]) > -1) {
+        event.preventDefault();
+        return false;
       }
-    });
+              
+    }
+    
+  });
+  
+  // Resize
+  $(window).resize(function() {
+    if(g_currentView === e_view.slides) {
+      scaleSlides();
+    }
+  });
 
 }

@@ -1,0 +1,117 @@
+.slides{
+	background-color: #003366 !important;
+}
+.slides #slides > div > section {
+	font-family: Arial, sans-serif;
+	font-size: 1em;
+	color: #000000;
+	font-weight: normal;
+}
+
+.slides #slides > div {
+
+}
+.slides #slides > div > .tracker {
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+.slides #slides > div > .tracker > .litTab{
+	background-image: url("../images/SSTheme/lit.gif")
+}
+.slides #slides > div > .tracker > .offTab{
+	background-image: url("../images/SSTheme/off.gif");
+}
+
+.slides #slides > div > .topStyle{
+	height:10px;
+	display: block;
+	margin-bottom: -10px;
+	width: 90%;
+	position: absolute;
+	left: 5%;
+	top: 5%;
+	margin-top: 60px;
+	background: #999; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#003366', endColorstr='#ccccff'); /* for IE */
+	background: -webkit-gradient(linear, left bottom, right bottom, from(#003366), to(#ccccff)); /* for webkit browsers */
+	background: -moz-linear-gradient(left center,  ##003366,  #ccccff); /* for firefox 3.6+ */
+}
+
+/* -- REMOVABLE -- */
+
+.slides #slides > div > .leftStripe{
+	height:100%;
+	display: block;
+	margin-bottom: -100%;
+	margin-right: -32px;
+	width: 32px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: #003366;
+}
+
+.slides #slides > div > footer {
+  margin-left: 34px;
+}
+
+/* -- NO LONGER REMOVABLE -- */
+
+.slides #slides > div > .logoTop{
+	display: block;
+	background: url("../images/SSTheme/SSlogo.gif") top left no-repeat;
+	height:44px;
+	width: 129px;
+	margin-bottom: -44px;
+	margin-right: -129px;
+	position: absolute;
+	top: 0px;
+	left: 32px;
+}
+
+.slides #slides > div > .logoLeft{
+	display: block;
+	background: url("../images/SSTheme/SSleft.gif") top left no-repeat;
+	height:177px;
+	width: 32px;
+	margin-bottom: -177px;
+	margin-right: -32px;
+	position: absolute;
+	top: 44px;
+	left: 0px;
+}
+
+.slides #slides > div > h2 {
+	font-family: Arial, sans-serif;
+	font-size: 2em;
+	color: #000000;
+	font-weight: normal;
+	margin-top: 40px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.slides #slides > div > section {
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.slides #slides > div > section > p {
+	font-size: 1.5em;
+}
+.slides #slides > div > section > ul { 
+}
+
+.slides #slides > div > section > ul > ul { 
+	margin-left: 0.5em;
+	margin-bottom: 1.2em;
+}
+
+.slides #slides > div > section > ul > li {
+	font-size: 1.5em;
+}
+
+.slides #slides > div > section > ol > li {
+	font-size: 1.5em;
+}
+
