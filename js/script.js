@@ -660,11 +660,11 @@ function superSlides(options) {
   function loadSyntaxHighlighting() {
   
     // syntax css
-    includeCss('tools/syntax/styles/shCore.css');
-    includeCss('tools/syntax/styles/shThemeDefault.css');
+    includeCss('../tools/syntax/styles/shCore.css');
+    includeCss('../tools/syntax/styles/shThemeDefault.css');
       
     // syntax core js
-    includeJs('tools/syntax/scripts/shCore.js');
+    includeJs('../tools/syntax/scripts/shCore.js');
     
     // syntax brushes
     $.each(settings.syntax, function(index, value) { 
