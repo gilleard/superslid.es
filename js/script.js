@@ -88,7 +88,7 @@ function superSlides(options) {
   function includeJs(l_jsFile) {
   
     var l_req = new XMLHttpRequest();
-    l_req.open("GET", l_jsFile, false);
+    l_req.open('GET', l_jsFile, false);
     l_req.onreadystatechange = function() {
       if(l_req.readyState === 4) {
         window.eval(l_req.responseText);
@@ -233,6 +233,29 @@ function superSlides(options) {
     positionSlides();
   
   } // scaleSlides()
+  
+  function scaleImages() {
+  
+    // For each image
+    $g_slides.find('> img')
+    
+      // On load
+      .one('load', function() {
+        
+        // Set width as a % relative to settings.width
+        $(this).css('width', ($(this).width() / settings.width) * 100 + '%');
+      
+      })
+      .each(function() {
+      
+        // Cache check
+        if(this.complete) {
+          $(this).trigger('load');
+        }
+      
+      });
+  
+  } // scaleImages()
 
   function goToSlide(l_slideNumber, l_direction) {
 
@@ -438,7 +461,7 @@ function superSlides(options) {
     if($l_links.size() > 0) {
 
       // Create reference slide
-      $('#slides').append('<div class="references"><h2>References</h2><section><ol></ol></section></div>');
+      $('#slides').append('<div class="references"><h2>References</h2><section><ul></ul></section></div>');
       var l_referencesHtml = '';
 
       // For each
@@ -448,7 +471,7 @@ function superSlides(options) {
         $(this).after('<sup>[' + parseInt($l_links.index($(this)) + 1, 10) + ']</sup>');
 
         // Start reference list item
-        l_referencesHtml += '<li>' + $(this).text();
+        l_referencesHtml += '<li><a href="#' + parseInt($g_slides.index($(this).parentsUntil('#slides').last()) + 1, 10) + '">[' + parseInt($l_links.index($(this)) + 1, 10) + ']</a> ' + $(this).text();
 
         // Check for a description
         if($(this).attr('title') !== '') {
@@ -460,7 +483,14 @@ function superSlides(options) {
       });
 
       // Add list to reference slide
-      $('#slides > .references ol').append(l_referencesHtml);
+      $('#slides > .references ul').append(l_referencesHtml);
+      
+      // Go to reference location
+      $('#slides > .references ul a').click(function() {
+      
+        goToSlide(parseInt($(this).attr('href').substring(1), 10));
+      
+      });
 
     }
 
@@ -490,11 +520,11 @@ function superSlides(options) {
   
   function initMathJax() {
   
-    var l_scriptTag = document.createElement("script");
-    l_scriptTag.type = "text/javascript";
-    l_scriptTag.src = "tools/math/MathJax.js";
+    var l_scriptTag = document.createElement('script');
+    l_scriptTag.type = 'text/javascript';
+    l_scriptTag.src = '../tools/math/MathJax.js';
   
-    var l_config = 'MathJax.Hub.Config({ config: "MathJax.js" }); ' + 'MathJax.Hub.Startup.onload();';
+    var l_config = 'MathJax.Hub.Config({ config: \'MathJax.js\' }); ' + 'MathJax.Hub.Startup.onload();';
   
     if(window.opera) {
       l_scriptTag.innerHTML = l_config;
@@ -672,154 +702,12 @@ function superSlides(options) {
     });
     
     // call syntax highlighter
-    SyntaxHighlighter.all();
+    if(typeof SyntaxHighlighter  !== 'undefined') {
+      SyntaxHighlighter.all();
+    }
 
   } // loadSyntaxHighlighting()
-
   
-  
-  
-  
-  
-  // *** UNDER DEVELOPMENT - TO REVIEW ***
-  
-  function initGraphics() {
-  
-    $g_slides.not('.references').each(function() {
-    
-      if($(this).find('> .graphics').size() < 1) {
-        $(this).append($('<div />').addClass('graphics'));
-      }
-      
-    });
-  
-  }
-  
-  function addTextBox(event) {
-    
-    var $l_newTextBox = 
-      $('<p />')
-        .text('Insert Text')
-        .attr('contenteditable', 'true')
-        .append($('<span />').attr('contenteditable', 'false').addClass('ui drag'))
-        .append($('<span />').attr('contenteditable', 'false').addClass('ui resize'))
-        .css({'top':'0', 'left':'0'});
-    
-    $l_newTextBox.appendTo($g_currentSlide.find('> .graphics'));
-    
-  } // addTextBox()
-  
-  function drawArrow($l_canvasWrapper) {
-   
-    // Resize/reset canvas
-    var l_canvas = $l_canvasWrapper.find('canvas').get(0);
-    l_canvas.width = $l_canvasWrapper.width();
-    l_canvas.height = $l_canvasWrapper.height();
-    
-    var l_canvasContext = l_canvas.getContext('2d');
-    
-    l_canvasContext.beginPath();
-    l_canvasContext.lineWidth = 3;
-    l_canvasContext.strokeStyle = "#444";
-    
-    l_canvasContext.moveTo(0, 0);
-    l_canvasContext.lineTo(l_canvas.width, l_canvas.height);
-    l_canvasContext.stroke();
-  
-  }
-  
-  function addArrow(event) {
-    
-    var $l_newArrow = 
-      $('<div />')
-        .addClass('arrow')
-        .append('<canvas />')
-        .append($('<span />').addClass('ui drag'))
-        .append($('<span />').addClass('ui resize'))
-        .css({'top':'0', 'left':'0'});
-    
-    $l_newArrow.appendTo($g_currentSlide.find('> .graphics'));
-    
-    drawArrow($l_newArrow);
-    
-  } // addArrow()
-  
-  $('.drag').live('mousedown', function(event){
-  
-    var
-      $l_activeGraphic = $(this).parent(),
-      l_offsetY = event.pageY - $l_activeGraphic.offset().top + g_wrapperVerticalMargin,
-      l_offsetX = event.pageX - $l_activeGraphic.offset().left + g_wrapperHorizontalMargin;
-  
-    $('body')
-      .mousemove(function(event) {
-      
-        $(this).addClass('drag');
-      
-        $l_activeGraphic
-          .addClass('active')
-          .css({
-            'top': (((event.pageY - l_offsetY) / g_wrapperHeight) * 100) + '%',
-            'left': (((event.pageX - l_offsetX) / g_wrapperWidth) * 100) + '%'
-          });
-      
-        return false;
-      
-      })
-      .mouseup(function() {
-  
-        $l_activeGraphic.removeClass('active');
-        $(this).unbind('mousemove').removeClass('drag');
-      
-      });
-      
-    return false;
-  
-  });
-  
-  $('.resize').live('mousedown', function(event){
-  
-    var
-      $l_activeGraphic = $(this).parent(),
-      l_offsetY = $l_activeGraphic.height() - event.pageY,
-      l_offsetX = $l_activeGraphic.width() - event.pageX;
-  
-    $('body')
-      .mousemove(function(event) {
-      
-        $(this).addClass('resize');
-      
-        $l_activeGraphic
-          .addClass('active')
-          .css({
-            'height': (((event.pageY + l_offsetY) / g_wrapperHeight) * 100) + '%',
-            'width': (((event.pageX + l_offsetX) / g_wrapperWidth) * 100) + '%'
-          });
-          
-        if($l_activeGraphic.hasClass('arrow')) {
-          drawArrow($l_activeGraphic);
-        }
-      
-        return false;
-      
-      })
-      .mouseup(function() {
-  
-        $l_activeGraphic.removeClass('active');
-        $(this).unbind('mousemove').removeClass('resize');
-      
-      });
-      
-    return false;
-  
-  });
-  
-  // *** UNDER DEVELOPMENT - TO REVIEW ***
-  
-  
-  
-
-
   // **************************************************
   //
   // Initialisation
@@ -849,15 +737,15 @@ function superSlides(options) {
 
   // Calculate initial scale
   scaleSlides();
+  
+  // Resize images
+  scaleImages();
 
   // Show initial slide
   goToSlide(g_currentSlideNumber, e_direction.forward);
 
   // Generate footer
   generateFooters();
-  
-  // Init graphics
-  initGraphics();
   
   // MathJax
   if(settings.enableMath) {
@@ -986,18 +874,6 @@ function superSlides(options) {
         case 84: // t
           if(!g_overviewActive) {
             switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides);
-          }
-          break;
-  
-        case 88: // x
-          if(g_currentView === e_view.slides) {
-            addArrow(event);
-          }
-          break;
-  
-        case 90: // z
-          if(g_currentView === e_view.slides) {
-            addTextBox(event);
           }
           break;
           

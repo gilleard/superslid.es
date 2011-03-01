@@ -20,44 +20,6 @@
   background-color: #ffffff;
   -webkit-transition: opacity 1s;
 }
-.slides #slides > div > .graphics > p, .slides #slides > div > .graphics > .arrow {
-  position: absolute;
-  width: 20%;
-  height: 20%;
-  overflow: hidden;
-  border: 3px solid #444;
-  background-color: #ffffff;
-}
-.slides #slides > div > .graphics > p > .ui, .slides #slides > div > .graphics > .arrow > .ui {
-  position: absolute;
-  display: none;
-  width: 10px;
-  height: 10px;
-}
-.slides #slides > div > .graphics > p > .drag, .slides #slides > div > .graphics > .arrow > .drag {
-  top: 0;
-  left: 0;
-  cursor: move;
-}
-.slides #slides > div > .graphics > p > .resize, .slides #slides > div > .graphics > .arrow > .resize {
-  right: 0;
-  bottom: 0;
-  cursor: se-resize;
-}
-.slides #slides > div > .graphics > .arrow {
-  border: none;
-  background: none;
-}
-.slides #slides > div > .graphics > .arrow > canvas {
-  width: 100%;
-  height: 100%;
-}
-.slides #slides > div > .graphics > p:hover .ui, .slides #slides > div > .graphics > .arrow:hover .ui {
-  display: block;
-}
-.slides #slides > div > .graphics > .active {
-  opacity: 0.75;
-}
 .slides #slides > div > footer {
   position: absolute;
   left: 0;
@@ -84,18 +46,15 @@
   width: 10px;
   background-color: #cccccc;
 }
-.slides #slides > div.current {
+.slides #slides > .current {
   display: block;
   opacity: 1;
 }
+.slides #slides > .references ul {
+  list-style: none;
+}
 .slides #slides .incremental {
   visibility: hidden;
-}
-.slides.drag {
-  cursor: move;
-}
-.slides.resize {
-  cursor: se-resize;
 }
 #overview {
   display: none;

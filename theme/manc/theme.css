@@ -17,6 +17,9 @@
   background: #FFF url('bg.png') top left no-repeat;
   border: 0.15em solid #6A268D;
 }
+.slides #slides > img {
+  mar
+}
 
 .slides #slides > div > .topStyle{
 	height:10px;
@@ -67,6 +70,7 @@
 	text-align: center;
 }
 
+.slides #slides > div > img,
 .slides #slides > div > section {
 	margin-left: 5%;
 	margin-right: 5%;
