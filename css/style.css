@@ -46,8 +46,10 @@
   width: 10px;
   background-color: #cccccc;
 }
+.slides #slides > .inplace {
+  opacity: 0;
+}
 .slides #slides > .current {
-  display: block;
   opacity: 1;
 }
 .slides #slides > .references ul {

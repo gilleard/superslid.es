@@ -135,26 +135,30 @@ function superSlides(options) {
   
     $g_slides.not(':first').each(function() {
       
-      // Non-sub slide
-      if(!$(this).hasClass('sub')) {
+      if(!$(this).hasClass('inplace')) {
       
-        // Increment non-sub slide index
-        l_nonSubSlideIndex += 1;
+        // Non-sub slide
+        if(!$(this).hasClass('sub')) {
         
-        // Reset sub slide index
-        l_subSlideIndex = 0;
+          // Increment non-sub slide index
+          l_nonSubSlideIndex += 1;
+          
+          // Reset sub slide index
+          l_subSlideIndex = 0;
+          
+          // Update the sub slide direction
+          l_subSlideGoingDown = $(this).hasClass('up');
+          
+        }
         
-        // Update the sub slide direction
-        l_subSlideGoingDown = $(this).hasClass('up');
+        // Sub slide 
+        else {
         
-      }
+          // Increment sub slide index
+          l_subSlideIndex += 1;
+          
+        }
       
-      // Sub slide 
-      else {
-      
-        // Increment sub slide index
-        l_subSlideIndex += 1;
-        
       }
       
       // Position slide accordingly
