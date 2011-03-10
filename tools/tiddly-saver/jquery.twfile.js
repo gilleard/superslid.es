@@ -240,7 +240,7 @@ Triple licensed under the BSD, MIT and GPL licenses:
 		name: "tiddlySaver",
 		deferredInit: function() {
 			if(!document.applets["TiddlySaver"] && !$.browser.mozilla && !$.browser.msie && document.location.toString().substr(0,5) == "file:") {
-				$('body').append("<applet style='position:absolute;left:-1px' name='TiddlySaver' code='TiddlySaver.class' archive='TiddlySaver.jar' width='1'height='1'></applet>");
+				$('body').append("<applet style='position:absolute;left:-1px' name='TiddlySaver' code='TiddlySaver.class' archive='../tools/tiddly-saver/TiddlySaver.jar' width='1'height='1'></applet>");
 			}
 		},
 		isAvailable: function() {

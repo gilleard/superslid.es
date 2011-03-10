@@ -5,7 +5,7 @@
   
     <!-- meta -->
     <meta charset="utf-8">
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>SUPERslid.es</title>
     
     <!-- css -->
@@ -35,15 +35,15 @@
       <div>
         <h2>Slide 2</h2>
         <section>
-          <p>Duis aute irure \(\sqrt{3x-1}+(1+x)^2\) dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla <a class="exclude" href="http://bla.com" title="excluded with title attribute">another excluded link</a> pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui \(\sqrt{3x-1}+(1+x)^2\) officia deserunt mollit anim id est laborum.</p>
-      		<pre class="brush: xml;">
-            <div>
-              <h2>Title</h2>
-              <section>
-            		<p>Text</p>
-              </section>
-            </div>
-      		</pre>
+          <p>Duis aute irure \(\sqrt{3x-1}+(1+x)^2\) dolor in reprehenderit in $\sqrt{3x-1}+(1+x)^2$ voluptate velit esse cillum dolore eu fugiat nulla <a class="exclude" href="http://bla.com" title="excluded with title attribute">another excluded link</a> pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui \(\sqrt{3x-1}+(1+x)^2\) officia deserunt mollit anim id est laborum.</p>
+          <pre class="highlight">
+            &lt;div&gt;
+              &lt;h2&gt;Title&lt;/h2&gt;
+              &lt;section&gt;
+                &lt;p&gt;Text&lt;/p&gt;
+              &lt;/section&gt;
+            &lt;/div&gt;
+          </pre>
         </section>
       </div>
       
@@ -134,9 +134,8 @@
     </div>
   
     <!-- js -->
-    <script src="../js/jquery.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="../js/jquery.twfile.js"></script>
+    <script src="../js/library.js"></script>
+    <script src="../js/superslides.js"></script>
 
     <script>
 
@@ -147,15 +146,13 @@
           'height': 735,
           'scale': 0.9,
           'fontSize': 150,
-          'enableMath': false,
+          'enableSyntax': true,
+          'enableMath': true,
           'enableToc': false,
           'strictNav': false,
           'incrementOnce': false,
           'customJs': '../theme/manc/theme.js',
-          'customCss': '../theme/manc/theme.css',
-          'syntax': {
-            'xml': '../tools/syntax/scripts/shBrushXml.js'
-          }
+          'customCss': '../theme/manc/theme.css'
           
         });
       });

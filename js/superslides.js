@@ -6,13 +6,13 @@ function superSlides(options) {
     height: 735,
     scale: 0.9,
     fontSize: 150,
+    enableSyntax: false,
     enableMath: false,
     enableToc: false,
     strictNav: false,
     incrementOnce: false,
     customJs: null,
-    customCss: null,
-    syntax: null
+    customCss: null
   };
 
   // Update settings with user's values
@@ -60,7 +60,8 @@ function superSlides(options) {
     g_currentSlideNumber = isNaN(location.hash.substr(1)) || location.hash === '' ? 1 : location.hash.substr(1),
     g_currentView = e_view.slides,
     g_skipSlides = '',
-    g_overviewActive = false;
+    g_overviewActive = false,
+    g_converter = new Showdown.converter();
     
   // Scale/position
   var
@@ -70,7 +71,12 @@ function superSlides(options) {
     g_wrapperHeight = null,
     g_wrapperHorizontalMargin = null,
     g_wrapperVerticalMargin = null;
-
+    
+  // Hacky html blocks ;(
+  var
+    g_blankSlideHtml = '<div>' + $g_slides.first().clone().find('.delete').removeAttr('disabled').end().find('> .markdown .source').html('').end().html() + '</div>',
+    g_footerHtml = $g_wrapper.find('> footer').size() > 0 ? '<footer>' + $g_wrapper.find('> footer').remove().html() + '</footer>' : '<footer></footer>';
+    
   // **************************************************
   //
   // Functions
@@ -85,41 +91,14 @@ function superSlides(options) {
 
   } // log(message)
   
-  function includeJs(l_jsFile) {
-  
-    var l_req = new XMLHttpRequest();
-    l_req.open('GET', l_jsFile, false);
-    l_req.onreadystatechange = function() {
-      if(l_req.readyState === 4) {
-        window.eval(l_req.responseText);
-        log(l_jsFile + ' loaded.');
-      }
-    };
-    l_req.send(null);
-  
-  } // include(l_jsFile)
-  
-  function includeCss(l_cssFile) {
-  
-    $('head').append(
-      $('<link />').attr({
-        'rel': 'stylesheet',
-        'href': l_cssFile
-      })
-    );
-    log(l_cssFile + ' included.');
-  
-  } // includeCss(l_cssFile)
-  
   function loadTheme() {
   
-    if(settings.customJs) {
-      includeJs(settings.customJs);
-    }
+    if(settings.customJs) { $.appendScript(settings.customJs); }
     
-    if(settings.customCss) {
-      includeCss(settings.customCss);
-    }
+    if(settings.customCss) { $.appendStylesheet(settings.customCss); }
+    
+    // Force a request (MathJax fail)
+    if(settings.enableMath) { $.appendStylesheet('../css/hack.css'); }
       
   } // loadTheme()
   
@@ -127,13 +106,13 @@ function superSlides(options) {
   
     // Init positioning variables
     var
-      l_nonSubSlideIndex = 0,
+      l_nonSubSlideIndex = -1,
       l_subSlideIndex = 0,
-      l_subSlideGoingDown = true,
+      l_subSlideGoingUp = false,
       l_topOffsetPerSlide = parseInt(g_wrapperHeight + (g_wrapperVerticalMargin / 2), 10),
       l_leftOffsetPerSlide = parseInt(g_wrapperWidth + (g_wrapperHorizontalMargin / 2), 10);
   
-    $g_slides.not(':first').each(function() {
+    $g_slides.each(function() {
       
       if(!$(this).hasClass('inplace')) {
       
@@ -147,7 +126,7 @@ function superSlides(options) {
           l_subSlideIndex = 0;
           
           // Update the sub slide direction
-          l_subSlideGoingDown = $(this).hasClass('up');
+          l_subSlideGoingUp = $(this).hasClass('up');
           
         }
         
@@ -163,7 +142,7 @@ function superSlides(options) {
       
       // Position slide accordingly
       $(this).css({
-        'top': l_subSlideIndex > 0 ? (l_subSlideGoingDown ? '-' : '') + (l_subSlideIndex * l_topOffsetPerSlide) + 'px' : 'auto',
+        'top': l_subSlideIndex > 0 ? (l_subSlideGoingUp ? '-' : '') + (l_subSlideIndex * l_topOffsetPerSlide) + 'px' : 'auto',
         'left': l_nonSubSlideIndex > 0 ? (l_nonSubSlideIndex * l_leftOffsetPerSlide) + 'px' : 'auto'
       });
       
@@ -241,7 +220,7 @@ function superSlides(options) {
   function scaleImages() {
   
     // For each image
-    $g_slides.find('> img')
+    $g_slides.find('img')
     
       // On load
       .one('load', function() {
@@ -450,7 +429,7 @@ function superSlides(options) {
   function generateReferences() {
 
     // Get all links and remove specific excluded links
-    var $l_links = $g_slides.filter(':not(#toc)').find('a[href]:not(.exclude)');
+    var $l_links = $g_slides.not('#toc, .references').find('a[href]:not(.exclude)');
 
     // Check for use of title attribute
     var $l_filteredLinks = $l_links.filter('[title]');
@@ -460,12 +439,21 @@ function superSlides(options) {
 
     // Restore any explicit references
     $l_links = $l_links.add($g_slides.find('a.include[href]'));
+    
+    // Look for reference slide
+    var $l_referenceSlide = $('#slides').find('> .references');
 
-    // If there are any
+    // If there are any links
     if($l_links.size() > 0) {
-
-      // Create reference slide
-      $('#slides').append('<div class="references"><h2>References</h2><section><ul></ul></section></div>');
+      
+      // Check for reference slide
+      if($l_referenceSlide.size() < 1) {
+        $('#slides').append('<div class="references"><h2>References</h2><section><ul></ul></section></div>');
+      }
+      else {
+        $('#slides > .references ul').html('');
+      }
+      
       var l_referencesHtml = '';
 
       // For each
@@ -490,24 +478,31 @@ function superSlides(options) {
       $('#slides > .references ul').append(l_referencesHtml);
       
       // Go to reference location
-      $('#slides > .references ul a').click(function() {
+      $('#slides > .references ul a').live('click', function() {
       
         goToSlide(parseInt($(this).attr('href').substring(1), 10));
       
       });
 
     }
+    
+    // If there aren't any links
+    else {
+    
+      // Remove the reference slide
+      $l_referenceSlide.remove();
+    
+    }
 
     // Update paging variables
     $g_slides = $('#slides > div');
     g_totalSlides = $g_slides.size();
+    
+    return $l_links.size() > 0;
 
   } // generateReferences()
   
-  function generateFooters() {
-  
-    // Copy footer into each slide
-    $g_slides.append($g_wrapper.find('> footer'));
+  function updateFooters() {
     
     // For each slide
     $g_slides.each(function() {
@@ -520,26 +515,16 @@ function superSlides(options) {
     // Replace total slide numbers
     $g_slides.find('.total').text(g_totalSlides);
   
+  } // updateFooters()
+  
+  function generateFooters() {
+  
+    // Copy footer into each slide
+    $g_slides.append(g_footerHtml);
+    
+    updateFooters();
+  
   } // generateFooters()
-  
-  function initMathJax() {
-  
-    var l_scriptTag = document.createElement('script');
-    l_scriptTag.type = 'text/javascript';
-    l_scriptTag.src = '../tools/math/MathJax.js';
-  
-    var l_config = 'MathJax.Hub.Config({ config: \'MathJax.js\' }); ' + 'MathJax.Hub.Startup.onload();';
-  
-    if(window.opera) {
-      l_scriptTag.innerHTML = l_config;
-    }
-    else {
-      l_scriptTag.text = l_config;
-    }
-  
-    $('head').get(0).appendChild(l_scriptTag);
-  
-  } // initMathJax()
 
   function toggleOverview() {
     
@@ -620,13 +605,13 @@ function superSlides(options) {
     var $l_printHtml = $('html').clone();
     
     // Switch to print state
-    $l_printHtml.find('body').removeClass('slides outline').addClass('print');
+    $l_printHtml.find('body').removeClass('slides outline').removeAttr('style').addClass('print');
     
     // Remove any scaling
-    $l_printHtml.find('body > .wrapper').attr('style' , '').css({'font-size': settings.fontSize + '%'});
+    $l_printHtml.find('body > #slides').removeAttr('style').css({'font-size': settings.fontSize + '%'});
     
     // Remove any unnecessary html
-    $l_printHtml.find('#MathJax_Hidden, #MathJax_Message, #overview, script, applet').remove();
+    $l_printHtml.find('#MathJax_Hidden, #MathJax_Message, #overview, script, style, link[id], applet, .markdown').remove();
     $l_printHtml.find('#slides > div').removeClass('current').removeAttr('style');
     
     // Put the doctype + html tag back
@@ -691,26 +676,201 @@ function superSlides(options) {
   
   } // generateToc()
   
-  function loadSyntaxHighlighting() {
+  function loadMathJax() {
   
-    // syntax css
-    includeCss('../tools/syntax/styles/shCore.css');
-    includeCss('../tools/syntax/styles/shThemeDefault.css');
-      
-    // syntax core js
-    includeJs('../tools/syntax/scripts/shCore.js');
+    $.appendScript('../tools/math/MathJax.js');
     
-    // syntax brushes
-    $.each(settings.syntax, function(index, value) { 
-      includeJs(value);
+    setTimeout(function() {
+      if(typeof(MathJax) !== 'undefined' && MathJax !== null && $g_slides.find('> .html').size() === 0) {  
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+      }
+    }, 250);
+  
+  } // loadMathJax()
+  
+  function loadSyntaxHighlighting() {
+    
+    // FIX - Code doesn't scale
+    $.appendScript('../tools/syntax-highlighter/scripts/jquery.syntaxhighlighter.js');
+    
+    setTimeout(function() {
+      if($.SyntaxHighlighter) {
+      
+        $.SyntaxHighlighter.init({
+          'prettifyBaseUrl': '../tools/syntax-highlighter/prettify',
+          'baseUrl': '../tools/syntax-highlighter',
+          'highlight': ($g_slides.find('> .html').size() === 0)
+        });
+        
+      }
+    }, 250);
+      
+  } // loadSyntaxHighlighting()
+  
+  function renderSlide($l_slide) {
+  
+    // FIX - encode pre/code tag contents (encode selection)
+    $l_slide.find('.html').html('').append(g_converter.makeHtml($l_slide.find('.markdown > .source').html()));
+    
+    // Syntax
+    if(settings.enableSyntax) {
+      setTimeout(function() {
+        if($.SyntaxHighlighter) { $l_slide.find('.html pre').syntaxHighlight(); }
+      }, 250);
+    }
+    
+    // Math
+    if(settings.enableMath) {
+      setTimeout(function() {
+        // FIX - Still Typesets whole document
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub], $l_slide.find('.html').get(0));
+      }, 250);
+    }
+        
+  } // renderSlide()
+  
+  function renderAllSlides() {
+    
+    $g_slides.each(function() {
+    
+      if($(this).find('.html').size() > 0) { renderSlide($(this)); }
+    
     });
     
-    // call syntax highlighter
-    if(typeof SyntaxHighlighter  !== 'undefined') {
-      SyntaxHighlighter.all();
+  } // renderAllSlides()
+  
+  function saveSlide($l_slide) {
+  
+    // Update .source
+    $l_slide.find('.markdown > .source').first().html($l_slide.find('.markdown > textarea').first().val());
+    
+    // Render html
+    renderSlide($l_slide);
+    
+    if(generateReferences()) {
+    
+      // New reference slide so need to reposition
+      positionSlides();
+    
+      // Copy footer into new reference slide
+      $g_slides.filter('.references').append(g_footerHtml);
+      
     }
-
-  } // loadSyntaxHighlighting()
+    
+    // Update all footers
+    updateFooters();
+    
+    scaleImages();
+    
+    // Hide edit panel
+    $l_slide.find('.markdown').hide();
+    
+    // Commit!
+    saveToSource();
+    
+  } // saveSlide()
+  
+  function updateSlides() {
+  
+    // Update paging variables
+    $g_slides = $('#slides > div');
+    g_totalSlides = $g_slides.size();
+    
+    // Update all footers
+    updateFooters();
+    
+    // Reposition slides
+    positionSlides();
+  
+  } // updateSlides()
+  
+  function newSlide($l_newSlideButton) {
+  
+    // Render html incase it has been changed
+    $l_newSlideButton.parent().find('.save').trigger('click');
+    
+    // Store reference to current slide
+    var $l_currentSlide = $l_newSlideButton.parentsUntil('#slides').last();
+    
+    // Store reference to new slide
+    var $l_newslide = $l_currentSlide.after(g_blankSlideHtml).next();
+    
+    // Copy footer into new slide
+    $l_newslide.append(g_footerHtml);
+    
+    // Update all the dependencies
+    updateSlides();
+    
+    // Hide edit panel on current slide
+    $l_currentSlide.find('.markdown').hide();
+    
+    // Show edit panel on new slide
+    $l_newslide.find('.markdown').show();
+    
+    // Move to new slide
+    goToSlide(parseInt(g_currentSlideNumber, 10) + 1, e_direction.forward);
+    
+    // Set focus to textarea
+    $g_currentSlide.find('> .markdown textarea').focus();
+    
+    // Commit!
+    saveToSource();
+  
+  } // insertNewSlide()
+  
+  function deleteSlide($l_slide) {
+    
+    // Check this isn't the last slide ;)
+    if(g_totalSlides > 1) {
+    
+      // Move to previous slide
+      goToSlide(parseInt(g_currentSlideNumber - 1, 10), e_direction.back);
+      
+      // Remove slide
+      $l_slide.remove();
+      
+      // Update all the dependencies
+      updateSlides();
+    
+    // Commit!
+    saveToSource();
+    
+    }
+  
+  } // deleteSlide()
+  
+  function saveToSource() { 
+  
+    // Fetch current html
+    var $l_printHtml = $('html').clone();
+    
+    // Remove any state
+    $l_printHtml.find('body').removeAttr('class').removeAttr('style');
+    
+    // Remove any scaling
+    $l_printHtml.find('#slides').removeAttr('style');
+    
+    // Remove any unnecessary html
+    $l_printHtml.find('style, link[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet').remove();
+    $l_printHtml.find('#slides > div').removeClass('current').removeAttr('style').find('> footer').remove();
+    
+    // Adjust markdown
+    $l_printHtml.find('#slides > div > .html').html('');
+    $l_printHtml.find('#slides > div > .markdown').removeAttr('style');
+    
+    // Remove blank divs at start of body (and find out what it is)
+    $l_printHtml.find('body > div').not('#slides').remove();
+    
+    // Put the footer back
+    $l_printHtml.find('#slides').append(g_footerHtml);
+    
+    // Put the doctype + html tag back
+    var l_printHtml = '<!doctype html><html lang="en-GB">' + $l_printHtml.html() + '</html>';
+    
+    // Save the file
+    $.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
+      
+  } // saveToSource()
   
   // **************************************************
   //
@@ -722,6 +882,15 @@ function superSlides(options) {
   log('Current slides: ' + g_currentSlideNumber);
   log('Current view: ' + getCurrentView(g_currentView));
   
+  // MathJax
+  if(settings.enableMath) { loadMathJax(); }
+  
+  // Syntax Highlighting
+  if(settings.enableSyntax) { loadSyntaxHighlighting(); }
+  
+  // Render initial content
+  renderAllSlides();
+  
   // Load theme
   loadTheme();
   
@@ -729,9 +898,7 @@ function superSlides(options) {
   $g_body.addClass(g_currentView === e_view.slides ? 'slides' : 'outline');
   
   // Generate ToC
-  if(settings.enableToc) {
-    generateToc();
-  }
+  if(settings.enableToc) { generateToc(); }
 
   // Generate initial references
   generateReferences();
@@ -750,16 +917,6 @@ function superSlides(options) {
 
   // Generate footer
   generateFooters();
-  
-  // MathJax
-  if(settings.enableMath) {
-    initMathJax();
-  }
-  
-  // Syntax Highlighting
-  if(settings.syntax) {
-    loadSyntaxHighlighting();
-  }
 
   // **************************************************
   //
@@ -770,20 +927,16 @@ function superSlides(options) {
   // Keyboard
   $(document).keydown(function(event) {
   
-    if(!$(event.target).is('[contenteditable=true]')) {
+    if($g_slides.find('.markdown:visible').size() === 0) {
 
       switch(event.which) {
   
         case 35: // end
-          if(g_currentView === e_view.slides) {
-            goToSlide(g_totalSlides, e_direction.forward);
-          }
+          if(g_currentView === e_view.slides) { goToSlide(g_totalSlides, e_direction.forward); }
           break;
   
         case 36: // home
-          if(g_currentView === e_view.slides) {
-            goToSlide(1, e_direction.forward);
-          }
+          if(g_currentView === e_view.slides) { goToSlide(1, e_direction.forward); }
           break;
   
         case 10: // return
@@ -805,18 +958,14 @@ function superSlides(options) {
               }
             }
             else {
-              if(event.which === 32 || event.which === 39) {
-                advance(e_dimension.title);
-              }
+              if(event.which === 32 || event.which === 39) { advance(e_dimension.title); }
               else if(event.which === 40) {
                 // If reversed sub slides
                 if($g_currentSlide.hasClass('up') ||
                     ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
                   previous(e_dimension.sub);
                 }
-                else {
-                  advance(e_dimension.sub);
-                }
+                else { advance(e_dimension.sub); }
               }
             }
             g_skipSlides = '';
@@ -832,18 +981,14 @@ function superSlides(options) {
               goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
             }
             else {
-              if(event.which === 37) {
-                previous(e_dimension.title);
-              }
+              if(event.which === 37) { previous(e_dimension.title); }
               else if(event.which === 38) {
                 // If reversed sub slides
                 if($g_currentSlide.hasClass('up') ||
                     ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
                   advance(e_dimension.sub);
                 }
-                else {
-                  previous(e_dimension.sub);
-                }
+                else { previous(e_dimension.sub); }
               }
             }
             g_skipSlides = '';
@@ -863,22 +1008,29 @@ function superSlides(options) {
           g_skipSlides += parseInt(event.which, 10) - 48;
           break;
   
-        case 79: // o
+        case 69: // e
           if(g_currentView === e_view.slides) {
-            toggleOverview();
+            $g_currentSlide
+              .find('.markdown')
+                .find('> textarea')
+                  .first()
+                    .val($g_currentSlide.find('.markdown > .source').first().html())
+                  .end()
+                .end()
+              .show();
           }
+          break;
+  
+        case 79: // o
+          if(g_currentView === e_view.slides) { toggleOverview(); }
           break;
   
         case 80: // p
-          if(confirm('Are you sure?')) {
-            generatePrintHtml();
-          }
+          if(confirm('Are you sure?')) { generatePrintHtml(); }
           break;
   
         case 84: // t
-          if(!g_overviewActive) {
-            switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides);
-          }
+          if(!g_overviewActive) { switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides); }
           break;
           
       }
@@ -894,9 +1046,28 @@ function superSlides(options) {
   
   // Resize
   $(window).resize(function() {
-    if(g_currentView === e_view.slides) {
-      scaleSlides();
-    }
+    if(g_currentView === e_view.slides) { scaleSlides(); }
+  });
+  
+  // External links
+  $('a[href^="http"]').live('click', function() {
+    window.open($(this).attr('href'));
+    return false;
+  });
+  
+  // Save current slide
+  $('.controls > .save').live('click', function() {
+    saveSlide($(this).parentsUntil('#slides').last());
+  });
+  
+  // Insert new slide
+  $('.controls > .new').live('click', function() {
+    newSlide($(this));
+  });
+  
+  // Delete current slide
+  $('.controls > .delete').live('click', function() {
+    if(confirm('Are you sure?')) { deleteSlide($(this).parentsUntil('#slides').last()); }
   });
 
 }

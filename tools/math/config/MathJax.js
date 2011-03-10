@@ -23,7 +23,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
+ 
 MathJax.Hub.Config({
 
   //
@@ -126,7 +126,7 @@ MathJax.Hub.Config({
   //  in the lower left-hand corner.  Set to "false" to prevent those messages (though
   //  file loading and other messages will still be shown).
   //
-  showProcessingMessages: false,
+  showProcessingMessages: true,
   
   //
   //  This value controls the verbosity of the messages in the lower left-hand corner.
@@ -160,7 +160,7 @@ MathJax.Hub.Config({
   //  you will need to call MathJax.Hub.Typeset() yourself by hand, set
   //  this value to true.
   //
-  skipStartupTypeset: false,
+  skipStartupTypeset: true,
   
   //============================================================================
   //

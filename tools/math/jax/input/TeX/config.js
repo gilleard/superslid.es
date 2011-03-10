@@ -1,18 +1,39 @@
-/*
- *  ../SourceForge/trunk/mathjax/jax/input/TeX/config.js
+/*************************************************************
+ *
+ *  MathJax/jax/input/TeX/config.js
+ *
+ *  Initializes the TeX InputJax (the main definition is in
+ *  MathJax/jax/input/TeX/jax.js, which is loaded when needed).
+ *
+ *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2010 Design Science, Inc.
- *
- *  Part of the MathJax library.
- *  See http://www.mathjax.org for details.
+ *  Copyright (c) 2009 Design Science, Inc.
  * 
- *  Licensed under the Apache License, Version 2.0;
+ *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
- *
+ *  You may obtain a copy of the License at
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
-MathJax.Unpack([
-  ['MathJax.InputJax','.TeX','=',0,'({name:"TeX",version:"1.0",directory:',0,'.directory+"/','TeX",extensionDir:',0,'.extensionDir+"/TeX",require:[MathJax.ElementJax',6,'mml/jax.js"],config:{TagSide:"right",TagIndent:"0.8em",MultLineWidth:"85%"}});',0,1,'.Register("math/tex");',0,1,'.loadComplete("config.js");']
-]);
+MathJax.InputJax.TeX = MathJax.InputJax({
+  id: "TeX",
+  version: "1.0.4",
+  directory: MathJax.InputJax.directory + "/TeX",
+  extensionDir: MathJax.InputJax.extensionDir + "/TeX",
+  
+  config: {
+    TagSide:       "right",
+    TagIndent:     "0.8em",
+    MultLineWidth: "85%"
+  }
+});
+MathJax.InputJax.TeX.Register("math/tex");
 
+MathJax.InputJax.TeX.loadComplete("config.js");

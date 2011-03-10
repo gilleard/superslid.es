@@ -150,7 +150,7 @@ and <b>consume</b> Web documents and data!</li>
 
 <li>Initial URI, say
 
-&lt;<font color="#3333ff">http://ex.org/test/example.html</font>&gt;</li>
+&lt;http://ex.org/test/example.html&gt;</li>
 
 <li>The HTML:</li>
 
@@ -158,7 +158,7 @@ and <b>consume</b> Web documents and data!</li>
 
 <li>
 
-<pre class="brush: xml;">
+<pre class="highlight">
 &lt;html&gt;
   &lt;head&gt;
     &lt;p&gt;Eh?&lt;/p&gt;
@@ -493,10 +493,10 @@ permaLink.&nbsp; And, of course, content. -- <a href="http://www.intertwingly.ne
 
 </blockquote>
 
-<pre class="brush: xml;">
-&lt;h1&gt;My Weblog&lt;/h1&gt;<br>
-&lt;h2&gt;What I Did Today&lt;/h2&gt;<br>
-&lt;h3&gt;Feb. 11, 2008; Bijan Parsia&lt;/h3&gt;<br>
+<pre class="highlight">
+&lt;h1&gt;My Weblog&lt;/h1&gt;
+&lt;h2&gt;What I Did Today&lt;/h2&gt;
+&lt;h3&gt;Feb. 11, 2008; Bijan Parsia&lt;/h3&gt;
 &lt;p&gt;Taught a class and it went &lt;i&gt;very&lt;/i&gt; well.&lt;/p&gt;
 </pre>
 
@@ -508,14 +508,14 @@ permaLink.&nbsp; And, of course, content. -- <a href="http://www.intertwingly.ne
 
 <p>We can radically change the markup.</p>
 
-<pre class="brush: xml;">
-&lt;h1&gt;My Weblog&lt;/h1&gt;<br>
-&lt;ul&gt;<br>
- &lt;li&gt;<br>
- &lt;b&gt;What I Did Today&lt;/b&gt;&lt;br/&gt;<br>
- &lt;i&gt;Feb. 11, 2008; Bijan Parsia&lt;/i&gt;&lt;/br&gt;<br>
- &lt;p&gt;Taught a class and it went &lt;em&gt;very&lt;/em&gt; well.<br>
- &lt;/li&gt;<br>
+<pre class="highlight">
+&lt;h1&gt;My Weblog&lt;/h1&gt;
+&lt;ul&gt;
+ &lt;li&gt;
+ &lt;b&gt;What I Did Today&lt;/b&gt;&lt;br/&gt;
+ &lt;i&gt;Feb. 11, 2008; Bijan Parsia&lt;/i&gt;&lt;/br&gt;
+ &lt;p&gt;Taught a class and it went &lt;em&gt;very&lt;/em&gt; well.
+ &lt;/li&gt;
 &lt;/ul&gt;
 </pre>
 
@@ -526,24 +526,24 @@ permaLink.&nbsp; And, of course, content. -- <a href="http://www.intertwingly.ne
 
 
 
-<pre class="brush: xml;">
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
-&lt;feed xmlns="http://www.w3.org/2005/Atom"&gt;<br>
- &lt;title&gt;<font color="#3333ff">My Weblog</font>&lt;/title&gt;<br>
- &lt;updated&gt;2008-02-13T18:30:02Z&lt;/updated&gt; <br>
- &lt;id&gt;urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6&lt;/id&gt;<br>
- &lt;entry&gt;<br>
- &lt;author&gt; <br>
- &lt;name&gt;<font color="#3333ff">Bijan Parisa</font>&lt;/name&gt;<br>
- &lt;/author&gt; <br>
- &lt;title&gt;<font color="#3333ff">What I Did Today</font>&lt;/title&gt;<br>
- &lt;id&gt;urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id&gt;<br>
- &lt;updated&gt;<font color="#3333ff">2008-02-13T18:30:02Z</font>&lt;/updated&gt;<br>
- &lt;content type="xhtml" xml:lang="en"<br>
- xmlns="http://www.w3.org/1999/xhtml"&gt;<br>
- &lt;p&gt;<font color="#3333ff">Taught a class and it went &lt;em&gt;very&lt;/em&gt; well.</font>&lt;/p&gt;<br>
- &lt;/content&gt;<br>
- &lt;/entry&gt; <br>
+<pre class="highlight">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;feed xmlns="http://www.w3.org/2005/Atom"&gt;
+ &lt;title&gt;My Weblog&lt;/title&gt;
+ &lt;updated&gt;2008-02-13T18:30:02Z&lt;/updated&gt; 
+ &lt;id&gt;urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6&lt;/id&gt;
+ &lt;entry&gt;
+ &lt;author&gt; 
+ &lt;name&gt;Bijan Parisa&lt;/name&gt;
+ &lt;/author&gt; 
+ &lt;title&gt;What I Did Today&lt;/title&gt;
+ &lt;id&gt;urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id&gt;
+ &lt;updated&gt;2008-02-13T18:30:02Z&lt;/updated&gt;
+ &lt;content type="xhtml" xml:lang="en"
+ xmlns="http://www.w3.org/1999/xhtml"&gt;
+ &lt;p&gt;Taught a class and it went &lt;em&gt;very&lt;/em&gt; well.&lt;/p&gt;
+ &lt;/content&gt;
+ &lt;/entry&gt; 
 &lt;/feed&gt;
 </pre>
 
@@ -695,7 +695,7 @@ text:</a> "Do not specify meaningless alternate text (e.g.,
 
 <ul>
 
-<li>We are dealing with socio-political (and economic) phenomena<br>
+<li>We are dealing with socio-political (and economic) phenomena
 
 
 </li>
@@ -916,23 +916,23 @@ condition</li>
 
 
 
-<pre class="brush: xml;">
-&lt;schema xmlns="http://purl.oclc.org/dsdl/schematron"&gt;<br>
-&nbsp; &lt;ns prefix="h" uri="http://www.w3.org/1999/xhtml"/&gt;<br>
- &lt;pattern name='dfn cannot nest'&gt;<br>
- &lt;rule context="h:dfn"&gt;<br>
- &lt;report test="ancester::h:dfn"&gt;<br>
- The "dfn" element cannot contain any nested<br>
- "dfn" elements.&lt;/report&gt;<br>
- &lt;/rule&gt;<br>
- &lt;/pattern&gt;<br>
-&lt;pattern name='noscript cannot nest'&gt;<br>
- &lt;rule context="h:noscript"&gt;<br>
- &lt;report test="ancester::h:&gt;noscript"&gt;<br>
- The "noscript element cannot contain any nested<br>
- "noscript" elements.&lt;/report&gt;<br>
- &lt;/rule&gt;<br>
- &lt;/pattern&gt;<br>
+<pre class="highlight">
+&lt;schema xmlns="http://purl.oclc.org/dsdl/schematron"&gt;
+&nbsp; &lt;ns prefix="h" uri="http://www.w3.org/1999/xhtml"/&gt;
+ &lt;pattern name='dfn cannot nest'&gt;
+ &lt;rule context="h:dfn"&gt;
+ &lt;report test="ancester::h:dfn"&gt;
+ The "dfn" element cannot contain any nested
+ "dfn" elements.&lt;/report&gt;
+ &lt;/rule&gt;
+ &lt;/pattern&gt;
+&lt;pattern name='noscript cannot nest'&gt;
+ &lt;rule context="h:noscript"&gt;
+ &lt;report test="ancester::h:&gt;noscript"&gt;
+ The "noscript element cannot contain any nested
+ "noscript" elements.&lt;/report&gt;
+ &lt;/rule&gt;
+ &lt;/pattern&gt;
 &lt;/schema&gt;
 </pre>
 
@@ -944,19 +944,19 @@ condition</li>
 
 <p>From <a href="http://syntax.whattf.org/relaxng/common.rnc">common.rnc</a>:</p>
 
-<pre>common.elem.embedded = ( notAllowed )<br>
-common.elem.phrase = ( common.elem.embedded )<br>
+<pre>common.elem.embedded = ( notAllowed )
+common.elem.phrase = ( common.elem.embedded )
 common.inner.phrase =( text &amp; common.elem.phrase* )</pre>
 
 <p>From <a href="http://syntax.whattf.org/relaxng/phrase.rnc">phrase.rnc</a>:</p>
 
-<pre class="brush: xml;">
-dfn.elem = element dfn { dfn.inner &amp; dfn.attrs }<br>
-dfn.attrs =<br>
-	( common.attrs )<br>
-dfn.inner =<br>
-	( common.inner.phrase )<br>
-<br>
+<pre class="highlight">
+dfn.elem = element dfn { dfn.inner &amp; dfn.attrs }
+dfn.attrs =
+	( common.attrs )
+dfn.inner =
+	( common.inner.phrase )
+
 common.elem.phrase |= dfn.elem
 </pre>
 
@@ -966,13 +966,13 @@ common.elem.phrase |= dfn.elem
 
 
 
-<pre class="brush: xml;">
-&lt;ns uri="http://www.w3.org/2005/Atom" prefix="atom"/&gt; <br>
-&lt;rule context="atom:feed"&gt;<br>
- &lt;assert test="atom:author or not(atom:entry[not(atom:author)])"&gt;<br>
- An atom:feed must have an atom:author unless all<br>
- of its atom:entry children have an atom:author.<br>
- &lt;/assert&gt;<br>
+<pre class="highlight">
+&lt;ns uri="http://www.w3.org/2005/Atom" prefix="atom"/&gt; 
+&lt;rule context="atom:feed"&gt;
+ &lt;assert test="atom:author or not(atom:entry[not(atom:author)])"&gt;
+ An atom:feed must have an atom:author unless all
+ of its atom:entry children have an atom:author.
+ &lt;/assert&gt;
 &lt;/rule&gt;
 </pre>
 
@@ -1114,7 +1114,7 @@ attribute</li>
 
 <ul>
 
-<li>The "look" may need updating<br>
+<li>The "look" may need updating
 
 
 </li>
@@ -1255,29 +1255,29 @@ pairs</li>
 
 </section></div>
 
-<div><h2>CSS with <div>, <span></span></div></h2><section>
+<div><h2>CSS with</h2><section>
 
 
 
-<pre class="brush: xml;">
-&lt;style type="text/css"&gt;<br>
-.title {font-weight: bold}<br>
-div.title {text-align:center; font-size: 24; }<br>
-div.entry div.title {text-align: left; font-variant: normal}<br>
-span.date {font-style: italic}<br>
-span.date:after{content:" by"}<br>
-div.content {font-style: italic}<br>
-div.content i {font-style: normal; font-weight: bold}<br>
-#one {color: red}&lt;/style&gt;<br>
-&lt;div class=title&gt;My Weblog&lt;/div&gt;<br>
-&lt;div class="entry"&gt;<br>
- &lt;div class=title&gt;What I Did Today&lt;/div&gt;<br>
- &lt;div class=byline&gt;<br>
- &lt;span class=date&gt;Feb. 11, 2008&lt;/span&gt; &lt;span class=author&gt;Bijan Parsia&lt;/span&gt;<br>
- &lt;/div&gt;<br>
- &lt;div class="content" id="one"&gt;<br>
- &lt;p&gt;Taught a class and it went &lt;i&gt;very&lt;/i&gt; well.&lt;/p&gt;<br>
- &lt;/div&gt;<br>
+<pre class="highlight">
+&lt;style type="text/css"&gt;
+.title {font-weight: bold}
+div.title {text-align:center; font-size: 24; }
+div.entry div.title {text-align: left; font-variant: normal}
+span.date {font-style: italic}
+span.date:after{content:" by"}
+div.content {font-style: italic}
+div.content i {font-style: normal; font-weight: bold}
+#one {color: red}&lt;/style&gt;
+&lt;div class=title&gt;My Weblog&lt;/div&gt;
+&lt;div class="entry"&gt;
+ &lt;div class=title&gt;What I Did Today&lt;/div&gt;
+ &lt;div class=byline&gt;
+ &lt;span class=date&gt;Feb. 11, 2008&lt;/span&gt; &lt;span class=author&gt;Bijan Parsia&lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="content" id="one"&gt;
+ &lt;p&gt;Taught a class and it went &lt;i&gt;very&lt;/i&gt; well.&lt;/p&gt;
+ &lt;/div&gt;
 &lt;/div&gt;
 </pre>
 
@@ -1436,9 +1436,8 @@ Design of the Modern Web Architecture</a>&nbsp;</li>
 </div>
   
     <!-- js -->
-    <script src="../js/jquery.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="../js/jquery.twfile.js"></script>
+    <script src="../js/library.js"></script>
+    <script src="../js/superslides.js"></script>
     <script>
 
       $(function (){
@@ -1446,9 +1445,7 @@ Design of the Modern Web Architecture</a>&nbsp;</li>
           // Config options
           'customJs': '../theme/manc/theme.js',
           'customCss': '../theme/manc/theme.css',
-          'syntax': {
-            'xml': '../tools/syntax/scripts/shBrushXml.js'
-          }
+          'enableSyntax': true
         });
       });
 

@@ -1,18 +1,94 @@
-/*
- *  ../SourceForge/trunk/mathjax/jax/output/HTML-CSS/autoload/multiline.js
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/autoload/multiline.js
+ *  
+ *  Implements the HTML-CSS output <mrow>'s that contain line breaks.
+ *
+ *  ---------------------------------------------------------------------
  *  
  *  Copyright (c) 2010 Design Science, Inc.
- *
- *  Part of the MathJax library.
- *  See http://www.mathjax.org for details.
  * 
- *  Licensed under the Apache License, Version 2.0;
+ *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
- *
+ *  You may obtain a copy of the License at
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
-MathJax.Unpack([
-  ['(function(a,b){var c="1.0";a.mbase.Augment({toHTMLmultiline:function(u,r){u=this.HTMLcreateSpan(u);if(!this.type!=="mrow"){u=this.HTMLhandleSize(u)}var g=b.createStack(u);var o=[],f=[],p','=-b.BIGDIMEN,','q',1,'v,t,s,k',';for(t=0,k=r.length-1;t<k;t++){','o[t]=b.createBox(g);for(v=r[t][0],s=r[t+1][0];v<s;v++){if(this.data[v]){this.data[v].toHTML(o[t])}}if(','this.data[r[t][','0]]){',7,'0',']].HTMLspanElement().style.','paddingLeft=""}if(',7,'s-1]]){',7,'s-1',11,'paddingRight=""}f[t]=','this.HTMLcomputeBBox(o[t],','null',',r[t][0],r[t+1][0',']);if(','o[t].bbox.','h>p){p=',23,'h}if(',23,'d>q){q=',23,'d}}var n=0,x=this.HTMLgetScale(),e=b.FONTDATA.baselineskip*x;var l=this,h;while(l.inferred||(l.parent&&l.parent.type==="mrow"&&l.parent.data.length===1)){l=l.parent}var w=(','l.type==="math','"||l.type==="mtd");l.isMultiline=true',5,'for(v=0,s=f[t].length;v<s;v++){f[t][v].HTMLstretchV(o[t],p,q)}if(f[t].length){',19,'true',21,'])}var d=r[t','][1].getValues("','indentalign","indentshift");d.','lineleading','=b.length2em(','r[t+1][1].Get("',41,'"),0.5);if(t===0){h=r[t+1',39,'indentalignfirst','","','indentshiftfirst','");d.ALIGN=h.',47,';d.SHIFT=h.',49,'}else{if(t===k-1){h=r[t',39,'indentalignlast','","','indentshiftlast',50,56,52,58,'}}if(d.ALIGN&&d.ALIGN!==','a.INDENTALIGN.','INDENTALIGN){','d.indentalign','=d.ALIGN}if(d.SHIFT&&d.SHIFT!==a.INDENTSHIFT.INDENTSHIFT){','d.indentshift','=d.SHIFT}if(',66,'==',64,'AUTO){',66,'=(w?this.','displayAlign:',64,'LEFT)}if(',68,'==="auto"||',68,'===""){',68,75,'displayIndent:"0")}',68,42,68,',0);if(',68,'&&',66,'!==',64,'CENTER){b.createBlank(o[t],',68,',(',66,'!==',64,'RIGHT));',23,'w+=',68,';',23,'rw+=',68,'}b.alignBox(o[t],',66,',n);if(t<k-1){n-=Math.max(e,',23,'d+o[t+1].bbox.h+d.',41,')}}if(w){g.style.width="100%";if(',31,'"){u.bbox.width="100%"}}this.HTMLhandleSpace(u);this.HTMLhandleColor(u);u.bbox.isMultiline=true;return u}});MathJax.Hub.Startup.signal.Post("HTML-CSS multiline Ready");MathJax.Ajax.loadComplete(b.autoloadDir+"/multiline.js")})(MathJax.ElementJax.mml,MathJax.OutputJax["HTML-CSS"]);']
-]);
+(function (MML,HTMLCSS) {
+  var VERSION = "1.0";
+  
+  MML.mbase.Augment({
+    toHTMLmultiline: function (span,split) {
+      span = this.HTMLcreateSpan(span); if (!this.type !== "mrow") {span = this.HTMLhandleSize(span)}
+      var stack = HTMLCSS.createStack(span);
+      var box = [], stretchy = [], H = -HTMLCSS.BIGDIMEN, D = -HTMLCSS.BIGDIMEN, i, j, m, M;
+      for (j = 0, M = split.length-1; j < M; j++) {
+        box[j] = HTMLCSS.createBox(stack);
+        for (i = split[j][0], m = split[j+1][0]; i < m; i++)
+          {if (this.data[i]) {this.data[i].toHTML(box[j])}}
+        // remove inter-object spacing
+        if (this.data[split[j][0]]) {this.data[split[j][0]].HTMLspanElement().style.paddingLeft = ""}
+        if (this.data[split[j][m-1]]) {this.data[split[j][m-1]].HTMLspanElement().style.paddingRight = ""}
+        //
+        stretchy[j] = this.HTMLcomputeBBox(box[j],null,split[j][0],split[j+1][0]);
+        if (box[j].bbox.h > H) {H = box[j].bbox.h}
+        if (box[j].bbox.d > D) {D = box[j].bbox.d}
+      }
+      var y = 0, scale = this.HTMLgetScale(), LHD = HTMLCSS.FONTDATA.baselineskip * scale;
+      var parent = this, first;
+      while (parent.inferred || (parent.parent && parent.parent.type === "mrow" &&
+             parent.parent.data.length === 1)) {parent = parent.parent}
+      var isTop = (parent.type === "math" || parent.type === "mtd"); parent.isMultiline = true;
+      for (j = 0, M = split.length-1; j < M; j++) {
+        for (i = 0, m = stretchy[j].length; i < m; i++) {stretchy[j][i].HTMLstretchV(box[j],H,D)}
+        if (stretchy[j].length) {this.HTMLcomputeBBox(box[j],true,split[j][0],split[j+1][0])}
+        var values = split[j][1].getValues("indentalign","indentshift");
+        values.lineleading = HTMLCSS.length2em(split[j+1][1].Get("lineleading"),.5);
+        // handle first/last special cases
+        if (j === 0) {
+          first = split[j+1][1].getValues("indentalignfirst","indentshiftfirst");
+          values.ALIGN = first.indentalignfirst; values.SHIFT = first.indentshiftfirst;
+        } else if (j === M-1) {
+          first = split[j][1].getValues("indentalignlast","indentshiftlast");
+          values.ALIGN = first.indentalignlast; values.SHIFT = first.indentshiftlast;
+        }
+        if (values.ALIGN && values.ALIGN !== MML.INDENTALIGN.INDENTALIGN)
+          {values.indentalign = values.ALIGN}
+        if (values.SHIFT && values.SHIFT !== MML.INDENTSHIFT.INDENTSHIFT)
+          {values.indentshift = values.SHIFT}
+        //
+        if (values.indentalign == MML.INDENTALIGN.AUTO) 
+          {values.indentalign = (isTop ? this.displayAlign : MML.INDENTALIGN.LEFT)}
+        if (values.indentshift === "auto" || values.indentshift === "")
+          {values.indentshift = (isTop ? this.displayIndent : "0")}
+        values.indentshift = HTMLCSS.length2em(values.indentshift,0);
+        if (values.indentshift && values.indentalign !== MML.INDENTALIGN.CENTER) {
+          HTMLCSS.createBlank(box[j],values.indentshift,(values.indentalign !== MML.INDENTALIGN.RIGHT));
+          box[j].bbox.w += values.indentshift; box[j].bbox.rw += values.indentshift;
+        }
+        HTMLCSS.alignBox(box[j],values.indentalign,y);
+        if (j < M-1) {y -= Math.max(LHD,box[j].bbox.d + box[j+1].bbox.h + values.lineleading)}
+      }
+      if (isTop) {
+        stack.style.width = "100%";
+        if (parent.type === "math") {span.bbox.width = "100%"}
+      }
+      this.HTMLhandleSpace(span);
+      this.HTMLhandleColor(span);
+      span.bbox.isMultiline = true;
+      return span;
+    }
+  });
+  
+  MathJax.Hub.Startup.signal.Post("HTML-CSS multiline Ready");
+  MathJax.Ajax.loadComplete(HTMLCSS.autoloadDir+"/multiline.js");
+  
+})(MathJax.ElementJax.mml,MathJax.OutputJax["HTML-CSS"]);
 

@@ -1,18 +1,144 @@
-/*
- *  ../SourceForge/trunk/mathjax/jax/output/HTML-CSS/autoload/mmultiscripts.js
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/autoload/mmultiscripts.js
+ *  
+ *  Implements the HTML-CSS output for <mmultiscripts> elements.
+ *
+ *  ---------------------------------------------------------------------
  *  
  *  Copyright (c) 2010 Design Science, Inc.
- *
- *  Part of the MathJax library.
- *  See http://www.mathjax.org for details.
  * 
- *  Licensed under the Apache License, Version 2.0;
+ *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
- *
+ *  You may obtain a copy of the License at
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
-MathJax.Unpack([
-  ['(','function(','a,b){var c="1.0";a.','mmultiscripts','.Augment({toHTML:',1,'H,F,A){H=this.HTMLcreateSpan(H);var M=this.','HTMLgetScale();var ','k=b.createStack(H),f;var j=b.createBox(k);this.HTMLmeasureChild(this.base,j);if(','this.data[this.base',']){if(A!=null){b.Remeasured(',9,'].','HTMLstretchV','(j,F,A),j)}else{if(F!=null){b.Remeasured(',9,'].','HTMLstretchH','(j,F),j)}}}var K=b.TeX.x_height*M,z=b.TeX.scriptspace*M*0.75;var y=this.','HTMLgetScripts','(k,z);var l=y[0],e=y[1],o=y[2],i=y[3];var g=(','this.data[','1]||this).',7,'C=b.TeX.sup_drop*g,B=b.TeX.sub_drop*g;var w=j.bbox.h-C,n=j.bbox.d+B,L=0,E;if(j.bbox.ic){L=j.bbox.ic}if(',9,']&&(',9,'].type==="','mi"||',9,28,'mo")){if(',9,'].data.join("").length===1&&j.bbox.scale===1&&!',9,'].Get("largeop")){w=n=0}}var G','=this.getValues("','subscriptshift","','superscriptshift','");','G.subscriptshift','=(',41,'===""?0:b.length2em(',41,'));G.',39,'=(G.',39,'===""?0:b.length2em(G.',39,'));var m=0;if(o){m=','o.bbox.w','+L}else{if(i){m=i.bbox.w-L}}if(m<0){m=0}b.placeBox(j,m,0);if(!e&&!i){n','=Math.max(','n,b.TeX.','sub1*M,',41,');if(l){n',55,'n,l.bbox.h-(4/5)*K)}if(o){n',55,'n,o.bbox.h-(4/5)*K',')}if(l){b.placeBox(l,m+j.bbox.w+z-L,-n)}if(o){b.placeBox(o,','0,-n)}}else{if(!l&&!o){f',37,'displaystyle','","texprimestyle");E=b.TeX[(f.',67,'?"sup1":(f.texprimestyle?"sup3":"sup2"))];w',55,'w,E*M,G.',39,');if(e){w',55,'w,e.bbox.d+(1/4)*K)}if(i){w',55,'w,i.bbox.d+(1/4)*K)}','if(e){b.placeBox(e,m+j.bbox.w+z,w)}if(i){b.placeBox(i,','0,w)}}else{n',55,56,'sub2*M);var x=b.TeX.rule_thickness*M;var I=(l||o).bbox.h,J=(e||i).bbox.d;if(o){I',55,'I,o.bbox.h)}if(i){J',55,'J,i.bbox.d)}if((w-J)-(I-n)<3*x){n=3*x-w+J+I;C=(4/5)*K-(w-J);if(C>0){w+=C;n-=C}}w',55,'w,G.',39,');n',55,'n,',41,');',79,'m+L-i.bbox.w,w',64,'m-',53,',-n)}}}this.HTMLhandleSpace(H);this.HTMLhandleColor(H);return H},',19,':',1,'p,q){var o,d,e=[];var n=1,g=this.data.length,f=0;for(var h=0;h<4;h+=2){while(n<g&&',21,'n].type!=="','mprescripts"){for(var l=h;l<h+2;l++){if(',21,'n]&&',21,107,'none"){if(!e[l]){e[l]=b.createBox(p);e[l].bbox=this.HTMLemptyBBox({});if(f){b.createBlank(e[l],f);','e[l].bbox.','w=',114,'rw=f}}',21,'n].toHTML(e[l]);this.HTMLcombineBBoxes(',21,'n],e[l].bbox)}n++}d=e[h];o=e[h+1];if(d&&o){if(d.bbox.w<','o.bbox.w){b.createBlank(','d,',53,'-d.bbox.w);d.bbox.w=',53,';d.bbox.rw',55,'d.bbox.w,d.bbox.rw)}else{if(d.bbox.w>',122,'o,d.bbox.w-',53,');',53,'=d.bbox.w;o.bbox.rw',55,53,',o.bbox.rw)}}}if(d){f=d.bbox.w}else{if(o){f=',53,'}}}n++;f=0}for(l=0;l<4;l++){if(e[l]){',114,'w+=q;',114,'rw',55,114,'w,',114,'rw);this.HTMLcleanBBox(e[l].bbox)}}return e},',17,':a.mbase.',17,',',13,151,13,'});MathJax.Hub.Startup.signal.Post("HTML-CSS ',3,' Ready");MathJax.Ajax.loadComplete(b.autoloadDir+"/',3,'.js")})(MathJax.ElementJax.mml,MathJax.OutputJax["HTML-CSS"]);']
-]);
+(function (MML,HTMLCSS) {
+  var VERSION = "1.0";
+  
+  MML.mmultiscripts.Augment({
+    toHTML: function (span,HW,D) {
+      span = this.HTMLcreateSpan(span); var scale = this.HTMLgetScale();
+      var stack = HTMLCSS.createStack(span), values;
+      var base = HTMLCSS.createBox(stack);
+      this.HTMLmeasureChild(this.base,base);
+      if (this.data[this.base]) {
+        if (D != null) {HTMLCSS.Remeasured(this.data[this.base].HTMLstretchV(base,HW,D),base)}
+        else if (HW != null) {HTMLCSS.Remeasured(this.data[this.base].HTMLstretchH(base,HW),base)}
+      }
+      var x_height = HTMLCSS.TeX.x_height * scale,
+          s = HTMLCSS.TeX.scriptspace * scale * .75;  // FIXME: .75 can be removed when IC is right?
+
+      var BOX = this.HTMLgetScripts(stack,s);
+      var sub = BOX[0], sup = BOX[1], presub = BOX[2], presup = BOX[3];
+
+      var sscale = (this.data[1]||this).HTMLgetScale();
+      var q = HTMLCSS.TeX.sup_drop * sscale, r = HTMLCSS.TeX.sub_drop * sscale;
+      var u = base.bbox.h - q, v = base.bbox.d + r, delta = 0, p;
+      if (base.bbox.ic) {delta = base.bbox.ic}
+      if (this.data[this.base] &&
+         (this.data[this.base].type === "mi" || this.data[this.base].type === "mo")) {
+        if (this.data[this.base].data.join("").length === 1 && base.bbox.scale === 1 &&
+            !this.data[this.base].Get("largeop")) {u = v = 0}
+      }
+      var min = this.getValues("subscriptshift","superscriptshift");
+      min.subscriptshift   = (min.subscriptshift === ""   ? 0 : HTMLCSS.length2em(min.subscriptshift));
+      min.superscriptshift = (min.superscriptshift === "" ? 0 : HTMLCSS.length2em(min.superscriptshift));
+
+      var dx = 0;
+      if (presub) {dx = presub.bbox.w+delta} else if (presup) {dx = presup.bbox.w-delta}
+      if (dx < 0) {dx = 0};
+      HTMLCSS.placeBox(base,dx,0);
+
+      if (!sup && !presup) {
+        v = Math.max(v,HTMLCSS.TeX.sub1*scale,min.subscriptshift);
+        if (sub)    {v = Math.max(v,sub.bbox.h-(4/5)*x_height)}
+        if (presub) {v = Math.max(v,presub.bbox.h-(4/5)*x_height)}
+        if (sub)    {HTMLCSS.placeBox(sub,dx+base.bbox.w+s-delta,-v)}
+        if (presub) {HTMLCSS.placeBox(presub,0,-v)}
+      } else {
+        if (!sub && !presub) {
+          values = this.getValues("displaystyle","texprimestyle");
+          p = HTMLCSS.TeX[(values.displaystyle ? "sup1" : (values.texprimestyle ? "sup3" : "sup2"))];
+          u = Math.max(u,p*scale,min.superscriptshift);
+          if (sup)    {u = Math.max(u,sup.bbox.d+(1/4)*x_height)}
+          if (presup) {u = Math.max(u,presup.bbox.d+(1/4)*x_height)}
+          if (sup)    {HTMLCSS.placeBox(sup,dx+base.bbox.w+s,u)}
+          if (presup) {HTMLCSS.placeBox(presup,0,u)}
+        } else {
+          v = Math.max(v,HTMLCSS.TeX.sub2*scale);
+          var t = HTMLCSS.TeX.rule_thickness * scale;
+          var h = (sub||presub).bbox.h, d = (sup||presup).bbox.d;
+          if (presub) {h = Math.max(h,presub.bbox.h)}
+          if (presup) {d = Math.max(d,presup.bbox.d)}
+          if ((u - d) - (h - v) < 3*t) {
+            v = 3*t - u + d + h; q = (4/5)*x_height - (u - d);
+            if (q > 0) {u += q; v -= q}
+          }
+          u = Math.max(u,min.superscriptshift); v = Math.max(v,min.subscriptshift);
+          if (sup)    {HTMLCSS.placeBox(sup,dx+base.bbox.w+s,u)}
+          if (presup) {HTMLCSS.placeBox(presup,dx+delta-presup.bbox.w,u)}
+          if (sub)    {HTMLCSS.placeBox(sub,dx+base.bbox.w+s-delta,-v)}
+          if (presub) {HTMLCSS.placeBox(presub,dx-presub.bbox.w,-v)}
+        }
+      }
+      this.HTMLhandleSpace(span);
+      this.HTMLhandleColor(span);
+      return span;
+    },
+    HTMLgetScripts: function (stack,s) {
+      var sup, sub, BOX = [];
+      var i = 1, m = this.data.length, W = 0;
+      for (var k = 0; k < 4; k += 2) {
+        while (i < m && this.data[i].type !== "mprescripts") {
+          for (var j = k; j < k+2; j++) {
+            if (this.data[i] && this.data[i].type !== "none") {
+              if (!BOX[j]) {
+                BOX[j] = HTMLCSS.createBox(stack); BOX[j].bbox = this.HTMLemptyBBox({});
+                if (W) {HTMLCSS.createBlank(BOX[j],W); BOX[j].bbox.w = BOX[j].bbox.rw = W}
+              }
+              this.data[i].toHTML(BOX[j]); this.HTMLcombineBBoxes(this.data[i],BOX[j].bbox);
+            }
+            i++;
+          }
+          sub = BOX[k]; sup = BOX[k+1];
+          if (sub && sup) {
+            if (sub.bbox.w < sup.bbox.w) {
+              HTMLCSS.createBlank(sub,sup.bbox.w-sub.bbox.w);
+              sub.bbox.w = sup.bbox.w; sub.bbox.rw = Math.max(sub.bbox.w,sub.bbox.rw);
+            } else if (sub.bbox.w > sup.bbox.w) {
+              HTMLCSS.createBlank(sup,sub.bbox.w-sup.bbox.w);
+              sup.bbox.w = sub.bbox.w; sup.bbox.rw = Math.max(sup.bbox.w,sup.bbox.rw);
+            }
+          }
+          if (sub) {W = sub.bbox.w} else if (sup) {W = sup.bbox.w}
+        }
+        i++; W = 0;
+      }
+      for (j = 0; j < 4; j++) {
+        if (BOX[j]) {
+          BOX[j].bbox.w += s;
+          BOX[j].bbox.rw = Math.max(BOX[j].bbox.w,BOX[j].bbox.rw);
+          this.HTMLcleanBBox(BOX[j].bbox);
+        }
+      }
+      return BOX;
+    },
+    HTMLstretchH: MML.mbase.HTMLstretchH,
+    HTMLstretchV: MML.mbase.HTMLstretchV
+  });
+  
+  MathJax.Hub.Startup.signal.Post("HTML-CSS mmultiscripts Ready");
+  
+  MathJax.Ajax.loadComplete(HTMLCSS.autoloadDir+"/mmultiscripts.js");
+
+})(MathJax.ElementJax.mml,MathJax.OutputJax["HTML-CSS"]);
 
