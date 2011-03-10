@@ -33,9 +33,23 @@
 .slides #slides > div > .markdown > .source {
   display: none;
 }
+.slides #slides > div > .markdown > .controls {
+  position: absolute;
+  top: 2.5%;
+  right: 2.5%;
+}
 .slides #slides > div > .markdown > textarea {
-  width: 50%;
-  height: 50%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 95%;
+  height: 95%;
+  padding: 2.5%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+}
+.slides #slides > div iframe {
+  width: 100%;
 }
 .slides #slides > div > footer {
   position: absolute;

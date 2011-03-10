@@ -76,7 +76,7 @@ function superSlides(options) {
     
   // Hacky html blocks ;(
   var
-    g_blankSlideHtml = '<div>' + $g_slides.first().clone().find('.delete').removeAttr('disabled').end().find('> .markdown .source').html('').end().html() + '</div>',
+    g_blankSlideHtml = '<div>' + $g_slides.first().clone().find('.delete').removeAttr('disabled').end().find('> .markdown .source, > .html').html('').end().html() + '</div>',
     g_footerHtml = $g_wrapper.find('> footer').size() > 0 ? '<footer>' + $g_wrapper.find('> footer').remove().html() + '</footer>' : '<footer></footer>';
     
   // **************************************************
@@ -219,10 +219,10 @@ function superSlides(options) {
   
   } // scaleSlides()
   
-  function scaleImages() {
-  
+  function scaleImages($l_slide) {
+        
     // For each image
-    $g_slides.find('img')
+    $l_slide.find('img')
     
       // On load
       .one('load', function() {
@@ -260,6 +260,7 @@ function superSlides(options) {
     if($g_currentSlide) {
       $g_currentSlide.removeClass('current');
     }
+    $g_slides.filter('.next, .prev').removeClass('next prev');
 
     // Update variables
     $g_currentSlide = $g_slides.eq(l_slideNumber - 1);
@@ -271,8 +272,8 @@ function superSlides(options) {
       'left': $g_currentSlide.position().left * -1 + 'px'
     });
     
-    // Add class to current slide
-    $g_currentSlide.addClass('current');
+    // Add slide state classes
+    $g_currentSlide.addClass('current').next().addClass('next').end().prev().addClass('prev');
 
     // Update url
     if(g_currentView === e_view.slides) {
@@ -736,6 +737,9 @@ function superSlides(options) {
     $g_slides.each(function() {
           
       if($(this).find('.html').html() === '' && $(this).find('.markdown > .source').size() > 0) { renderSlide($(this)); }
+      
+      // Scale images
+      scaleImages($(this));
     
     });
     
@@ -762,7 +766,7 @@ function superSlides(options) {
     // Update all footers
     updateFooters();
     
-    scaleImages();
+    scaleImages($l_slide);
     
     // Hide edit panel
     $l_slide.find('.markdown').hide();
@@ -857,11 +861,11 @@ function superSlides(options) {
       
       // Remove any unnecessary html
       $l_printHtml.find('style, link[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet').remove();
-      $l_printHtml.find('#slides > div').removeClass('current').removeAttr('style').find('> footer').remove();
+      $l_printHtml.find('#slides > div').removeClass('current prev next').removeAttr('style').find('> footer').remove();
       
       // Adjust markdown
       $l_printHtml.find('#slides > div > .html');
-      $l_printHtml.find('#slides > div > .markdown').removeAttr('style');
+      $l_printHtml.find('#slides > div > .markdown, #slides > div > .html img').removeAttr('style');
       
       // Remove blank divs at start of body (and find out what it is)
       $l_printHtml.find('body > div').not('#slides').remove();
@@ -917,9 +921,6 @@ function superSlides(options) {
 
   // Calculate initial scale
   scaleSlides();
-  
-  // Resize images
-  scaleImages();
 
   // Show initial slide
   goToSlide(g_currentSlideNumber, e_direction.forward);
@@ -1023,7 +1024,7 @@ function superSlides(options) {
               .find('.markdown')
                 .find('> textarea')
                   .first()
-                    .val($g_currentSlide.find('.markdown > .source').first().html())
+                    .val($g_currentSlide.find('.markdown > .source').first().html()).focus()
                   .end()
                 .end()
               .show();

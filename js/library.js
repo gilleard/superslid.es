@@ -652,6 +652,7 @@ var _RunSpanGamut = function(text) {
 
 	// Process anchor and image tags. Images must come first,
 	// because ![foo][f] looks like an anchor.
+	text = _DoIFrames(text);
 	text = _DoImages(text);
 	text = _DoAnchors(text);
 
@@ -817,6 +818,42 @@ var writeAnchorTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
 	return result;
 }
 
+
+var _DoIFrames = function(text) {
+//
+// DIY Markdown iframe tags eg: i[src][height] (based on image tag)
+//
+
+	//
+	// First, handle reference-style labeled images: ![alt text][id]
+	//
+
+	/*
+		text = text.replace(/
+		(						// wrap whole match in $1
+			i\[
+			(.*?)				// src = $2
+			\]
+		)
+		/g,writeIFrameTag);
+	*/
+	text = text.replace(/(i\[(.*?)\](\[(.*?)\])?)/g,writeIFrameTag);
+
+	return text;
+}
+
+var writeIFrameTag = function(wholeMatch,m1,src,m2,height) {
+
+	var result = "<iframe src=\"" + src + "\"";
+	
+	if(height) {
+    result += " height=\"" + height + "%\"";
+	}
+	
+	result += "></iframe>";
+	
+	return result;
+}
 
 var _DoImages = function(text) {
 //
