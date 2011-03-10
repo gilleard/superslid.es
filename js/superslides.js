@@ -2,6 +2,7 @@ function superSlides(options) {
 
   // Defaults
   var settings = {
+    baseUrl: '../',
     width: 980,
     height: 735,
     scale: 0.9,
@@ -56,6 +57,7 @@ function superSlides(options) {
 
   // General variables
   var
+    g_local = window.location.protocol.substr(0, 4) === 'file',
     g_totalSlides = $g_slides.size(),
     g_currentSlideNumber = isNaN(location.hash.substr(1)) || location.hash === '' ? 1 : location.hash.substr(1),
     g_currentView = e_view.slides,
@@ -98,7 +100,7 @@ function superSlides(options) {
     if(settings.customCss) { $.appendStylesheet(settings.customCss); }
     
     // Force a request (MathJax fail)
-    if(settings.enableMath) { $.appendStylesheet('../css/hack.css'); }
+    if(settings.enableMath) { $.appendStylesheet(settings.baseUrl + 'css/hack.css'); }
       
   } // loadTheme()
   
@@ -678,7 +680,7 @@ function superSlides(options) {
   
   function loadMathJax() {
   
-    $.appendScript('../tools/math/MathJax.js');
+    $.appendScript(settings.baseUrl + 'tools/math/MathJax.js');
     
     setTimeout(function() {
       if(typeof(MathJax) !== 'undefined' && MathJax !== null && $g_slides.find('> .html').size() === 0) {  
@@ -691,14 +693,14 @@ function superSlides(options) {
   function loadSyntaxHighlighting() {
     
     // FIX - Code doesn't scale
-    $.appendScript('../tools/syntax-highlighter/scripts/jquery.syntaxhighlighter.js');
+    $.appendScript(settings.baseUrl + 'tools/syntax-highlighter/scripts/jquery.syntaxhighlighter.js');
     
     setTimeout(function() {
       if($.SyntaxHighlighter) {
       
         $.SyntaxHighlighter.init({
-          'prettifyBaseUrl': '../tools/syntax-highlighter/prettify',
-          'baseUrl': '../tools/syntax-highlighter',
+          'prettifyBaseUrl': settings.baseUrl + 'tools/syntax-highlighter/prettify',
+          'baseUrl': settings.baseUrl + 'tools/syntax-highlighter',
           'highlight': ($g_slides.find('> .html').size() === 0)
         });
         
@@ -732,8 +734,8 @@ function superSlides(options) {
   function renderAllSlides() {
     
     $g_slides.each(function() {
-    
-      if($(this).find('.html').size() > 0) { renderSlide($(this)); }
+          
+      if($(this).find('.html').html() === '' && $(this).find('.markdown > .source').size() > 0) { renderSlide($(this)); }
     
     });
     
@@ -839,36 +841,41 @@ function superSlides(options) {
   
   } // deleteSlide()
   
-  function saveToSource() { 
+  function saveToSource() {
   
-    // Fetch current html
-    var $l_printHtml = $('html').clone();
-    
-    // Remove any state
-    $l_printHtml.find('body').removeAttr('class').removeAttr('style');
-    
-    // Remove any scaling
-    $l_printHtml.find('#slides').removeAttr('style');
-    
-    // Remove any unnecessary html
-    $l_printHtml.find('style, link[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet').remove();
-    $l_printHtml.find('#slides > div').removeClass('current').removeAttr('style').find('> footer').remove();
-    
-    // Adjust markdown
-    $l_printHtml.find('#slides > div > .html').html('');
-    $l_printHtml.find('#slides > div > .markdown').removeAttr('style');
-    
-    // Remove blank divs at start of body (and find out what it is)
-    $l_printHtml.find('body > div').not('#slides').remove();
-    
-    // Put the footer back
-    $l_printHtml.find('#slides').append(g_footerHtml);
-    
-    // Put the doctype + html tag back
-    var l_printHtml = '<!doctype html><html lang="en-GB">' + $l_printHtml.html() + '</html>';
-    
-    // Save the file
-    $.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
+    // Make sure we're local
+    if(g_local && $.twFile) { 
+  
+      // Fetch current html
+      var $l_printHtml = $('html').clone();
+      
+      // Remove any state
+      $l_printHtml.find('body').removeAttr('class').removeAttr('style');
+      
+      // Remove any scaling
+      $l_printHtml.find('#slides').removeAttr('style');
+      
+      // Remove any unnecessary html
+      $l_printHtml.find('style, link[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet').remove();
+      $l_printHtml.find('#slides > div').removeClass('current').removeAttr('style').find('> footer').remove();
+      
+      // Adjust markdown
+      $l_printHtml.find('#slides > div > .html');
+      $l_printHtml.find('#slides > div > .markdown').removeAttr('style');
+      
+      // Remove blank divs at start of body (and find out what it is)
+      $l_printHtml.find('body > div').not('#slides').remove();
+      
+      // Put the footer back
+      $l_printHtml.find('#slides').append(g_footerHtml);
+      
+      // Put the doctype + html tag back
+      var l_printHtml = '<!doctype html><html lang="en-GB">' + $l_printHtml.html() + '</html>';
+      
+      // Save the file
+      $.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
+
+    }
       
   } // saveToSource()
   
@@ -881,6 +888,8 @@ function superSlides(options) {
   log('Number of slides: ' + g_totalSlides);
   log('Current slides: ' + g_currentSlideNumber);
   log('Current view: ' + getCurrentView(g_currentView));
+  
+  if(g_local) { $.appendScript(settings.baseUrl + 'js/twfile.js'); }
   
   // MathJax
   if(settings.enableMath) { loadMathJax(); }
@@ -1026,7 +1035,7 @@ function superSlides(options) {
           break;
   
         case 80: // p
-          if(confirm('Are you sure?')) { generatePrintHtml(); }
+          if(g_local && confirm('Are you sure?')) { generatePrintHtml(); }
           break;
   
         case 84: // t

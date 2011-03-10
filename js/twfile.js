@@ -92,14 +92,6 @@ Triple licensed under the BSD, MIT and GPL licenses:
 		}
 	});
 
-	// Deferred initialisation for any drivers that need it
-	$(function() {
-		for(var t in drivers) {
-			if(drivers[t].deferredInit)
-				drivers[t].deferredInit();
-		}
-	});
-
 	// Private driver implementations for each browser
 
 	var drivers = {};
@@ -240,7 +232,7 @@ Triple licensed under the BSD, MIT and GPL licenses:
 		name: "tiddlySaver",
 		deferredInit: function() {
 			if(!document.applets["TiddlySaver"] && !$.browser.mozilla && !$.browser.msie && document.location.toString().substr(0,5) == "file:") {
-				$('body').append("<applet style='position:absolute;left:-1px' name='TiddlySaver' code='TiddlySaver.class' archive='../tools/tiddly-saver/TiddlySaver.jar' width='1'height='1'></applet>");
+				$('body').append("<applet style='position:absolute;left:-1px' name='TiddlySaver' code='TiddlySaver.class' archive='TiddlySaver.jar' width='1'height='1'></applet>");
 			}
 		},
 		isAvailable: function() {
@@ -309,5 +301,13 @@ Triple licensed under the BSD, MIT and GPL licenses:
 		var i = url.indexOf(":");
 		return i > 0 ? url.substring(i-1) : url;
 	}
+
+	// Deferred initialisation for any drivers that need it
+	$(function() {
+		for(var t in drivers) {
+			if(drivers[t].deferredInit)
+				drivers[t].deferredInit();
+		}
+	});
 
 })(jQuery);

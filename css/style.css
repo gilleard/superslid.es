@@ -192,6 +192,9 @@ body.outline #slides > div ul {
 body.outline #slides > div ul ul {
   margin-left: 20px;
 }
+body.outline #slides > div dl dd {
+  margin-left: 20px;
+}
 body.outline #slides > div img {
   width: auto !important;
 }
