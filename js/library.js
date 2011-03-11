@@ -832,27 +832,37 @@ var _DoIFrames = function(text) {
 		text = text.replace(/
 		(						// wrap whole match in $1
 			i\[
-			(.*?)				// src = $2
+			(.*?)    // src = $2
 			\]
+			(
+		    \[
+		    (.*?) // width = 
+		    \]
+			)?
+			(
+		    \[
+		    (.*?) // height = 
+		    \]
+			)?
 		)
 		/g,writeIFrameTag);
 	*/
-	text = text.replace(/(i\[(.*?)\](\[(.*?)\])?)/g,writeIFrameTag);
+	text = text.replace(/(i\[(.*?)\](\[(.*?)\])?(\[(.*?)\])?)/g,writeIFrameTag);
 
 	return text;
 }
 
-var writeIFrameTag = function(wholeMatch,m1,src,m2,height) {
+var writeIFrameTag = function(wholeMatch,m1,src,m3,width,m5,height) {
 
 	var result = "<iframe src=\"" + src + "\"";
 	
-	if(height) {
-    result += " height=\"" + height + "%\"";
-	}
+	if(width) { result += " width=\"" + width + "\""; }
+	if(height) { result += " height=\"" + height + "\""; }
 	
 	result += "></iframe>";
 	
 	return result;
+
 }
 
 var _DoImages = function(text) {
@@ -1182,7 +1192,7 @@ var _DoCodeBlocks = function(text) {
 			codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
 			codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
 
-			codeblock = "<pre><code>" + codeblock + "\n</code></pre>";
+			codeblock = "<pre class=\"highlight\">" + codeblock + "\n</pre>";
 
 			return hashBlock(codeblock) + nextChar;
 		}

@@ -701,8 +701,7 @@ function superSlides(options) {
       
         $.SyntaxHighlighter.init({
           'prettifyBaseUrl': settings.baseUrl + 'tools/syntax-highlighter/prettify',
-          'baseUrl': settings.baseUrl + 'tools/syntax-highlighter',
-          'highlight': ($g_slides.find('> .html').size() === 0)
+          'baseUrl': settings.baseUrl + 'tools/syntax-highlighter'
         });
         
       }
@@ -712,13 +711,20 @@ function superSlides(options) {
   
   function renderSlide($l_slide) {
   
-    // FIX - encode pre/code tag contents (encode selection)
-    $l_slide.find('.html').html('').append(g_converter.makeHtml($l_slide.find('.markdown > .source').html()));
+    // Remove current html
+    $l_slide.find('.html').html('').append(
+    
+      // Replace with markdown output
+      g_converter.makeHtml($l_slide.find('.markdown > .source').html())
+      
+    );
     
     // Syntax
     if(settings.enableSyntax) {
       setTimeout(function() {
-        if($.SyntaxHighlighter) { $l_slide.find('.html pre').syntaxHighlight(); }
+        if($.SyntaxHighlighter) {
+          $l_slide.find('.html pre').syntaxHighlight(); 
+        }
       }, 250);
     }
     
@@ -790,16 +796,10 @@ function superSlides(options) {
   
   } // updateSlides()
   
-  function newSlide($l_newSlideButton) {
-  
-    // Render html incase it has been changed
-    $l_newSlideButton.parent().find('.save').trigger('click');
-    
-    // Store reference to current slide
-    var $l_currentSlide = $l_newSlideButton.parentsUntil('#slides').last();
+  function newSlide($l_slide) {
     
     // Store reference to new slide
-    var $l_newslide = $l_currentSlide.after(g_blankSlideHtml).next();
+    var $l_newslide = $l_slide.after(g_blankSlideHtml).next();
     
     // Copy footer into new slide
     $l_newslide.append(g_footerHtml);
@@ -808,7 +808,7 @@ function superSlides(options) {
     updateSlides();
     
     // Hide edit panel on current slide
-    $l_currentSlide.find('.markdown').hide();
+    $l_slide.find('.markdown').hide();
     
     // Show edit panel on new slide
     $l_newslide.find('.markdown').show();
@@ -817,7 +817,7 @@ function superSlides(options) {
     goToSlide(parseInt(g_currentSlideNumber, 10) + 1, e_direction.forward);
     
     // Set focus to textarea
-    $g_currentSlide.find('> .markdown textarea').focus();
+    $l_newslide.find('> .markdown textarea').focus();
     
     // Commit!
     saveToSource();
@@ -853,22 +853,19 @@ function superSlides(options) {
       // Fetch current html
       var $l_printHtml = $('html').clone();
       
-      // Remove any state
-      $l_printHtml.find('body').removeAttr('class').removeAttr('style');
+      // Remove generated elements
+      $l_printHtml
+        .find('style, link[id], script[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet, body > div:not(#slides), #slides > div > footer')
+        .remove();
       
-      // Remove any scaling
-      $l_printHtml.find('#slides').removeAttr('style');
+      // Remove style attribute
+      $l_printHtml
+        .find('body, #slides, #slides > div, #slides > div > .markdown, #slides > div > .html img')
+        .removeAttr('style');
       
-      // Remove any unnecessary html
-      $l_printHtml.find('style, link[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet').remove();
-      $l_printHtml.find('#slides > div').removeClass('current prev next').removeAttr('style').find('> footer').remove();
-      
-      // Adjust markdown
-      $l_printHtml.find('#slides > div > .html');
-      $l_printHtml.find('#slides > div > .markdown, #slides > div > .html img').removeAttr('style');
-      
-      // Remove blank divs at start of body (and find out what it is)
-      $l_printHtml.find('body > div').not('#slides').remove();
+      // Remove classes
+      $l_printHtml.find('body').removeAttr('class');
+      $l_printHtml.find('#slides > div').removeClass('current prev next');
       
       // Put the footer back
       $l_printHtml.find('#slides').append(g_footerHtml);
@@ -937,6 +934,7 @@ function superSlides(options) {
   // Keyboard
   $(document).keydown(function(event) {
   
+    // Slides mode
     if($g_slides.find('.markdown:visible').size() === 0) {
 
       switch(event.which) {
@@ -1022,12 +1020,14 @@ function superSlides(options) {
           if(g_currentView === e_view.slides) {
             $g_currentSlide
               .find('.markdown')
-                .find('> textarea')
-                  .first()
-                    .val($g_currentSlide.find('.markdown > .source').first().html()).focus()
-                  .end()
+                .find('> textarea:first')
+                  // Add the content first
+                  .val($g_currentSlide.find('.markdown > .source').first().html())
                 .end()
-              .show();
+              // Show edit mode
+              .show()
+                // Give textarea focus and select all
+                .find('> textarea:first').select();
           }
           break;
   
@@ -1037,6 +1037,13 @@ function superSlides(options) {
   
         case 80: // p
           if(g_local && confirm('Are you sure?')) { generatePrintHtml(); }
+          /*
+          var newwindow = window.open(
+            location.href,
+            null,
+            'width=' + parseInt(settings.width/settings.scale, 10) + ', height=' + parseInt(settings.height/settings.scale, 10)
+          );
+          */
           break;
   
         case 84: // t
@@ -1045,11 +1052,51 @@ function superSlides(options) {
           
       }
       
-      if($.inArray(event.which, [37, 38, 39, 40]) > -1) {
+      if($.inArray(event.which, [37, 38, 39, 40, 69]) > -1) {
         event.preventDefault();
         return false;
       }
               
+    }
+    
+    // Edit mode
+    else {
+    
+      switch(event.which) {
+  
+        case 9: // tab
+          event.preventDefault();
+          break;
+  
+        case 27: // esc
+          $g_currentSlide.find('.markdown').hide();
+          break;
+  
+        case 68: // d
+          if(event.ctrlKey) {
+              $g_currentSlide.find('> .markdown > .controls > .delete').each(function() {
+                if($(this).is(':enabled')) { $(this).click(); }
+              });
+              event.preventDefault();
+            }
+          break;
+  
+        case 78: // n
+          if(event.ctrlKey) {
+              $g_currentSlide.find('> .markdown > .controls > .new').click();
+              event.preventDefault();
+            }
+          break;
+  
+        case 83: // s
+          if(event.ctrlKey) {
+              $g_currentSlide.find('> .markdown > .controls > .save').click();
+              event.preventDefault();
+            }
+          break;
+          
+      }
+    
     }
     
   });
@@ -1072,7 +1119,16 @@ function superSlides(options) {
   
   // Insert new slide
   $('.controls > .new').live('click', function() {
-    newSlide($(this));
+    
+    // Get reference to current slide
+    var $l_slide = $(this).parentsUntil('#slides').last();
+    
+    // Render html incase it has been changed
+    saveSlide($l_slide);
+    
+    // Add new slide
+    newSlide($l_slide);
+    
   });
   
   // Delete current slide
