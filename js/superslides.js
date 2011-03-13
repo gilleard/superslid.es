@@ -7,13 +7,16 @@ function superSlides(options) {
     height: 735,
     scale: 0.9,
     fontSize: 150,
+    enableRef: true,
     enableSyntax: false,
     enableMath: false,
     enableToc: false,
     strictNav: false,
     incrementOnce: false,
     customJs: null,
-    customCss: null
+    customCss: null,
+    initialView: 'slides',
+    hideRefNo: false
   };
 
   // Update settings with user's values
@@ -49,7 +52,7 @@ function superSlides(options) {
 
   // Pointers
   var
-    $g_body = $('body'),
+    $g_body = $('body').addClass('outline'),
     $g_wrapper = $g_body.find('#slides'),
     $g_slides = $g_wrapper.find('> div'),
     $g_currentSlide = null,
@@ -60,7 +63,7 @@ function superSlides(options) {
     g_local = window.location.protocol.substr(0, 4) === 'file',
     g_totalSlides = $g_slides.size(),
     g_currentSlideNumber = isNaN(location.hash.substr(1)) || location.hash === '' ? 1 : location.hash.substr(1),
-    g_currentView = e_view.slides,
+    g_currentView = settings.initialView === 'slides' ? e_view.slides : e_view.outline,
     g_skipSlides = '',
     g_overviewActive = false,
     g_converter = new Showdown.converter();
@@ -73,10 +76,10 @@ function superSlides(options) {
     g_wrapperHeight = null,
     g_wrapperHorizontalMargin = null,
     g_wrapperVerticalMargin = null;
-    
+  
   // Hacky html blocks ;(
   var
-    g_blankSlideHtml = '<div>' + $g_slides.first().clone().find('.delete').removeAttr('disabled').end().find('> .markdown .source, > .html').html('').end().html() + '</div>',
+    g_blankSlideHtml = '<div>' + $g_slides.first().clone().find('> .markdown .source, > .html').html('').end().html() + '</div>',
     g_footerHtml = $g_wrapper.find('> footer').size() > 0 ? '<footer>' + $g_wrapper.find('> footer').remove().html() + '</footer>' : '<footer></footer>';
     
   // **************************************************
@@ -101,8 +104,48 @@ function superSlides(options) {
     
     // Force a request (MathJax fail)
     if(settings.enableMath) { $.appendStylesheet(settings.baseUrl + 'css/hack.css'); }
+    
+    if(settings.hideRefNo) { $g_body.addClass('hide-ref'); }
       
   } // loadTheme()
+
+  function goToSlide(l_slideNumber, l_direction) {
+
+    log('New slide: ' + l_slideNumber);
+
+    // Check l_slideNumber
+    if(l_slideNumber <= 0) {
+      l_slideNumber = 1;
+      log('Adjusted to: ' + l_slideNumber);
+    }
+    else if(l_slideNumber > g_totalSlides) {
+      l_slideNumber = g_totalSlides;
+      log('Adjusted to: ' + l_slideNumber);
+    }
+
+    // Hide current slide
+    if($g_currentSlide) {
+      $g_currentSlide.removeClass('current');
+    }
+    $g_slides.filter('.next, .prev').removeClass('next prev');
+
+    // Update variables
+    $g_currentSlide = $g_slides.eq(l_slideNumber - 1);
+    g_currentSlideNumber = l_slideNumber;
+    
+    // Move to new slide
+    $g_body.css({
+      'top': $g_currentSlide.position().top * -1 + 'px',
+      'left': $g_currentSlide.position().left * -1 + 'px'
+    });
+    
+    // Add slide state classes
+    $g_currentSlide.addClass('current').next().addClass('next').end().prev().addClass('prev');
+
+    // Update url
+    if(g_currentView === e_view.slides) { location.hash = '#' + g_currentSlideNumber; }
+
+  } // goToSlide()
   
   function positionSlides() {
   
@@ -151,15 +194,7 @@ function superSlides(options) {
     });
     
     // Centre current slide
-    if($g_currentSlide) {
-    
-      // Move to new slide
-      $g_body.css({
-        'top': $g_currentSlide.position().top * -1 + 'px',
-        'left': $g_currentSlide.position().left * -1 + 'px'
-      });
-    
-    }
+    goToSlide(g_currentSlideNumber, e_direction.forward);
   
   } // positionSlides()
   
@@ -226,9 +261,9 @@ function superSlides(options) {
     
       // On load
       .one('load', function() {
-        
+                
         // Set width as a % relative to settings.width
-        $(this).css('width', ($(this).width() / settings.width) * 100 + '%');
+        $(this).css('width', ((g_wrapperWidth * $(this).width() * 100) / (settings.width * $(this).parent().width())) + '%');
       
       })
       .each(function() {
@@ -241,46 +276,6 @@ function superSlides(options) {
       });
   
   } // scaleImages()
-
-  function goToSlide(l_slideNumber, l_direction) {
-
-    log('New slide: ' + l_slideNumber);
-
-    // Check l_slideNumber
-    if(l_slideNumber <= 0) {
-      l_slideNumber = 1;
-      log('Adjusted to: ' + l_slideNumber);
-    }
-    else if(l_slideNumber > g_totalSlides) {
-      l_slideNumber = g_totalSlides;
-      log('Adjusted to: ' + l_slideNumber);
-    }
-
-    // Hide current slide
-    if($g_currentSlide) {
-      $g_currentSlide.removeClass('current');
-    }
-    $g_slides.filter('.next, .prev').removeClass('next prev');
-
-    // Update variables
-    $g_currentSlide = $g_slides.eq(l_slideNumber - 1);
-    g_currentSlideNumber = l_slideNumber;
-    
-    // Move to new slide
-    $g_body.css({
-      'top': $g_currentSlide.position().top * -1 + 'px',
-      'left': $g_currentSlide.position().left * -1 + 'px'
-    });
-    
-    // Add slide state classes
-    $g_currentSlide.addClass('current').next().addClass('next').end().prev().addClass('prev');
-
-    // Update url
-    if(g_currentView === e_view.slides) {
-      location.hash = '#' + g_currentSlideNumber;
-    }
-
-  } // goToSlide()
 
   function advance(l_dimension) {
 
@@ -463,7 +458,7 @@ function superSlides(options) {
       $l_links.each(function() {
 
         // Add number to original link
-        $(this).after('<sup>[' + parseInt($l_links.index($(this)) + 1, 10) + ']</sup>');
+        $(this).after('<sup class="reference">[' + parseInt($l_links.index($(this)) + 1, 10) + ']</sup>');
 
         // Start reference list item
         l_referencesHtml += '<li><a href="#' + parseInt($g_slides.index($(this).parentsUntil('#slides').last()) + 1, 10) + '">[' + parseInt($l_links.index($(this)) + 1, 10) + ']</a> ' + $(this).text();
@@ -732,7 +727,9 @@ function superSlides(options) {
     if(settings.enableMath) {
       setTimeout(function() {
         // FIX - Still Typesets whole document
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub], $l_slide.find('.html').get(0));
+        if(typeof(MathJax) !== 'undefined' && MathJax !== null) {
+          MathJax.Hub.Queue(["Typeset", MathJax.Hub], $l_slide.find('.html').get(0));
+        }
       }, 250);
     }
         
@@ -751,6 +748,44 @@ function superSlides(options) {
     
   } // renderAllSlides()
   
+  function saveToSource() {
+  
+    // Make sure we're local
+    if(g_local && $.twFile) { 
+  
+      // Fetch current html
+      var $l_printHtml = $('html').clone();
+      
+      // Remove generated elements
+      $l_printHtml
+        .find('style, link[id], script[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet, body > div:not(#slides), sup.reference, #slides > div > footer')
+        .remove();
+      
+      // Remove style attribute
+      $l_printHtml
+        .find('body, #slides, #slides > div, #slides > div > .markdown, #slides > div > .markdown > textarea, #slides > div > .html img')
+        .removeAttr('style');
+      
+      // Remove classes
+      $l_printHtml.find('body').removeAttr('class');
+      $l_printHtml.find('#slides > div').removeClass('current prev next');
+      
+      // Make it non-js friendly
+      $l_printHtml.find('body').addClass('outline');
+      
+      // Put the footer back
+      $l_printHtml.find('#slides').append(g_footerHtml);
+      
+      // Put the doctype + html tag back
+      var l_printHtml = '<!doctype html><html lang="en-GB">' + $l_printHtml.html() + '</html>';
+      
+      // Save the file
+      $.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
+
+    }
+      
+  } // saveToSource()
+  
   function saveSlide($l_slide) {
   
     // Update .source
@@ -759,7 +794,7 @@ function superSlides(options) {
     // Render html
     renderSlide($l_slide);
     
-    if(generateReferences()) {
+    if(settings.enableRef && generateReferences()) {
     
       // New reference slide so need to reposition
       positionSlides();
@@ -845,51 +880,13 @@ function superSlides(options) {
   
   } // deleteSlide()
   
-  function saveToSource() {
-  
-    // Make sure we're local
-    if(g_local && $.twFile) { 
-  
-      // Fetch current html
-      var $l_printHtml = $('html').clone();
-      
-      // Remove generated elements
-      $l_printHtml
-        .find('style, link[id], script[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet, body > div:not(#slides), #slides > div > footer')
-        .remove();
-      
-      // Remove style attribute
-      $l_printHtml
-        .find('body, #slides, #slides > div, #slides > div > .markdown, #slides > div > .html img')
-        .removeAttr('style');
-      
-      // Remove classes
-      $l_printHtml.find('body').removeAttr('class');
-      $l_printHtml.find('#slides > div').removeClass('current prev next');
-      
-      // Put the footer back
-      $l_printHtml.find('#slides').append(g_footerHtml);
-      
-      // Put the doctype + html tag back
-      var l_printHtml = '<!doctype html><html lang="en-GB">' + $l_printHtml.html() + '</html>';
-      
-      // Save the file
-      $.twFile.save($.twFile.convertUriToLocalPath(document.location.href), l_printHtml);
-
-    }
-      
-  } // saveToSource()
-  
   // **************************************************
   //
   // Initialisation
   //
   // **************************************************
-
-  log('Number of slides: ' + g_totalSlides);
-  log('Current slides: ' + g_currentSlideNumber);
-  log('Current view: ' + getCurrentView(g_currentView));
   
+  // If running locally include twfile
   if(g_local) { $.appendScript(settings.baseUrl + 'js/twfile.js'); }
   
   // MathJax
@@ -904,26 +901,28 @@ function superSlides(options) {
   // Load theme
   loadTheme();
   
-  // Add view class
-  $g_body.addClass(g_currentView === e_view.slides ? 'slides' : 'outline');
-  
   // Generate ToC
   if(settings.enableToc) { generateToc(); }
 
   // Generate initial references
-  generateReferences();
+  if(settings.enableRef) { generateReferences(); }
   
   // Init overview
   $g_overview = $('<div />').attr('id', 'overview').append($('<div />').append($('<div />').addClass('preview'))).appendTo($g_body);
+  
+  // Check view class (allows for non-js fallback)
+  if(g_currentView === e_view.slides) { $g_body.removeClass('outline'); }
+  $g_body.addClass(g_currentView === e_view.slides ? 'slides' : 'outline');
 
   // Calculate initial scale
   scaleSlides();
 
-  // Show initial slide
-  goToSlide(g_currentSlideNumber, e_direction.forward);
-
   // Generate footer
   generateFooters();
+
+  log('Number of slides: ' + g_totalSlides);
+  log('Current slides: ' + g_currentSlideNumber);
+  log('Current view: ' + getCurrentView(g_currentView));
 
   // **************************************************
   //
@@ -1017,7 +1016,7 @@ function superSlides(options) {
           break;
   
         case 69: // e
-          if(g_currentView === e_view.slides) {
+          if(event.ctrlKey && g_currentView === e_view.slides) {
             $g_currentSlide
               .find('.markdown')
                 .find('> textarea:first')
@@ -1030,13 +1029,20 @@ function superSlides(options) {
                 .find('> textarea:first').select();
           }
           break;
+
+        case 78: // n
+          if(event.ctrlKey) {
+            newSlide($g_currentSlide);
+            event.preventDefault();
+          }
+          break;
   
         case 79: // o
-          if(g_currentView === e_view.slides) { toggleOverview(); }
+          if(event.ctrlKey && g_currentView === e_view.slides) { toggleOverview(); }
           break;
   
         case 80: // p
-          if(g_local && confirm('Are you sure?')) { generatePrintHtml(); }
+          if(event.ctrlKey && g_local && confirm('Are you sure?')) { generatePrintHtml(); }
           /*
           var newwindow = window.open(
             location.href,
@@ -1047,7 +1053,14 @@ function superSlides(options) {
           break;
   
         case 84: // t
-          if(!g_overviewActive) { switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides); }
+          if(event.ctrlKey && !g_overviewActive) { switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides); }
+          break;
+
+        case 88: // x
+          if(event.ctrlKey) {
+            if(g_currentSlideNumber > 1 && confirm('Are you sure?')) { deleteSlide($g_currentSlide); }
+            event.preventDefault();
+          }
           break;
           
       }
@@ -1069,28 +1082,18 @@ function superSlides(options) {
           break;
   
         case 27: // esc
-          $g_currentSlide.find('.markdown').hide();
-          break;
-  
-        case 68: // d
-          if(event.ctrlKey) {
-              $g_currentSlide.find('> .markdown > .controls > .delete').each(function() {
-                if($(this).is(':enabled')) { $(this).click(); }
-              });
-              event.preventDefault();
-            }
-          break;
-  
-        case 78: // n
-          if(event.ctrlKey) {
-              $g_currentSlide.find('> .markdown > .controls > .new').click();
-              event.preventDefault();
-            }
+        case 69: // e
+          if(event.which === 69 && !event.ctrlKey) { break; }
+          $g_currentSlide
+            // Hide edit mode
+            .find('.markdown').hide()
+            // Put current source back
+            .find('> textarea:first').val($g_currentSlide.find('.markdown > .source').first().html());
           break;
   
         case 83: // s
           if(event.ctrlKey) {
-              $g_currentSlide.find('> .markdown > .controls > .save').click();
+              saveSlide($g_currentSlide);
               event.preventDefault();
             }
           break;
@@ -1112,28 +1115,60 @@ function superSlides(options) {
     return false;
   });
   
-  // Save current slide
-  $('.controls > .save').live('click', function() {
-    saveSlide($(this).parentsUntil('#slides').last());
-  });
-  
-  // Insert new slide
-  $('.controls > .new').live('click', function() {
+  /*
+  // iPhone hAX
+  $('body')
+    .bind('touchmove', function(event) {
+      event.preventDefault();
+    })
+    .bind('mousedown touchstart', function(event) {
     
-    // Get reference to current slide
-    var $l_slide = $(this).parentsUntil('#slides').last();
-    
-    // Render html incase it has been changed
-    saveSlide($l_slide);
-    
-    // Add new slide
-    newSlide($l_slide);
-    
-  });
-  
-  // Delete current slide
-  $('.controls > .delete').live('click', function() {
-    if(confirm('Are you sure?')) { deleteSlide($(this).parentsUntil('#slides').last()); }
-  });
+      if($g_slides.find('.markdown:visible').size() === 0) {
+      
+        var
+          l_x = event.pageX,
+          l_y = event.pageY;
+      
+        log('1) x: ' + l_x);
+          
+        $(this).bind('mouseup touchend', function(event) {
+      
+          log('2) x: ' + event.pageX);
+          
+          $(this).unbind('mouseup touchend');
+          
+          var
+            l_netX = event.pageX - l_x,
+            l_netY = event.pageY - l_y,
+            l_absNetX = Math.abs(l_netX),
+            l_absNetY = Math.abs(l_netY);
+          
+          var e = jQuery.Event("keydown");
+          
+          if(l_absNetX > l_absNetY) {
+            if(l_absNetX > 10) {
+              if(l_netX > 0) { e.which = 39; log('right'); } // Right
+              else { e.which = 37; log('left'); } // Left
+            }
+          }
+          else {
+            if(l_absNetY > 10) {
+              if(l_netY > 0) { e.which = 39; log('down'); } // Down
+              else { e.which = 37; log('up'); } // Up
+            }
+          }
+          
+          $(document).trigger(e);
+        
+          event.preventDefault();
+          
+        });
+        
+        event.preventDefault();
+        
+      }
+      
+    });
+  */
 
 }

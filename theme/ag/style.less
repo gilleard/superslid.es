@@ -1,0 +1,67 @@
+@gutter: 3.125%;
+
+.slides {
+
+  #slides > div {
+    font-family: 'League Gothic', Helvetica, Arial, sans-serif;
+    background: #333 url('background.jpg') 50% 50% no-repeat;
+    -webkit-background-size: 100% 100%;
+    color: #f5f5f5;
+    
+    > *,
+    > .html > * {
+      clear: both;
+      padding: @gutter @gutter 0;
+      line-height: 150%;
+    }
+    
+    > h2,
+    > .html > h2 {
+      float: left;
+      margin-top: @gutter;
+      padding: @gutter/2 @gutter;
+      line-height: 100%;
+      font-size: 150%;
+      text-transform: uppercase;
+      background-color: rgba(255,255,255,.15);
+      text-shadow: rgba(0,0,0,.25) 0 3px 0;
+    }
+    
+    a {
+      color: #F06;
+      text-decoration: none;
+    }
+    
+    li {
+      list-style: none;
+    }
+    
+    li:before {
+      content: "\00BB\0020";
+    }
+    
+    em {
+      font-style: normal;
+      background-color: rgba(255,255,255,.15);
+      text-shadow: rgba(0,0,0,.25) 0 3px 0;
+    }
+    
+    img,
+    iframe {
+      display: block;
+    }
+    
+    > div,
+    > footer {
+      padding: 0;
+    }
+    
+    > footer p {
+      padding: @gutter;
+      line-height: 100%;
+      text-align: right;
+    }
+    
+  }
+
+}

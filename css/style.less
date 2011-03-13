@@ -10,14 +10,6 @@
     position: absolute;
   	width: 100%;
   	height: 100%;
-    
-    > .prev {
-    
-    }
-    
-    > .next {
-    
-    }
 
     > div {
       position: absolute;
@@ -40,40 +32,31 @@
       
       > .markdown {
         display: none;
+        font-size: 13px;
+        background-color: rgba(255,255,255,.95);
+        z-index: 2;
         
         > .source {
           display: none;
         }
         
-        > .controls {
-          position: absolute;
-          top: 2.5%;
-          right: 2.5%;
-          
-          > button {
-          }
-        
-        }
-        
         > textarea {
           position: absolute;
-          top: 0%;
-          left: 0%;
-          width: 95%;
-          height: 95%;
-          padding: 2.5%;
-          background-color: rgba(255,255,255,.9);
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          overflow: hidden;
+          overflow-y: auto;
           border: none;
+          font-family: monospace;
         }
         
       }
       
       > .html {
-      
-      }
-      
-      iframe {
-      
+        overflow: auto;
       }
       
       > footer {
@@ -128,6 +111,12 @@
   }
   
 }
+
+.slides.hide-ref sup.reference {
+  display: none;
+}
+
+
 
 #overview {
   display: none;
@@ -247,7 +236,7 @@
 
 
 
-body.outline {
+.outline {
   font-size: 16px;
   line-height: 150%;
 
@@ -326,6 +315,8 @@ body.outline {
   }
 
 }
+
+
 
 /*
 @page {

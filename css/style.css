@@ -29,24 +29,27 @@
 }
 .slides #slides > div > .markdown {
   display: none;
+  font-size: 13px;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 2;
 }
 .slides #slides > div > .markdown > .source {
   display: none;
 }
-.slides #slides > div > .markdown > .controls {
-  position: absolute;
-  top: 2.5%;
-  right: 2.5%;
-}
 .slides #slides > div > .markdown > textarea {
   position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 95%;
-  height: 95%;
-  padding: 2.5%;
-  background-color: rgba(255, 255, 255, 0.9);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto;
   border: none;
+  font-family: monospace;
+}
+.slides #slides > div > .html {
+  overflow: auto;
 }
 .slides #slides > div > footer {
   position: absolute;
@@ -85,6 +88,9 @@
 }
 .slides #slides .incremental {
   visibility: hidden;
+}
+.slides.hide-ref sup.reference {
+  display: none;
 }
 #overview {
   display: none;
@@ -172,21 +178,21 @@
   height: 50%;
   background-color: #ffffff;
 }
-body.outline {
+.outline {
   font-size: 16px;
   line-height: 150%;
 }
-body.outline #slides {
+.outline #slides {
   width: auto !important;
   height: auto !important;
   margin: 0 !important;
   padding: 20px 20px 0;
   font-size: inherit !important;
 }
-body.outline #slides > div {
+.outline #slides > div {
   margin-bottom: 20px;
 }
-body.outline #slides > div h2 {
+.outline #slides > div h2 {
   margin-bottom: 20px;
   padding: 10px;
   line-height: 100%;
@@ -194,25 +200,25 @@ body.outline #slides > div h2 {
   background-color: #f5f5f5;
   border-bottom: 1px solid #ddd;
 }
-body.outline #slides > div h3, body.outline #slides > div h4, body.outline #slides > div h5 {
+.outline #slides > div h3, .outline #slides > div h4, .outline #slides > div h5 {
   font-weight: bold;
 }
-body.outline #slides > div ul {
+.outline #slides > div ul {
   list-style: square inside;
 }
-body.outline #slides > div ul ul {
+.outline #slides > div ul ul {
   margin-left: 20px;
 }
-body.outline #slides > div dl dd {
+.outline #slides > div dl dd {
   margin-left: 20px;
 }
-body.outline #slides > div img {
+.outline #slides > div img {
   width: auto !important;
 }
-body.outline #slides > div.title h1 {
+.outline #slides > div.title h1 {
   font-size: 200%;
 }
-body.outline #slides > div.title h2 {
+.outline #slides > div.title h2 {
   margin: 20px 0 0;
   padding: 0;
   line-height: 150%;
@@ -220,10 +226,10 @@ body.outline #slides > div.title h2 {
   background-color: transparent;
   border-bottom: none;
 }
-body.outline #slides .markdown, body.outline #slides footer {
+.outline #slides .markdown, .outline #slides footer {
   display: none;
 }
-body.outline > #slides .incremental {
+.outline > #slides .incremental {
   visibility: inherit!important;
 }
 /*
