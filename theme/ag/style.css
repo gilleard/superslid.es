@@ -1,15 +1,15 @@
-.slides #slides > div {
+.slides.theme-active #slides > div {
   font-family: 'League Gothic', Helvetica, Arial, sans-serif;
   background: #333333 url('background.jpg') 50% 50% no-repeat;
   -webkit-background-size: 100% 100%;
   color: #f5f5f5;
 }
-.slides #slides > div > *, .slides #slides > div > .html > * {
+.slides.theme-active #slides > div > *, .slides.theme-active #slides > div > .html > * {
   clear: both;
   padding: 3.125% 3.125% 0;
   line-height: 150%;
 }
-.slides #slides > div > h2, .slides #slides > div > .html > h2 {
+.slides.theme-active #slides > div > h2, .slides.theme-active #slides > div > .html > h2 {
   float: left;
   margin-top: 3.125%;
   padding: 1.5625% 3.125%;
@@ -19,28 +19,34 @@
   background-color: rgba(255, 255, 255, 0.15);
   text-shadow: rgba(0, 0, 0, 0.25) 0 3px 0;
 }
-.slides #slides > div a {
+.slides.theme-active #slides > div a {
   color: #F06;
   text-decoration: none;
 }
-.slides #slides > div li {
+.slides.theme-active #slides > div li {
   list-style: none;
 }
-.slides #slides > div li:before {
+.slides.theme-active #slides > div li ul {
+  margin-left: 3.125%;
+}
+.slides.theme-active #slides > div li:before {
   content: "\00BB\0020";
 }
-.slides #slides > div em {
+.slides.theme-active #slides > div em {
   font-style: normal;
   background-color: rgba(255, 255, 255, 0.15);
   text-shadow: rgba(0, 0, 0, 0.25) 0 3px 0;
 }
-.slides #slides > div img, .slides #slides > div iframe {
+.slides.theme-active #slides > div pre {
+  font-size: 50%;
+}
+.slides.theme-active #slides > div img, .slides.theme-active #slides > div iframe {
   display: block;
 }
-.slides #slides > div > div, .slides #slides > div > footer {
+.slides.theme-active #slides > div > div, .slides.theme-active #slides > div > footer {
   padding: 0;
 }
-.slides #slides > div > footer p {
+.slides.theme-active #slides > div > footer p {
   padding: 3.125%;
   line-height: 100%;
   text-align: right;

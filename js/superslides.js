@@ -79,8 +79,8 @@ function superSlides(options) {
   
   // Hacky html blocks ;(
   var
-    g_blankSlideHtml = '<div>' + $g_slides.first().clone().find('> .markdown .source, > .html').html('').end().html() + '</div>',
-    g_footerHtml = $g_wrapper.find('> footer').size() > 0 ? '<footer>' + $g_wrapper.find('> footer').remove().html() + '</footer>' : '<footer></footer>';
+    g_blankSlideHtml = '<div><div class="html" /><div class="markdown"><div class="source" /><textarea /></div></div>',
+    g_footerHtml = $g_wrapper.find('> footer').size() > 0 ? '<footer class="master">' + $g_wrapper.find('> footer').remove().html() + '</footer>' : '<footer class="master"></footer>';
     
   // **************************************************
   //
@@ -97,6 +97,8 @@ function superSlides(options) {
   } // log(message)
   
   function loadTheme() {
+  
+    $g_body.addClass('theme-active');
   
     if(settings.customJs) { $.appendScript(settings.customJs); }
     
@@ -518,7 +520,7 @@ function superSlides(options) {
   function generateFooters() {
   
     // Copy footer into each slide
-    $g_slides.append(g_footerHtml);
+    $g_slides.filter(function() { return !$(this).find('> footer').size() > 0; }).append(g_footerHtml);
     
     updateFooters();
   
@@ -758,7 +760,7 @@ function superSlides(options) {
       
       // Remove generated elements
       $l_printHtml
-        .find('style, link[id], script[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet, body > div:not(#slides), sup.reference, #slides > div > footer')
+        .find('style, link[id], script[id], head > script, #MathJax_Hidden, #MathJax_Message, #overview, applet, body > div:not(#slides), sup.reference, #slides > div > footer.master')
         .remove();
       
       // Remove style attribute
@@ -1061,6 +1063,10 @@ function superSlides(options) {
             if(g_currentSlideNumber > 1 && confirm('Are you sure?')) { deleteSlide($g_currentSlide); }
             event.preventDefault();
           }
+          break;
+        
+        case 90: // x
+          if(event.ctrlKey) { $g_body.toggleClass('theme-active'); }
           break;
           
       }

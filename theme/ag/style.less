@@ -1,6 +1,6 @@
 @gutter: 3.125%;
 
-.slides {
+.slides.theme-active {
 
   #slides > div {
     font-family: 'League Gothic', Helvetica, Arial, sans-serif;
@@ -34,6 +34,10 @@
     
     li {
       list-style: none;
+      
+      ul {
+        margin-left: @gutter;
+      }
     }
     
     li:before {
@@ -44,6 +48,10 @@
       font-style: normal;
       background-color: rgba(255,255,255,.15);
       text-shadow: rgba(0,0,0,.25) 0 3px 0;
+    }
+    
+    pre {
+      font-size: 50%;
     }
     
     img,
