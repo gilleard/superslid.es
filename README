@@ -1,17 +1,28 @@
+Brief Tutorial:
+- Create a copy of blank.html (webkit browsers require a copy of http://www.tiddlywiki.com/#TiddlySaver in the same directory)
+- Adjust title, theme, footer and configuration settings in file (typically only "baseUrl" required - if you've moved the file)
+- To create slides (ctrl for windows/linux, cmd for mac):
+  - edit: ctrl + e
+  - save: ctrl + s
+  - discard changes: esc
+  - new slide: ctrl + n
+  - delete slide: ctrl + x
+- To navigate between slides:
+  - next: space bar, right arrow, down arrow
+  - prev: left arrow, up arrow
+  - first/last: home/end
+  - skip forward/back: number to skip then any next/prev slide key
+  - go to slide: slide number, then return or enter
+  - overview: ctrl + o
+
 Features:
-- Auto-scaling Text
-- Incremental Display: use .incremental to reveal items one at a time
-- Progress Indicator: keep track of where you are using .current and .total in your footer
-- Slide Bookmarks: point at a specific slide using /slides.html#3
-- Keyboard Controls: see http://is.gd/iDr3d
-- Outline View: toggle between outline and slide view using 't' key
-- Link References: lists all link, if any title attributes are provided those without are excluded, implicitly specify with .exclude and .include
-- Overview: navigate and preview slides using the 'o' key
-- Print: save generated source code using 'p' key (webkit browsers require TiddlySaver), print using PrinceXML
-
-Issues:
-- Overview titles need a length limit
-
-Ideas:
-- Back button support
-- Allow for hidden text in slide view, shown in outline
+- Auto-scaling text and images
+- Incremental reveal: use ".incremental" to reveal items one at a time
+- Slide Bookmarks: point at a specific slides eg. "/slides.html#3"
+- Outline View: toggle between outline and slide view using ctrl + t
+- Link References: lists all links for printing, title attributes override default text, implicitly specify with ".exclude" and ".include"
+- Print: save generated source code using "ctrl + p", print using PrinceXML
+- "1.5d" slides: use ".sub" to break free from linear slides
+- Support for markdown format, with iframe support using "i[url][width][height]" syntax
+- Footers: footer included on all slides, ".current" and ".total" replaced with appropriate values
+- Touch controls allows for use on smartphones

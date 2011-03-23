@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en-GB">
+  <head>
+  
+    <!-- meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    
+    <!-- css -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/style.css">
+    
+  </head>
+  <body>
+    
+    <div id="slides">
+      
+      <div>
+        <div class="html"></div>
+        <div class="markdown">
+          <textarea></textarea>
+          <div class="source"></div>
+        </div>
+      </div>
+      
+      <footer>
+        <p><span class="current">X</span> of <span class="total">Y</span></p>
+      </footer>
+    
+    </div>
+  
+    <!-- js -->
+    <script src="../js/library.js"></script>
+    <script src="../js/superslides.js"></script>
+    
+    <script>
+    
+      $(function (){
+        superSlides({
+          
+          baseUrl: '../',
+          width: 980,
+          height: 735,
+          scale: 0.9,
+          fontSize: 150,
+          enableRef: true,
+          enableSyntax: false,
+          enableMath: false,
+          enableToc: false,
+          strictNav: false,
+          incrementOnce: false,
+          customJs: null,
+          customCss: null,
+          initialView: 'slides',
+          hideRefNo: false
+              
+        });
+      });
+      
+    </script>
+    
+  </body>
+</html>
