@@ -1,0 +1,39 @@
+.slides.theme-active {
+  font-family: Arial, sans-serif;
+}
+.slides.theme-active #slides > div > *, .slides.theme-active #slides > div > .html > * {
+  clear: both;
+  padding: 3.125% 3.125% 0;
+  line-height: 150%;
+}
+.slides.theme-active #slides > div li ul {
+  margin-left: 3.125%;
+}
+.slides.theme-active #slides > div > pre, .slides.theme-active #slides > div > .html > pre {
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
+}
+.slides.theme-active #slides > div img, .slides.theme-active #slides > div iframe {
+  display: block;
+}
+.slides.theme-active #slides > div > div, .slides.theme-active #slides > div > footer {
+  padding: 0;
+}
+.slides.theme-active #slides > div > footer p {
+  padding: 3.125%;
+  line-height: 100%;
+  text-align: center;
+}
+.slides.theme-active #slides > div.title {
+  text-align: center;
+}
+.slides.theme-active #slides > div.title > h1 {
+  font-size: 200%;
+  line-height: 100%;
+  margin-top: 20%;
+}
+.slides.theme-active #slides > div.title > h2 {
+  font-size: 150%;
+  line-height: 100%;
+}

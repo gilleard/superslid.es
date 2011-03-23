@@ -1,9 +1,14 @@
 @gutter: 3.125%;
+@font: 'League Gothic', Helvetica, Arial, sans-serif;
 
+@font-face { font-family: 'League Gothic'; src: url('league-gothic.otf'); }
+
+// Slides
 .slides.theme-active {
+  font-family: @font;
 
-  #slides > div {
-    font-family: 'League Gothic', Helvetica, Arial, sans-serif;
+  #slides > div,
+  #overview > div > ol > li > .preview {
     background: #333 url('background.jpg') 50% 50% no-repeat;
     -webkit-background-size: 100% 100%;
     color: #f5f5f5;
@@ -27,6 +32,10 @@
       text-shadow: rgba(0,0,0,.25) 0 3px 0;
     }
     
+    h3 {
+      margin-bottom: @gutter*-1;
+    }
+    
     a {
       color: #F06;
       text-decoration: none;
@@ -41,7 +50,7 @@
     }
     
     li:before {
-      content: "\00BB\0020";
+      content: '\00BB\0020';
     }
     
     em {
@@ -50,7 +59,8 @@
       text-shadow: rgba(0,0,0,.25) 0 3px 0;
     }
     
-    pre {
+    pre,
+    code {
       font-size: 50%;
     }
     
@@ -70,6 +80,99 @@
       text-align: right;
     }
     
+  }
+
+}
+
+// Overview
+.theme-active #overview > div ol > li {
+    text-transform: uppercase;
+}
+
+// Outline
+.outline {
+  font-family: @font;
+  background: #333 url('background.jpg') fixed 50% 50% no-repeat;
+  -webkit-background-size: 100% 100%;
+  color: #f5f5f5;
+  font-size: 200%;
+
+  #slides {
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 20px 20px 0;
+    font-size: inherit !important;
+  
+    > div {
+      margin-bottom: 0;
+    
+      > *,
+      > .html > * {
+        clear: both;
+        padding-bottom: 20px;
+      }
+    
+      > h2,
+      > .html > h2 {
+        float: left;
+        margin: 0 0 20px -20px;
+        padding: 10px 20px;
+        line-height: 100%;
+        font-size: 150%;
+        text-transform: uppercase;
+        background-color: rgba(255,255,255,.15);
+        text-shadow: rgba(0,0,0,.25) 0 3px 0;
+        border-bottom: none;
+      }
+      
+      h3 {
+        margin-bottom: -20px;
+      }
+    
+      a {
+        color: #F06;
+        text-decoration: none;
+      }
+      
+      li {
+        list-style: none;
+        
+        ul {
+          margin-left: @gutter;
+        }
+      }
+      
+      li:before {
+        content: '\00BB\0020';
+      }
+      
+      em {
+        font-style: normal;
+        background-color: rgba(255,255,255,.15);
+        text-shadow: rgba(0,0,0,.25) 0 3px 0;
+      }
+      
+      pre,
+      code {
+        font-size: 50%;
+      }
+      
+      pre {
+        line-height: 150%;
+      }
+      
+      img,
+      iframe {
+        display: block;
+      }
+      
+      > div {
+        padding: 0;
+      }
+    
+    }
+
   }
 
 }

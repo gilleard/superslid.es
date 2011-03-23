@@ -1255,7 +1255,7 @@ var _DoCodeSpans = function(text) {
       c = c.replace(/^([ \t]*)/g,""); // leading whitespace
       c = c.replace(/[ \t]*$/g,""); // trailing whitespace
       c = _EncodeCode(c);
-      return m1+"<pre class=\"highlight\">"+c+"</pre>";
+      return m1+"<code>"+c+"</code>";
     });
 
   return text;

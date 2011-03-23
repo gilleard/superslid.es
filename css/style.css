@@ -5,6 +5,9 @@
   background-color: #000000;
   overflow: hidden;
   -webkit-transition: top 1s, left 1s;
+  -moz-transition: top 1s, left 1s;
+  -o-transition: top 1s, left 1s;
+  transition: top 1s, left 1s;
 }
 .slides #slides {
   position: absolute;
@@ -19,6 +22,9 @@
   opacity: .5;
   background-color: #ffffff;
   -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  transition: opacity 1s;
 }
 .slides #slides > div > .markdown, .slides #slides > div > .html {
   position: absolute;
@@ -89,9 +95,6 @@
 .slides #slides .incremental {
   visibility: hidden;
 }
-.slides.hide-ref sup.reference {
-  display: none;
-}
 #overview {
   display: none;
   position: fixed;
@@ -125,6 +128,13 @@
 #overview > div > ol > li > .preview, #overview > div > ol > li > ol > li > .preview {
   font-size: 50%;
   z-index: 1;
+}
+#overview > div > ol > li > .preview > .html, #overview > div > ol > li > ol > li > .preview > .html {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 #overview > div > ol > li > .preview > footer, #overview > div > ol > li > ol > li > .preview > footer {
   position: absolute;
@@ -231,6 +241,9 @@
 }
 .outline > #slides .incremental {
   visibility: inherit!important;
+}
+.hide-ref sup.reference {
+  display: none;
 }
 /*
 @page {

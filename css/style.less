@@ -20,7 +20,6 @@
       background-color: rgb(255,255,255);
     	-webkit-transition: opacity 1s;
     	
-      
       > .markdown,
       > .html {
         position: absolute;
@@ -112,10 +111,6 @@
   
 }
 
-.slides.hide-ref sup.reference {
-  display: none;
-}
-
 
 
 #overview {
@@ -158,6 +153,14 @@
         > .preview {
           font-size: 50%;
           z-index: 1;
+    	
+          > .html {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
           
           > footer {
           	position: absolute;
@@ -314,6 +317,10 @@
   	visibility: inherit!important;
   }
 
+}
+
+.hide-ref sup.reference {
+  display: none;
 }
 
 
