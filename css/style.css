@@ -89,11 +89,36 @@
 .slides #slides > .current {
   opacity: 1;
 }
+.slides #slides > .references, #toc {
+  overflow: auto;
+}
 .slides #slides > .references ul {
   list-style: none;
 }
+.leftin{
+  margin-left: -300px;
+}
 .slides #slides .incremental {
   visibility: hidden;
+}
+.calendarEntry {
+	clear: both;
+	display: block;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+	padding: 1em;
+	border: 1px solid #000000;
+	background: #E0D2E6;
+}
+.calendarTitle {
+	display: block;
+	clear: both;
+	margin-bottom: 0.2 em;
+	font-weight: bold;
+}
+
+.calendarLocation {
+	color: #cc00cc;
 }
 #overview {
   display: none;

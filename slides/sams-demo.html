@@ -1,0 +1,323 @@
+<!doctype html>
+
+<html lang="en-GB">
+  <head>
+  
+    <!-- meta -->
+    <meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>SUPERslid.es</title>
+    
+    <!-- css -->
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  	<link rel="stylesheet" href="../theme/manc/theme.css" />
+	
+  </head>
+  <body>
+    <div id="slides">
+      
+      <div class="title" data-content="Introduction">
+        <section>
+          <h1>SuperSlides Technical Demo</h1>
+          <h2>First Version: 09/03/11</h2>
+        </section>
+      </div>
+      
+      <div data-content="Introduction">
+        <h2>Our Goal</h2>
+        <section>
+          <ul>
+			<li>To develop a competitive HTML based slideshow system that takes advantage of modern web technologies.</li>
+			<ul><li>HTML5: More sophisticated tags</li><li>JQuery: Ease of use and development and cross-browser</li><li>CSS3 enhanced effects</li></ul>
+			<li>Also have a level of integration with the web without depending on it.</li>
+			<ul><li>Use of google API</li><li>Dynamic Tag Cloud Generation</li></ul>
+		  </ul>
+        </section>
+      </div>
+      
+      <div class="up">
+        <h2>The Basic Principle</h2>
+        <section>
+          <p>Fully browser based 2 dimensional slideshow</p>
+		  <ul>
+			<li>Fully Integrated with the web</li>
+			<li>Easy to plug in additional features</li>
+			<li>Examples Coming UP!</li>
+		  </ul>
+        </section>
+      </div>
+	  
+	  <div class="sub" data-content="Embeded">
+		<h2>Embeded youtube videos!</h2>
+		<section>
+			<p>It takes almost 5 minutes to explain how to do it in powerpoint! (it embeds directly here)</p>
+			<iframe title="YouTube video player" width="480" height="390" src="http://www.youtube.com/embed/hChq5drjQl4" frameborder="0" allowfullscreen></iframe>
+		</section>
+	  </div>
+	  
+	  <div class="sub" data-content="Embeded">
+		<h2>Embeded Google Maps!</h2>
+		<section>
+			<p>We are here somewhere... i think</p>
+			<iframe width="500" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.co.uk/?ie=UTF8&amp;t=h&amp;ll=53.467179,-2.232907&amp;spn=0.004471,0.010729&amp;z=16&amp;output=embed"></iframe><br /><small><a href="http://maps.google.co.uk/?ie=UTF8&amp;t=h&amp;ll=53.467179,-2.232907&amp;spn=0.004471,0.010729&amp;z=16&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+		</section>
+	  </div>
+	  
+      <div>
+        <h2>Maths</h2>
+        <section>
+          <ul>
+			<li>MathJax Used</li>
+			<li>LaTeX input generates nice looking math</li>
+			<li>Initially was on all the time</li>
+			<li>Can now be toggled due to load time</li>
+			<li> Example: <ul><li> \[ \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) \] </li></ul>
+		  </ul>
+        </section>
+      </div>
+      
+      <div>
+        <h2>Overview</h2>
+        <section>
+          <ul>
+			<li>Toggled with "o"</li>
+			<li>Gives a complete overview of the slideshow</li>
+			<li>Themes for overview must be specified seperately in the stylesheet</li>
+			<li>Demonstration</li>
+		  </ul>
+        </section>
+      </div>
+      
+      
+      <div>
+        <h2>Generating Referances</h2>
+        <section>
+		 <ul>
+           <li class="incremental"><a href="http://www.google.co.uk" class="include">Link to Google:</a> An example of an explicit referance.</li>
+		   <li class="incremental"><a href="http://www.bbc.co.uk" class="exclude">Link to BBC: </a> An example of an excluded referance.</li>
+		   <li class="incremental"><a href="http://www.manchester.ac.uk" title="UoM stands for University of Manchester">Link to UoM Website: </a> Unspecified link with title.</li>
+		  </ul>
+        </section>
+      </div>
+      
+      <div class="down">
+        <h2>2 Dimensional Navigation</h2>
+        <section>
+          <ul><li>Allows for inclusion of "additional" information.</li><li>Can create a flexible slideshow</li><li>Can have other things off slide! (shown later)</li></ul>
+        </section>
+      </div>
+	  
+	  <div class="sub">
+        <h2>Example of Slide Going DOWN!</h2>
+        <section>
+          <img src="http://www.building.co.uk/Pictures/web/p/x/k/University_of_Manches_C2F72.jpg" />
+        </section>
+      </div>
+	  
+	  <div class="up" data-content="Syntax Highlighting">
+        <h2>Syntax Highlighting</h2>
+        <section>
+          <ul><li>Uses SyntaxHighlighter 3.0.83 <a href="http://alexgorbatchev.com/SyntaxHighlighter/" class="include">(SH3.0.83)</a></li>
+			<li>Widely used by companies such as google</li>
+			<li>Allows for custom brushes</li>
+			<li>I created a custom OWL brush</li>
+		  </ul>
+        </section>
+      </div>
+	  	  <div class="sub" data-content="Syntax Highlighting">
+        <h2>Syntax Highlighting Example 1</h2>
+        <section>
+		Our Standard Layout <br /><br />
+		  <pre class="highlight">
+            &lt;div&gt;
+  &lt;h2&gt;Title&lt;/h2&gt;
+  &lt;section&gt;
+    &lt;p&gt;Text&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Text Item&lt;/li&gt;
+      &lt;li class=&quot;Incremental&quot;&gt;Incremental Text Item&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+      	  </pre>
+        </section>
+      </div>
+	  
+	  <div class="sub" data-content="Syntax Highlighting">
+        <h2>Syntax Highlighting Example 2</h2>
+        <section>
+		Our Initialisation Code <br /><br />
+		  <pre class="highlight">
+  // Load theme
+  loadTheme();
+  // Add view class
+  $g_body.addClass(g_currentView === e_view.slides ? 'slides' : 'outline'); 
+  // Generate ToC
+  if(settings.enableToc) {
+    generateToc();
+  }
+  // Generate initial references
+  generateReferences(); 
+      	  </pre>
+        </section>
+      </div>
+	  
+	  
+	  <div class="sub" data-content="Syntax Highlighting">
+        <h2>Syntax Highlighting Example 3</h2>
+        <section>
+		Custom OWL Brush: Developed using regular expressions<br /><br />
+		  <pre class="highlight">
+&lt;owl:Class&gt;
+  &lt;owl:oneOf rdf:parseType=&quot;Collection&quot;&gt;
+    &lt;owl:Thing rdf:about=&quot;#Eurasia&quot;&gt;&lt;/owl:Thing&gt;
+    &lt;owl:Thing rdf:about=&quot;#Africa&quot;&gt;&lt;/owl:Thing&gt;
+    &lt;owl:Thing rdf:about=&quot;#NorthAmerica&quot;&gt;&lt;/owl:Thing&gt;
+    &lt;owl:Thing rdf:about=&quot;#SouthAmerica&quot;&gt;&lt;/owl:Thing&gt;
+    &lt;owl:Thing rdf:about=&quot;#Australia&quot;&gt;&lt;/owl:Thing&gt;
+    &lt;owl:Thing rdf:about=&quot;#Antarctica&quot;&gt;&lt;/owl:Thing&gt;
+  &lt;/owl:oneOf&gt;
+&lt;/owl:Class&gt;
+      	  </pre>
+		  <p>This is the regular expression used to parse this:</p>
+		  <pre class="highlight">
+		  var	regexOne = new XRegExp('\\<*\\s*(?<prefix> [^\\:?]+)\\:(?<subject> [^\\s\\>]+)\\/*\\>*', 'xg');
+			var	regexTwo = new XRegExp('(?<name> [^\\=?]+)\\=(?<val> ".*?"|\'.*?\'|\\w+)\\/*\\>*', 'xg');
+		   </pre>
+        </section>
+      </div>
+	  
+	  <div>
+        <h2>Printing</h2>
+        <section>
+          <ul>
+            <li>Uses Java and PrinceXML</li>
+			<li>Wont work here due to no PrinceXML installed on the machines</li>
+			<li>PDF Example provided</li>
+			<li>Uses a Java Swing GUI designed in NetBeans</li>
+		  </ul>
+        </section>
+      </div>
+	  
+	  <div>
+        <h2>Table of Contents</h2>
+        <section>
+		<ul>
+			<li>"Tag" slides with their own "group"</li>
+			<li>Allows publisher and reader alike to sort the notes coherantly</li>
+			<li>Links take you directly to the correct slide</li>
+		</ul>
+		</section>
+      </div>
+	  
+	  <div>
+        <h2>Themes</h2>
+        <section>
+			<ul>
+			<li>Kept in seperate CSS files</li>
+			<li>Take full advantage of CSS3</li>
+			<ul><li><a href="demoflash.html">Example 1</a></li><li><a href="demoss.html">Example 2</a></li></ul>
+			</ul>
+		</section>
+      </div>
+	  
+	  <div class="up">
+        <h2>Location Indicators</h2>
+        <section>
+			<ul>
+				<li>Track location!</li>
+				<li>Stops you getting lost!</li>
+			</ul>
+		</section>
+      </div>
+	  <div class="sub"></div><div class="sub"></div><div class="sub"></div><div class="sub"></div><div class="sub"></div><div class="sub"></div><div class="sub"></div><div class="sub"></div>
+	  
+	  <div>
+        <h2>Transitions!</h2>
+        <section>
+			<ul>
+           <li class="incremental">"Normal" Entry</li>
+		   <li class="incremental fade">Fade in to the scene</li>
+		   <li class="incremental leftin">Incoming from the left</li>
+		   <li class="incremental flashin">Flash into the screen</li>
+		   <li class="incremental jumpin">Goes REALLY BIG, then really small</li>
+		  </ul>
+		</section>
+      </div>
+	  
+	  <div>
+        <h2>Dynamic Tag Clouds</h2>
+        <section>
+			<a class="cloud" href="http://www.cs.man.ac.uk/~bparsia/">Bijan's manchester site: <br /><br /></a>
+		</section>
+      </div>
+	  
+	  <div>
+        <h2>Work with Google API</h2>
+        <section>
+			<p>Hopefully spreadsheets aswell!</p>
+		</section>
+      </div>
+	  
+	  <div class="sub">
+        <h2>Remotely Posted Questions and Answers</h2>
+        <section>
+			<p>Here is the <a href="https://spreadsheets.google.com/ccc?key=0AnHCHrTM96X0dE9RbjdpZ3Exa3FFeFZwY3VtVDdqMmc&hl=en#gid=0">link</a> to the spreadsheet</p>
+			<span class="question" data-id="1a">!Q:What did you think of the presentation?#</span>
+		</section>
+      </div>
+			
+	  <div id="info">
+		<section>Work In Progress (<a href="https://www.google.com/calendar/feeds/cartwrs8@cs.man.ac.uk/public/full" class="include">Google Calendar</a>)</section>
+	  </div>
+	  
+	  <div>
+		<h2>It's already a revolution!</h2>
+		<section>http://www.cs.man.ac.uk/~bparsia/2011/bijan-superslides/slides/fishbase.html#31<br /><br />
+		SuperSlides! Join the Revolution!</section>
+	  </div>
+      
+      <footer>
+        <p><span class="current">X</span> of <span class="total">Y</span></p>
+      </footer>
+      
+    </div>
+  
+    <!-- js -->
+    <script src="../js/library.js"></script>
+  	<script src="../theme/manc/theme.js"></script>
+  	
+  	<!-- sam's extras -->
+  	<script src="../tools/cloudGenerator.js"></script>
+    <script src="../tools/genform.js"></script>
+    <script src="http://www.google.com/jsapi"></script>
+    <script src="../tools/gcalendar.js"></script>
+    <script src="../tools/cross-domain-ajax/jquery.xdomainajax.js"></script>
+    <script src="../tools/jquery.dynacloud-5.js"></script>
+  	
+    <script src="../js/superslides.js"></script>
+	
+    <script>
+    
+    	google.load("gdata", "2.x");
+	
+      $(function (){
+        superSlides({
+          'baseUrl': '../',
+          'width': 980,
+          'height': 735,
+          'scale': 0.9,
+          'fontSize': 150,
+          'enableMath': true,
+          'enableSyntax': true,
+          'enableToc': true,
+          'strictNav': false,
+          'incrementOnce': false
+        });
+      });
+
+    </script>
+    
+  </body>
+</html>

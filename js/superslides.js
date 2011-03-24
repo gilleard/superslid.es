@@ -66,6 +66,7 @@ function superSlides(options) {
     g_currentView = settings.initialView === 'slides' ? e_view.slides : e_view.outline,
     g_skipSlides = '',
     g_overviewActive = false,
+    g_inputHasFocus = false,
     g_converter = new Showdown.converter();
     
   // Scale/position
@@ -307,11 +308,31 @@ function superSlides(options) {
 
       // Show the next one
       log('Showing next element');
-      $l_elementsToIncrement.first().css({'visibility':'visible'});
+      
+      // Check for effects
+      var $l_nextElementToIncrement = $l_elementsToIncrement.first();
+      
+      if($l_nextElementToIncrement.hasClass('fade')) {
+        $l_nextElementToIncrement.hide().css({'visibility':'visible'}).fadeIn(400);
+      }
+      else if($l_nextElementToIncrement.hasClass('leftin')) {
+        $l_nextElementToIncrement.hide().css({'visibility':'visible'}).fadeIn(100).animate({'margin-left':'0px'}, 200);
+      }
+      else if($l_nextElementToIncrement.hasClass('flashin')) {
+        $l_nextElementToIncrement.hide().css({'visibility':'visible'}).fadeIn(10).delay(1).fadeOut(5).delay(25).fadeIn(20).delay(5).fadeOut(10).delay(15).fadeIn(40).delay(10).fadeOut(20).delay(10).fadeIn(50).delay(15).fadeOut(20).delay(10).fadeIn(70).delay(10).fadeOut(20).delay(10).fadeIn(140).delay(20).fadeOut(80).delay(10).fadeIn(280);
+      }
+      else if($l_nextElementToIncrement.hasClass('jumpin')) {
+        $l_nextElementToIncrement.hide().css({'visibility':'visible'});
+        var l_tempFontSize = $l_nextElementToIncrement.css('font-size');
+        $l_nextElementToIncrement.show().animate({'font-size':'400%'}, 300).delay(10).animate({'font-size':l_tempFontSize}, 300);
+      }
+      else {
+        $l_nextElementToIncrement.css({'visibility':'visible'});
+      }
       
       // Check for increment preference
       if(settings.incrementOnce) {
-        $l_elementsToIncrement.first().removeClass('incremental');
+        $l_nextElementToIncrement.removeClass('incremental');
       }
 
     }
@@ -369,6 +390,7 @@ function superSlides(options) {
 
       // Hide the last one
       log('Hiding next element');
+  	  if($l_elementsIncremented.last().hasClass('leftin')){ $l_elementsIncremented.last().animate({'margin-left':'-300px'}, 200); }
       $l_elementsIncremented.last().css({'visibility':'hidden'});
 
     } // $l_elementsIncremented.size() > 0
@@ -960,181 +982,184 @@ function superSlides(options) {
   $(document).keydown(function(event) {
   
     var l_preventDefault = true;
+    
+    if(!g_inputHasFocus) {
   
-    // Slides mode
-    if($g_slides.find('.markdown:visible').size() === 0) {
-
-      switch(event.which) {
+      // Slides mode
+      if($g_slides.find('.markdown:visible').size() === 0) {
   
-        case 35: // end
-          if(g_currentView === e_view.slides) { goToSlide(g_totalSlides, e_direction.forward); }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 36: // home
-          if(g_currentView === e_view.slides) { goToSlide(1, e_direction.forward); }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 10: // return
-        case 13: // enter
-        case 32: // space
-        case 39: // right
-        case 40: // down
-          if(g_currentView === e_view.slides && !g_overviewActive) {
-            if(g_skipSlides !== '') {
-              if((event.which === 10) || (event.which === 13)) {
-                // Skip to slide
-                log('Skip to slide ' + g_skipSlides);
-                goToSlide(g_skipSlides, e_direction.forward);
+        switch(event.which) {
+    
+          case 35: // end
+            if(g_currentView === e_view.slides) { goToSlide(g_totalSlides, e_direction.forward); }
+            else { l_preventDefault = false; }
+            break;
+    
+          case 36: // home
+            if(g_currentView === e_view.slides) { goToSlide(1, e_direction.forward); }
+            else { l_preventDefault = false; }
+            break;
+    
+          case 10: // return
+          case 13: // enter
+          case 32: // space
+          case 39: // right
+          case 40: // down
+            if(g_currentView === e_view.slides && !g_overviewActive) {
+              if(g_skipSlides !== '') {
+                if((event.which === 10) || (event.which === 13)) {
+                  // Skip to slide
+                  log('Skip to slide ' + g_skipSlides);
+                  goToSlide(g_skipSlides, e_direction.forward);
+                }
+                else {
+                  // Skip forward slides
+                  log('Skip forward ' + parseInt(g_skipSlides, 10) + ' slides');
+                  goToSlide(parseInt(g_currentSlideNumber, 10) + parseInt(g_skipSlides, 10), e_direction.forward);
+                }
               }
               else {
-                // Skip forward slides
-                log('Skip forward ' + parseInt(g_skipSlides, 10) + ' slides');
-                goToSlide(parseInt(g_currentSlideNumber, 10) + parseInt(g_skipSlides, 10), e_direction.forward);
-              }
-            }
-            else {
-              if(event.which === 32 || event.which === 39) { advance(e_dimension.title); }
-              else if(event.which === 40) {
-                // If reversed sub slides
-                if($g_currentSlide.hasClass('up') ||
-                    ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
-                  previous(e_dimension.sub);
+                if(event.which === 32 || event.which === 39) { advance(e_dimension.title); }
+                else if(event.which === 40) {
+                  // If reversed sub slides
+                  if($g_currentSlide.hasClass('up') ||
+                      ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
+                    previous(e_dimension.sub);
+                  }
+                  else { advance(e_dimension.sub); }
                 }
-                else { advance(e_dimension.sub); }
               }
+              g_skipSlides = '';
             }
-            g_skipSlides = '';
-          }
-          else if(g_overviewActive) {
-            // FIX - Overview keyboard nav
-          }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 37: // left
-        case 38: // up
-          if(g_currentView === e_view.slides && !g_overviewActive) {
-            if(g_skipSlides !== '') {
-              // Skip back slides
-              log('Skip back ' + g_skipSlides + ' slides');
-              goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
+            else if(g_overviewActive) {
+              // FIX - Overview keyboard nav
             }
-            else {
-              if(event.which === 37) { previous(e_dimension.title); }
-              else if(event.which === 38) {
-                // If reversed sub slides
-                if($g_currentSlide.hasClass('up') ||
-                    ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
-                  advance(e_dimension.sub);
+            else { l_preventDefault = false; }
+            break;
+    
+          case 37: // left
+          case 38: // up
+            if(g_currentView === e_view.slides && !g_overviewActive) {
+              if(g_skipSlides !== '') {
+                // Skip back slides
+                log('Skip back ' + g_skipSlides + ' slides');
+                goToSlide(parseInt(g_currentSlideNumber, 10) - parseInt(g_skipSlides, 10), e_direction.back);
+              }
+              else {
+                if(event.which === 37) { previous(e_dimension.title); }
+                else if(event.which === 38) {
+                  // If reversed sub slides
+                  if($g_currentSlide.hasClass('up') ||
+                      ($g_currentSlide.hasClass('sub') && $g_currentSlide.prevAll(':not(.sub)').first().hasClass('up'))) {
+                    advance(e_dimension.sub);
+                  }
+                  else { previous(e_dimension.sub); }
                 }
-                else { previous(e_dimension.sub); }
               }
+              g_skipSlides = '';
             }
-            g_skipSlides = '';
-          }
-          else if(g_overviewActive) {
-            // FIX - Overview keyboard nav
-          }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 48: // 0
-        case 49: // 1
-        case 50: // 2
-        case 51: // 3
-        case 52: // 4
-        case 53: // 5
-        case 54: // 6
-        case 55: // 7
-        case 56: // 8
-        case 57: // 9
-          g_skipSlides += parseInt(event.which, 10) - 48;
-          break;
-  
-        case 69: // e
-          if(event.metaKey && g_currentView === e_view.slides) {
-          
-            $g_currentSlide
-              .find('.markdown')
-                .find('> textarea:first')
-                  // Add the content first
-                  .val($g_currentSlide.find('.markdown > .source').first().html())
-                .end()
-              // Show edit mode
-              .show()
-                // Give textarea focus and select all
-                .find('> textarea:first').select();
+            else if(g_overviewActive) {
+              // FIX - Overview keyboard nav
+            }
+            else { l_preventDefault = false; }
+            break;
+    
+          case 48: // 0
+          case 49: // 1
+          case 50: // 2
+          case 51: // 3
+          case 52: // 4
+          case 53: // 5
+          case 54: // 6
+          case 55: // 7
+          case 56: // 8
+          case 57: // 9
+            g_skipSlides += parseInt(event.which, 10) - 48;
+            break;
+    
+          case 69: // e
+            if(event.metaKey && g_currentView === e_view.slides) {
             
-          }
-          else { l_preventDefault = false; }
-          break;
-
-        case 78: // n
-          if(event.metaKey) { newSlide($g_currentSlide); }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 79: // o
-          if(event.metaKey && g_currentView === e_view.slides) { toggleOverview(); }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 80: // p
-          if(event.metaKey && g_local && confirm('Are you sure?')) { generatePrintHtml(); }
-          else { l_preventDefault = false; }
-          break;
-  
-        case 84: // t
-          if(event.metaKey && !g_overviewActive) { switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides); }
-          else { l_preventDefault = false; }
-          break;
-
-        case 88: // x
-          if(event.metaKey) {
-            if(g_currentSlideNumber > 1 && confirm('Delete slide - are you sure?')) { deleteSlide($g_currentSlide); }
-          }
-          else { l_preventDefault = false; }
-          break;
-          
-        default:
-          l_preventDefault = false;
-          
-      }
+              $g_currentSlide
+                .find('.markdown')
+                  .find('> textarea:first')
+                    // Add the content first
+                    .val($g_currentSlide.find('.markdown > .source').first().html())
+                  .end()
+                // Show edit mode
+                .show()
+                  // Give textarea focus and select all
+                  .find('> textarea:first').select();
               
-    }
-    
-    // Edit mode
-    else {
-    
-      switch(event.which) {
+            }
+            else { l_preventDefault = false; }
+            break;
   
-        case 9: // tab
-          break;
-  
-        case 27: // esc
-          $g_currentSlide
-            // Hide edit mode
-            .find('.markdown').hide()
-            // Put current source back
-            .find('> textarea:first').val($g_currentSlide.find('.markdown > .source').first().html());
-          break;
-  
-        case 83: // s
-          if(event.metaKey) { saveSlide($g_currentSlide); }
-          else { l_preventDefault = false; }
-          break;
-          
-        default:
-          l_preventDefault = false;
-          
-      }
+          case 78: // n
+            if(event.metaKey) { newSlide($g_currentSlide); }
+            else { l_preventDefault = false; }
+            break;
     
-    }
+          case 79: // o
+            if(event.metaKey && g_currentView === e_view.slides) { toggleOverview(); }
+            else { l_preventDefault = false; }
+            break;
     
-    if(l_preventDefault) { log('key did summit'); event.preventDefault(); }
-    else { log('not a hot key'); }
+          case 80: // p
+            if(event.metaKey && g_local && confirm('Are you sure?')) { generatePrintHtml(); }
+            else { l_preventDefault = false; }
+            break;
+    
+          case 84: // t
+            if(event.metaKey && !g_overviewActive) { switchView(g_currentView === e_view.slides ? e_view.outline : e_view.slides); }
+            else { l_preventDefault = false; }
+            break;
+  
+          case 88: // x
+            if(event.metaKey) {
+              if(g_currentSlideNumber > 1 && confirm('Delete slide - are you sure?')) { deleteSlide($g_currentSlide); }
+            }
+            else { l_preventDefault = false; }
+            break;
+            
+          default:
+            l_preventDefault = false;
+            
+        } // switch(event.which)
+                
+      } // Slides mode
+      
+      // Edit mode
+      else {
+      
+        switch(event.which) {
+    
+          case 9: // tab
+            break;
+    
+          case 27: // esc
+            $g_currentSlide
+              // Hide edit mode
+              .find('.markdown').hide()
+              // Put current source back
+              .find('> textarea:first').val($g_currentSlide.find('.markdown > .source').first().html());
+            break;
+    
+          case 83: // s
+            if(event.metaKey) { saveSlide($g_currentSlide); }
+            else { l_preventDefault = false; }
+            break;
+            
+          default:
+            l_preventDefault = false;
+            
+        } // switch(event.which)
+      
+      } // // Edit mode
+      
+      if(l_preventDefault) { event.preventDefault(); }
+      
+    } // !g_inputHasFocus
     
   });
   
@@ -1147,6 +1172,11 @@ function superSlides(options) {
   $('a[href^="http"]').live('click', function() {
     window.open($(this).attr('href'));
     event.preventDefault();
+  });
+  
+  // Keep track of form element use
+  $(':input').live('focus blur', function() {
+      g_inputHasFocus = event.type === 'focus';
   });
   
   // iPhone hAX
@@ -1170,51 +1200,5 @@ function superSlides(options) {
       }
       
     });
-  /*
-  $(document)
-    .bind('touchmove', function(event) {
-      event.preventDefault();
-    })
-    .bind('mousedown touchstart', function(event) {
-    
-      if($g_slides.find('.markdown:visible').size() === 0) {
-      
-        var
-          l_x = event.pageX,
-          l_y = event.pageY;
-          
-        $(this).bind('mouseup touchend', function(event) {
-          
-          $(this).unbind('mouseup touchend');
-          
-          var
-            l_netX = event.pageX - l_x,
-            l_netY = event.pageY - l_y,
-            l_absNetX = Math.abs(l_netX),
-            l_absNetY = Math.abs(l_netY);
-          
-          var e = jQuery.Event("keydown");
-          
-          if(l_absNetX > l_absNetY) {
-            if(l_absNetX > 50) {
-              if(l_netX > 0) { e.which = 39; } // Right
-              else { e.which = 37; } // Left
-            }
-          }
-          else {
-            if(l_absNetY > 50) {
-              if(l_netY > 0) { e.which = 40; } // Down
-              else { e.which = 38; } // Up
-            }
-          }
-          
-          $(document).trigger(e);
-          
-        });
-        
-      }
-      
-    });
-  */
 
 }
