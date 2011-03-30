@@ -1176,7 +1176,8 @@ function superSlides(options) {
   
   // Keep track of form element use
   $(':input').live('focus blur', function() {
-      g_inputHasFocus = event.type === 'focus';
+    if(event.type === 'focus' && $(this).parent().hasClass('markdown')) { return; }
+    g_inputHasFocus = event.type === 'focus';
   });
   
   // iPhone hAX
